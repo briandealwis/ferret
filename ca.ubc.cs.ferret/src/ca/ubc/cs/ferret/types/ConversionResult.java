@@ -11,7 +11,8 @@ public class ConversionResult<T> {
 	protected Class<T> clazz;
 	
 	public static <T> ConversionResult<T> forObject(T object) {
-		ConversionResult<T> r = new ConversionResult(object.getClass(), Fidelity.Exact);
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        ConversionResult<T> r = new ConversionResult(object.getClass(), Fidelity.Exact);
 		r.addResult(object);
 		return r;
 	}

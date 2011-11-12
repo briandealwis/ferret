@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JMenuItem;
-
 import junit.framework.TestCase;
 
 import org.apache.commons.lang.time.DurationFormatUtils;

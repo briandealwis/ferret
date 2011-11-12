@@ -19,13 +19,16 @@ Require-Bundle: org.eclipse.jface,
  org.eclipse.search,
  org.eclipse.ui.editors,
  ca.ubc.cs.clustering,
- ca.ubc.cs.objhdl
+ ca.ubc.cs.objhdl,
+ edu.uci.lcs.jung.api;bundle-version="2.0.0",
+ edu.uci.lcs.jung.algorithms;bundle-version="2.0.0",
+ edu.uci.lcs.jung.graph.impl;bundle-version="2.0.0"
 Import-Package: org.apache.commons.collections15,
  org.apache.commons.collections15.iterators,
  org.apache.commons.collections15.map,
  org.apache.commons.collections15.multimap,
  org.apache.commons.lang,
- org.apache.commons.lang.time;specification-version="2.6.0"
+ org.apache.commons.lang.time
 Provide-Package: ca.ubc.cs.ferret,
  ca.ubc.cs.ferret.display,
  ca.ubc.cs.ferret.model,

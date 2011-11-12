@@ -203,7 +203,7 @@ public class TypesConversionManager implements IRegistryChangeListener {
             	System.out.println("Conversion using Eclipse Adapter Framework: " 
             			+ object.getClass().getName() + " -> " + adapterType);
             }
-            return new ConversionResult(adapted, adapted.getClass(), Fidelity.Exact);
+            return ConversionResult.forObject(adapted);
 		}
 
 		List<ConversionPipeline> pipelines = findConversion(object.getClass(), adapterType, fidelity);

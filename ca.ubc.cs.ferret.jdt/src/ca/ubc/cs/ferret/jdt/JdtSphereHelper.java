@@ -4,12 +4,26 @@
  */
 package ca.ubc.cs.ferret.jdt;
 
-import java.security.Signature;
-
 import org.apache.commons.collections15.Predicate;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMember;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeHierarchy;
+import org.eclipse.jdt.core.ITypeRoot;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
+import org.eclipse.jdt.internal.ui.actions.SelectionConverter;
+import org.eclipse.jdt.internal.ui.javaeditor.JavaEditor;
+import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;

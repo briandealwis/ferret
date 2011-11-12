@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
-Bundle-SymbolicName: ca.ubc.cs.ferret.jdt; singleton=true
-Bundle-Version: 0.4.0.qualifier
-Bundle-Activator: ca.ubc.cs.ferret.jdt.FerretJdtPlugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: ca.ubc.cs.ferret.jdt;singleton:=true
 Bundle-Name: Ferret JDT Support Plug-in
+Bundle-Version: 0.4.0.qualifier
 Bundle-Vendor: University of British Columbia
-Bundle-Localization: plugin
+Bundle-Activator: ca.ubc.cs.ferret.jdt.FerretJdtPlugin
 Require-Bundle: ca.ubc.cs.ferret;bundle-version="[0.4.0,0.5.0)",
  ca.ubc.cs.clustering;bundle-version="[0.4.0,0.5.0)",
  org.eclipse.ui,
@@ -23,12 +23,9 @@ Import-Package: org.apache.commons.collections15,
  org.apache.commons.collections15.map,
  org.apache.commons.collections15.multimap,
  org.apache.commons.lang
-Eclipse-AutoStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: ca.ubc.cs.ferret.jdt,
  ca.ubc.cs.ferret.jdt.attributes,
  ca.ubc.cs.ferret.jdt.ops
 Bundle-ClassPath: .
-Provide-Package: ca.ubc.cs.ferret.jdt,
- ca.ubc.cs.ferret.jdt.attributes,
- ca.ubc.cs.ferret.jdt.ops
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

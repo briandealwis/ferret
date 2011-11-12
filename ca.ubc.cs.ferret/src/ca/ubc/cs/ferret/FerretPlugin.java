@@ -123,6 +123,9 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
 	 * This method is called when the plug-in is stopped
 	 */
 	public void stop(BundleContext context) throws Exception {
+		if(plugin == this) {
+			plugin = null;
+		}
 		Platform.getExtensionRegistry().removeRegistryChangeListener(this);
         Consultancy.shutdown();
         // getSpheres() may recreate the sphereHelpers, causing problems on
@@ -235,7 +238,6 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
         }
         IWorkbenchAdapter wa = getAdapter(object, IWorkbenchAdapter.class);
         if(wa != null && (label = wa.getLabel(object)) != null) { return label; } 
-        if(object == null) { return "(null)"; }
         return object.toString();
     }
 
@@ -291,7 +293,7 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
 //	}
 
     public static SphereHelper[] getSphereHelpers() {
-    	if(getDefault().getWorkbench().isClosing()) {
+		if(plugin == null) {
     		return new SphereHelper[0];
     	}
         return getDefault().basicGetSphereHelpers();

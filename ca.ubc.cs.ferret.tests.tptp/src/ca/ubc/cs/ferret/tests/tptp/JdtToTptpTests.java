@@ -1,4 +1,4 @@
-package ca.ubc.cs.ferret.tests;
+package ca.ubc.cs.ferret.tests.tptp;
 
 import java.io.BufferedInputStream;
 import java.io.File;

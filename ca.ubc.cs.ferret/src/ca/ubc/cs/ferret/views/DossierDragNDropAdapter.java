@@ -1,9 +1,6 @@
 package ca.ubc.cs.ferret.views;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jface.viewers.ISelection;
@@ -22,7 +19,6 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 
 import ca.ubc.cs.ferret.display.DwObject;
-import ca.ubc.cs.ferret.model.Consultation;
 
 
 public class DossierDragNDropAdapter extends ViewerDropAdapter
@@ -102,7 +98,7 @@ public class DossierDragNDropAdapter extends ViewerDropAdapter
 		}
 		Object[] unwrapped = new Object[dwObjects.length];
 		for(int i = 0; i < dwObjects.length; i++) {
-			unwrapped[i] = ((DwObject)dwObjects[i]).getObject();
+			unwrapped[i] = ((DwObject<?>)dwObjects[i]).getObject();
 		}
 		IStructuredSelection selection = new StructuredSelection(unwrapped);
 //		System.out.println("dragSetData(): sending " + FerretPlugin.debugPrint(selection));

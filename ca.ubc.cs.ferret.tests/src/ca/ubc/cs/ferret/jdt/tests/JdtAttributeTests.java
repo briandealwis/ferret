@@ -16,7 +16,6 @@ import ca.ubc.cs.clustering.ClusteringPlugin;
 import ca.ubc.cs.clustering.attrs.IAttributeSource;
 import ca.ubc.cs.clustering.attrs.IClassifier;
 import ca.ubc.cs.ferret.jdt.JavaModelHelper;
-import ca.ubc.cs.ferret.jdt.attributes.MemberDeclaringType;
 import ca.ubc.cs.ferret.jdt.attributes.MethodThrowsProvider;
 
 public class JdtAttributeTests extends TestCase {
@@ -96,8 +95,8 @@ public class JdtAttributeTests extends TestCase {
     		Object value = av.getCategory(throwsMethod);
     		assertNotNull(value);
     		assertTrue(value instanceof Collection);
-    		assertTrue(((Collection)value).size() == 1);
-    		Object ex = ((Collection)value).iterator().next();
+			assertTrue(((Collection<?>)value).size() == 1);
+			Object ex = ((Collection<?>)value).iterator().next();
     		assertTrue(ex instanceof IType);
     		assertEquals("java.io.UnsupportedEncodingException", 
     				((IType)ex).getFullyQualifiedName());
