@@ -5,10 +5,9 @@
 package ca.ubc.cs.clustering;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.collections15.CollectionUtils;
 
 
 public class Cluster<T> {
@@ -44,7 +43,9 @@ public class Cluster<T> {
     
     @SuppressWarnings("unchecked")
 	public Collection<Cluster<T>> getSubclusters() {
-    	if(subclusters == null) { return CollectionUtils.EMPTY_COLLECTION; }
+        if (subclusters == null) {
+            return Collections.emptyList();
+        }
     	return subclusters;
     }
 

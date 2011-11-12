@@ -6,12 +6,13 @@ Bundle-Version: 0.4.0.qualifier
 Bundle-Activator: ca.ubc.cs.clustering.ClusteringPlugin
 Bundle-Vendor: UBC Computer Science
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.expressions,
- org.apache.commons.collections15
+ org.eclipse.core.expressions
 Eclipse-LazyStart: true
 Export-Package: ca.ubc.cs.clustering,
  ca.ubc.cs.clustering.attrs,
  ca.ubc.cs.clustering.utils
 Bundle-ClassPath: .
-Import-Package: org.eclipse.jface.resource
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.apache.commons.collections15,
+ org.apache.commons.collections15.multimap,
+ org.eclipse.jface.resource

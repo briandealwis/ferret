@@ -21,7 +21,6 @@ view across a multitude of sources of program information.
 Dependencies are provided under the following licenses:
   * JUNG: BSD
   * CERN Colt: BSD-like, LGPL
-  * edu.oswego.cs.dl.util.concurrent: public domain
   * Larva Labs Commons Collections 4.01: Apache license 2.0
    </license>
 
@@ -98,18 +97,20 @@ Dependencies are provided under the following licenses:
          unpack="false"/>
 
    <plugin
-         id="org.apache.commons.collections15"
+         id="net.sourceforge.collections"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
+<!--
    <plugin
          id="edu.oswego.cs.dl.util.concurrent"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+-->
 
    <plugin
          id="edu.uci.lcs.jung.algorithms"

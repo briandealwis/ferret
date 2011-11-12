@@ -35,7 +35,7 @@ public class FerretJdtPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
         FerretPlugin.getDefault().dropSphereHelper(JdtSphereHelper.getDefault());
-        JdtSphereHelper.getDefault().stop();
+        JdtSphereHelper.shutdown();
 		super.stop(context);
 		plugin = null;
 	}

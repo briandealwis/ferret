@@ -34,9 +34,9 @@ import org.osgi.framework.BundleContext;
 
 import ca.ubc.cs.ferret.model.SphereHelper;
 import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
+import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
 import ca.ubc.cs.ferret.types.FerretObject;
 import ca.ubc.cs.ferret.types.TypesConversionManager;
-import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
 import ca.ubc.cs.ferret.util.JobManager;
 import ca.ubc.cs.ferret.views.DossierConstants;
 
@@ -124,7 +124,7 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
 	 */
 	public void stop(BundleContext context) throws Exception {
 		Platform.getExtensionRegistry().removeRegistryChangeListener(this);
-        Consultancy.getDefault().stop();
+        Consultancy.shutdown();
         // getSpheres() may recreate the sphereHelpers, causing problems on
         // shutdown.  Downstream plugins are responsible for shutting down
         // their sphereHelpers in their respective stop() methods.

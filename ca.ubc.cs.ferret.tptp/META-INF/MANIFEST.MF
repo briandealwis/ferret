@@ -16,8 +16,8 @@ Require-Bundle: ca.ubc.cs.ferret.jdt;bundle-version="0.4.0",
  org.eclipse.tptp.platform.collection.framework,
  org.eclipse.tptp.platform.models,
  org.eclipse.ui,
- org.eclipse.core.runtime,
- org.apache.commons.collections15;bundle-version="4.1.0"
+ org.eclipse.core.runtime
+Import-Package: org.apache.commons.collections15
 Eclipse-AutoStart: true
 Export-Package: ca.ubc.cs.ferret.tptp,
  ca.ubc.cs.ferret.tptp.ops,

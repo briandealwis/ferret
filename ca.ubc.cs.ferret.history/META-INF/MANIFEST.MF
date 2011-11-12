@@ -10,8 +10,9 @@ Require-Bundle: ca.ubc.cs.ferret,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.views,
- ca.ubc.cs.clustering,
- org.apache.commons.collections15
+ ca.ubc.cs.clustering
 Eclipse-AutoStart: true
 Export-Package: ca.ubc.cs.ferret.history
+Import-Package: org.apache.commons.collections15,
+ org.apache.commons.collections15.bag
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

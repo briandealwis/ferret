@@ -29,8 +29,8 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import ca.ubc.cs.ferret.model.Consultation;
 import ca.ubc.cs.ferret.model.IConceptualQuery;
-import ca.ubc.cs.ferret.model.ISphere;
 import ca.ubc.cs.ferret.model.ISolution;
+import ca.ubc.cs.ferret.model.ISphere;
 import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
 import ca.ubc.cs.ferret.types.FerretObject;
 
@@ -89,6 +89,14 @@ public class Consultancy {
     
     protected IResourceChangeListener resourceChangeListener;
     
+    public static void shutdown() {
+        if (singleton == null) {
+            return;
+        }
+        singleton.stop();
+        singleton = null;
+    }
+
     /**
      * Cause all consultancy activity to stop.
      */

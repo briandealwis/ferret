@@ -40,7 +40,7 @@ Kenyon is licensed using the LGPL.
       <import plugin="org.eclipse.jdt"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.apache.commons.collections15"/>
+      <import plugin="net.sourceforge.collections"/>
       <import plugin="ca.ubc.cs.objhdl"/>
       <import plugin="ca.ubc.cs.ferret.jdt"/>
       <import plugin="org.eclipse.pde"/>

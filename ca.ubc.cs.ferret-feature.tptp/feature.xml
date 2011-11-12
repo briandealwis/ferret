@@ -48,7 +48,7 @@
       <import plugin="org.eclipse.hyades.trace.views"/>
       <import plugin="org.eclipse.tptp.platform.collection.framework"/>
       <import plugin="org.eclipse.tptp.platform.models"/>
-      <import plugin="org.apache.commons.collections15"/>
+      <import plugin="net.sourceforge.collections"/>
       <import plugin="ca.ubc.cs.ferret.jdt"/>
    </requires>
 
