@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<fragment>
+   <extension
+         point="ca.ubc.cs.ferret.typeConverters">
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.jdt.core.IMethod"
+            desiredType="org.eclipse.hyades.models.trace.TRCMethod"
+            fidelity="approximate" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCMethod"
+            desiredType="org.eclipse.jdt.core.IMethod"
+            fidelity="approximate" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCMethod"
+            desiredType="org.eclipse.jdt.core.IMember"
+            fidelity="approximate" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCMethod"
+            desiredType="ca.ubc.cs.ferret.types.IEquivalenceTesting"
+            fidelity="exact" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCMethod"
+            desiredType="ca.ubc.cs.ferret.display.IPrettyPrinter"
+            fidelity="approximate" />
+
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.jdt.core.IType"
+            desiredType="org.eclipse.hyades.models.trace.TRCClass"
+            fidelity="approximate" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCClass"
+            desiredType="org.eclipse.jdt.core.IType"
+            fidelity="approximate" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCClass"
+            desiredType="org.eclipse.jdt.core.IMember"
+            fidelity="approximate" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCClass"
+            desiredType="ca.ubc.cs.ferret.types.IEquivalenceTesting"
+            fidelity="exact" />
+      <converter
+            class="ca.ubc.cs.ferret.tptp.jdt.JDTtoTRCConverter"
+            providedType="org.eclipse.hyades.models.trace.TRCClass"
+            desiredType="ca.ubc.cs.ferret.display.IPrettyPrinter"
+            fidelity="approximate" />
+   </extension>
+   <extension
+         point="ca.ubc.cs.ferret.cqs">
+      <conceptualQuery
+            category="inter-class"
+            class="ca.ubc.cs.ferret.tptp.jdt.UsedClassesQuery"
+            id="ca.ubc.cs.ferret.tptp-jdt.uc">
+         <parameter
+               class="org.eclipse.jdt.core.IPackageFragment"
+               count="1"
+               fidelity="approximate">
+         </parameter>
+      </conceptualQuery>
+   </extension>
+
+</fragment>

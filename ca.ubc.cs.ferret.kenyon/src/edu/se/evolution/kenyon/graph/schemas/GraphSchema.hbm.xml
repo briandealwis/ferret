@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.graph.schemas.GraphSchema"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-GraphSchema.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <discriminator
+            column="discriminator"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-GraphSchema.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+        <subclass
+            name="edu.se.evolution.kenyon.graph.schemas.C_Schema"
+            discriminator-value="c_schema"
+        >
+
+	    <!--
+            	To add non XDoclet property mappings, create a file named
+                hibernate-properties-C_Schema.xml
+		containing the additional properties and place it in your merge dir.
+	    -->
+
+        </subclass>
+        <subclass
+            name="ca.ubc.cs.ferret.kenyon.JavaSchema"
+            discriminator-value="java_schema"
+        >
+
+	    <!--
+            	To add non XDoclet property mappings, create a file named
+                hibernate-properties-JavaSchema.xml
+		containing the additional properties and place it in your merge dir.
+	    -->
+
+        </subclass>
+
+    </class>
+
+</hibernate-mapping>

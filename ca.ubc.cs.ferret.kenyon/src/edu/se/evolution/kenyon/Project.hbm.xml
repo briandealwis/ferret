@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.Project"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Project.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <set
+            name="dataSets"
+            lazy="true"
+            cascade="save-update"
+            sort="natural"
+        >
+
+            <key
+                column="project_id"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.se.evolution.kenyon.ConfigData"
+            />
+
+        </set>
+
+        <property
+            name="projectName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="projectName"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Project.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="getProjectByName"><![CDATA[
+            from Project p where p.projectName = :pn
+        ]]></query>
+        <query name="getProjects"><![CDATA[
+            from Project p order by p.projectName asc
+        ]]></query>
+        <query name="getRevisionsOfProject"><![CDATA[
+            select data.spec from Project prj join prj.dataSets data where prj.id = :id order by data.spec.time asc
+        ]]></query>
+        <query name="getRevisionsOfProjectBetween"><![CDATA[
+            select data.spec from Project prj join prj.dataSets data where prj.id = :id and data.spec.time >= :d1 and data.spec.time <= :d2 order by data.spec.time asc
+        ]]></query>
+        <query name="getDataForProjectAtSpec"><![CDATA[
+            select data from Project prj join prj.dataSets data where prj.id = :id and data.spec = :spec
+        ]]></query>
+
+</hibernate-mapping>

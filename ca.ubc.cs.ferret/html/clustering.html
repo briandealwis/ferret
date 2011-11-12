@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Clustering Query Results</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+</HEAD>
+
+<BODY>
+<H1>Clustering Query Results</H1>
+
+<P>Ferret supports drilling into the results of a query to 
+understand underlying structure through <EM>clustering</EM> 
+on the different attributes of the results.</P>
+
+<P>For example: the references to a method,
+which are generally themselves methods, may be clustered into
+different groups identified by attributes such as their access
+protection (public, private, package, or default), their containing
+type, their package, or boolean attributes such as static vs.
+non-static.  Some clusterings may have results belong to multiple
+groups, such as might arise for a clustering by argument types:
+the method <CODE>Arrays.addList(Collection, Object[])</CODE> would
+added to groups for <CODE>Collection</CODE> and <CODE>Object</CODE>.</P>
+
+</BODY>
+</HTML>

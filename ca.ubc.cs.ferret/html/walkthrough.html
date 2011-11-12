@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Ferret Walkthrough</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+</HEAD>
+
+<BODY>
+<H1>Ferret Walkthrough</H1>
+
+<OL>
+<LI> <P>If the Dossier is not already present, push the <CODE>F9</CODE> key. 
+    The Dossier view should pop up and be populated with a set of
+    queries.  When the queries are finished, which should take a few
+    seconds, you should see a view like this:</P>
+    <div align="center"><img src="Ferret-figure.png"></div>
+    </LI>
+<LI>  <P>Try expanding some of the tree elements, such as for the query
+    <CODE>superinterfaces</CODE>, showing the super interfaces specified
+    by <CODE>Figure</CODE>.  Right-click on the first result for this query,
+    <CODE>Cloneable</CODE>: the normal Java operations are available from
+    this elements.</P></LI>
+<LI> <P>The query <CODE>implementors</CODE> has many results (44), however
+    Ferret was able to find 3 different means of grouping these results.
+    To access these groupings, right click on the element, and choose
+    the <CODE>Cluster results by...</CODE> menu.</P>
+    <div align="center"><img src="Ferret-figure-cluster.png"></div>
+    <P>Choose to cluster by the enclosing package: to cluster the results
+    by their package.</P></LI>
+<LI> <P>Now click on the re-open original query element button
+    <IMG SRC="nav_home.gif" title="[reopen original query element]">. 
+    This causes the original queried-upon element <CODE>Figure</CODE>
+    to be re-opened.</P></LI>
+<LI> <P>Try selecting the <CODE>Figure.decompose()</CODE> method from
+    the <CODE>Outline</CODE> view, and notice the <CODE>Dossier</CODE>'s
+    contents have changed with the query results about the new
+    element.</P>
+</OL>
+
+</BODY>
+</HTML>

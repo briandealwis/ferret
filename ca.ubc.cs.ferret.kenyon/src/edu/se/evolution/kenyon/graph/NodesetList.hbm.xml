@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.graph.NodesetList"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-NodesetList.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <list
+            name="nodes"
+            table="nodeset_list"
+            lazy="true"
+            cascade="save-update"
+        >
+
+            <key
+                column="nodeset_list_id"
+            >
+            </key>
+
+            <index
+                column="node_position"
+            />
+
+            <many-to-many
+                class="edu.se.evolution.kenyon.graph.Node"
+                column="ordered_node"
+                outer-join="auto"
+             />
+
+        </list>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-NodesetList.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

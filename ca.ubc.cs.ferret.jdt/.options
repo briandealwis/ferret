@@ -1,0 +1,8 @@
+ca.ubc.cs.ferret.jdt/debug=false
+
+# Eclipse JDT R3.1 often throws JMEs or NPEs while resolving within binary types
+
+ca.ubc.cs.ferret.jdt/debug/logJavaModelExceptions=false
+ca.ubc.cs.ferret.jdt/debug/logNullPointerExceptions=false
+
+ca.ubc.cs.ferret.jdt/debug/showJMHCacheLookups=false

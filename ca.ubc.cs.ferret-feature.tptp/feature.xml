@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ca.ubc.cs.ferret.feature.tptp"
+      label="Ferret TPTP Feature"
+      version="0.4.0.qualifier"
+      provider-name="UBC Computer Science">
+
+   <description>
+      This feature includes program information sources for:
+* source repository information using the Kenyon project
+   </description>
+
+   <copyright>
+      Copyright (c) 2004-2007 by the University of British Columbia.
+   </copyright>
+
+   <license url="epl-v10.html">
+      Provided under the Eclipse Public License 1.0.
+   </license>
+
+   <url>
+      <update label="Ferret Update Site" url="http://www.cs.ubc.ca/~bsd/research/ferret/"/>
+      <discovery label="Europa Discovery Site" url="http://download.eclipse.org/releases/europa"/>
+      <discovery label="Eclipse Modelling Framework (for TPTP)" url="http://download.eclipse.org/modeling/emf/updates/"/>
+      <discovery label="Eclipse Test and Performance Tools Platform (TPTP)" url="http://eclipse.org/tptp/updates/"/>
+   </url>
+
+   <includes
+         id="ca.ubc.cs.ferret.feature"
+         version="0.0.0"
+         search-location="both"/>
+
+   <requires>
+      <import feature="org.eclipse.tptp.platform.runtime" version="4.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.tptp.platform.core" version="4.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.tptp.platform.trace" version="4.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.tptp.trace" version="4.1.0" match="greaterOrEqual"/>
+      <!-- TPTP people should specify the apache logging features explicitly
+      <import feature="org.apache.commons_logging.feature" version="1.0.4" match="greaterOrEqual"/>
+      <import feature="org.apache.jakarta_log4j.feature" version="1.2.8" match="greaterOrEqual"/>
+      -->
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="ca.ubc.cs.ferret"/>
+      <import plugin="org.eclipse.hyades.analysis.engine"/>
+      <import plugin="org.eclipse.hyades.execution"/>
+      <import plugin="org.eclipse.hyades.trace.ui"/>
+      <import plugin="org.eclipse.hyades.trace.views"/>
+      <import plugin="org.eclipse.tptp.platform.collection.framework"/>
+      <import plugin="org.eclipse.tptp.platform.models"/>
+      <import plugin="org.apache.commons.collections15"/>
+      <import plugin="ca.ubc.cs.ferret.jdt"/>
+   </requires>
+
+   <plugin
+         id="ca.ubc.cs.ferret.tptp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ca.ubc.cs.ferret.tptp.jdt"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+</feature>

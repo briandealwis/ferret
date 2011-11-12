@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="ca.ubc.cs.ferret">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="ca.ubc.cs.ferret" id="query_stimulants" name="Stimulants prompting queries"/>
+      </appInfo>
+      <documentation>
+         Provides list of stimulants that should cause new queries.  Currently supported
+are &lt;command id=&quot;&quot;/&gt; elements, specifying Eclipse command ids, such as 
+&quot;org.eclipse.ui.navigate.backwardHistory&quot; and &quot;org.eclipse.ui.edit.text.gotoLastEditPosition&quot;
+      </documentation>
+   </annotation>
+
+   <element name="command">
+      <annotation>
+         <documentation>
+            Required tags:
+&lt;DL&gt;
+&lt;DT&gt;id&lt;/DT&gt;
+&lt;DD&gt;Command id.  The selection at the conclusion of the command will be used as the source for the next query.&lt;/DD&gt;
+&lt;/DL&gt;
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         2006-04-18
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         &lt;extension point=&quot;ca.ubc.cs.ferret.query_stimulants&quot;&gt;
+   &lt;command id=&quot;org.eclipse.ui.navigate.backwardHistory&quot; /&gt;
+&lt;/extension&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

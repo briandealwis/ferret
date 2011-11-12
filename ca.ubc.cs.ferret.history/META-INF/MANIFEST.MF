@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ferret Navigation History Plug-in
+Bundle-SymbolicName: ca.ubc.cs.ferret.history;singleton:=true
+Bundle-Version: 0.4.0.qualifier
+Bundle-Activator: ca.ubc.cs.ferret.history.FerretHistoryPlugin
+Bundle-Vendor: University of British Columbia
+Bundle-ClassPath: history.jar
+Require-Bundle: ca.ubc.cs.ferret,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.views,
+ ca.ubc.cs.clustering,
+ org.apache.commons.collections15
+Eclipse-AutoStart: true
+Export-Package: ca.ubc.cs.ferret.history
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

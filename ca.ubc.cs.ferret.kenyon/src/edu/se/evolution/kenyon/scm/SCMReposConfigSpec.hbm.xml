@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.scm.SCMReposConfigSpec"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-SCMReposConfigSpec.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="time"
+            type="long"
+            update="true"
+            insert="true"
+            column="time"
+        />
+
+        <property
+            name="branchIdentifier"
+            type="string"
+            update="true"
+            insert="true"
+            column="branchIdentifier"
+        />
+
+        <property
+            name="projectIdentifier"
+            type="string"
+            update="true"
+            insert="true"
+            column="projectIdentifier"
+        />
+
+        <property
+            name="uniqueIdentifier"
+            type="string"
+            update="true"
+            insert="true"
+            column="uniqueIdentifier"
+        />
+
+        <set
+            name="completingTransactions"
+            table="completing_transactions"
+            lazy="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+            <key
+                column="scm_spec_id"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.se.evolution.kenyon.scm.SCMTransaction"
+                column="transaction_id"
+                outer-join="auto"
+             />
+
+        </set>
+
+        <set
+            name="ongoingTransactions"
+            table="ongoing_transactions"
+            lazy="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+            <key
+                column="scm_spec_id"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.se.evolution.kenyon.scm.SCMTransaction"
+                column="transaction_id"
+                outer-join="auto"
+             />
+
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SCMReposConfigSpec.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="findPrevPersistedSpec"><![CDATA[
+            from SCMReposConfigSpec spec where spec.projectIdentifier = :spec_project_id and spec.branchIdentifier = :spec_branch_id and spec.time < :spec_time order by spec.time desc
+        ]]></query>
+        <query name="findNextPersistedSpec"><![CDATA[
+            from SCMReposConfigSpec spec where spec.projectIdentifier = :spec_project_id and spec.branchIdentifier = :spec_branch_id and spec.time > :spec_time order by spec.time asc
+        ]]></query>
+
+</hibernate-mapping>

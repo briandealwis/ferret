@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!-- $Header: /home/bsd/research/cvsroot/phd-ca.ubc.cs.ferret.history/plugin.xml,v 1.6 2007/11/28 19:30:45 bsd Exp $ -->
+<plugin>
+   <extension
+         point="ca.ubc.cs.ferret.sphereHelpers">
+		<sphereHelper
+			id="ca.ubc.cs.ferret.sphere.history" 
+			class="ca.ubc.cs.ferret.history.HistorySphereHelperFactory" />
+	</extension>
+
+    <extension point="ca.ubc.cs.ferret.cqs">
+	 	<conceptualQuery id="ca.ubc.cs.ferret.history.tfo"
+	 		class="ca.ubc.cs.ferret.history.TransitionsFromObjects"
+	 		category="navigation">
+	 		<parameter class="java.lang.Object" fidelity="approximate"/>
+	 	</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.history.t2o"
+	 		class="ca.ubc.cs.ferret.history.TransitionsToObjects"
+	 		category="navigation">
+	 		<parameter class="java.lang.Object" fidelity="approximate"/>
+	 	</conceptualQuery>
+	 </extension>
+         
+</plugin>

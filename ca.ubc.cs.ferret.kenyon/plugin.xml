@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension point="ca.ubc.cs.ferret.sphereHelpers">
+      <sphereHelper class="ca.ubc.cs.ferret.kenyon.KenyonSphereHelperFactory" />
+   </extension>
+
+   <extension point="ca.ubc.cs.ferret.cqs">
+	 	<conceptualQuery id="fk.modifiers-of"
+	 		class="ca.ubc.cs.ferret.kenyon.queries.ModifiersOfElement"
+	 		category="evolution">
+	 		<parameter
+	          class="java.lang.Object"
+	          count="+"
+    	      fidelity="approximate"/>
+	 	</conceptualQuery>
+      <conceptualQuery
+            category="evolution"
+            class="ca.ubc.cs.ferret.kenyon.queries.ModifiedBy"
+            id="fk.modified-by">
+         <parameter
+               class="java.lang.Object"
+               count="+"
+               fidelity="approximate">
+         </parameter>
+      </conceptualQuery>
+      <conceptualQuery
+            category="evolution"
+            class="ca.ubc.cs.ferret.kenyon.queries.TxFileVersions"
+            id="fk.tx-file-versions">
+         <parameter
+               class="ca.ubc.cs.ferret.kenyon.KTransaction"
+               count="+"
+               fidelity="approximate">
+         </parameter>
+      </conceptualQuery>
+      <conceptualQuery
+            category="evolution"
+            class="ca.ubc.cs.ferret.kenyon.queries.TxCochanged"
+            id="fg.tx-cochange">
+         <parameter
+               class="ca.ubc.cs.ferret.kenyon.KTransaction"
+               count="+"
+               fidelity="approximate">
+         </parameter>
+      </conceptualQuery>
+      <conceptualQuery
+            category="evolution"
+            class="ca.ubc.cs.ferret.kenyon.queries.TransactionsOf"
+            id="fk.cs-tx">
+         <parameter
+               class="edu.se.evolution.kenyon.scm.SCMReposConfigSpec"
+               count="1"
+               fidelity="approximate">
+         </parameter>
+      </conceptualQuery>
+	</extension>
+	
+	<extension point="org.eclipse.ui.preferencePages">
+		<page name="Ferret Kenyon Support"
+			class="ca.ubc.cs.ferret.kenyon.preferences.FerretKenyonPreferencePage"
+			category="ca.ubc.cs.ferret.preferences.primary"
+			id="ca.ubc.cs.ferret.preferences.kenyon" />
+	</extension>	
+	
+	<extension point="org.eclipse.core.runtime.preferences">
+		 <initializer class="ca.ubc.cs.ferret.kenyon.preferences.FKPreferenceInitializer" />
+	</extension>
+ 	
+ 	<extension point="org.eclipse.core.runtime.adapters">
+    	<factory
+          adaptableType="edu.se.evolution.kenyon.scm.SCMReposConfigSpec"
+          class="ca.ubc.cs.ferret.kenyon.KenyonElementAdaptorFactory">
+			<adapter type="java.util.Date" />
+    	</factory>
+    	<factory
+          adaptableType="ca.ubc.cs.ferret.kenyon.KTransaction"
+          class="ca.ubc.cs.ferret.kenyon.KenyonElementAdaptorFactory">
+			<adapter type="java.util.Date" />
+    	</factory>
+	</extension> 	
+	
+    <extension point="org.eclipse.help.contexts">
+        <contexts file="helpContexts.xml"  />
+    </extension>
+
+</plugin>

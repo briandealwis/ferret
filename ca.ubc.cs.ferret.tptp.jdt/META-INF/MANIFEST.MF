@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JDT/TPTP Bridge Fragment
+Bundle-SymbolicName: ca.ubc.cs.ferret.tptp.jdt;singleton:=true
+Bundle-Version: 0.4.0.qualifier
+Bundle-Vendor: UBC Computer Science
+Require-Bundle: ca.ubc.cs.ferret.jdt;bundle-version="0.4.0",
+ ca.ubc.cs.ferret.tptp;bundle-version="0.4.0",
+ ca.ubc.cs.ferret;bundle-version="0.4.0",
+ ca.ubc.cs.clustering,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.ui,
+ org.eclipse.jface,
+ org.eclipse.ui,
+ org.eclipse.hyades.trace.ui,
+ org.eclipse.hyades.trace.views,
+ org.eclipse.tptp.platform.models,
+ org.eclipse.core.runtime,
+ org.apache.commons.collections15;bundle-version="4.1.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: ca.ubc.cs.ferret.tptp.jdt

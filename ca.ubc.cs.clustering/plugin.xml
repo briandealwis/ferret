@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="clusterers" name="Availble Type Clusterers" schema="schema/clusterers.exsd"/>
+   <extension-point id="classifiers" name="Assigns a classification to an object" schema="schema/classifiers.exsd"/>
+
+ 	<extension point="ca.ubc.cs.clustering.clusterers">
+ 	   <clusterer
+        	  id="ca.ubc.cs.clusterer.attributes"
+        	  precedence="80"
+    	      class="ca.ubc.cs.clustering.attrs.AttributeClusteringsFactory"
+	          synopsis="Individual Attributes"
+	          description="Group related objects by single attributes" />
+<!-- Squeezer disabled as it's far too slow
+ 	   <clusterer
+        	  id="ca.ubc.cs.clusterer.squeezer"
+    	      precedence="100"
+    	      class="ca.ubc.cs.clustering.SqueezerClusteringFactory"
+	          synopsis="Squeezer Algorithm"
+	          description="Group related objects usingthe Squeezer single-level clustering algorithm" />
+-->
+	 </extension>
+
+</plugin>

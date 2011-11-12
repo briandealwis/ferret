@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Clustering Plug-in
+Bundle-SymbolicName: ca.ubc.cs.clustering;singleton:=true
+Bundle-Version: 0.4.0.qualifier
+Bundle-Activator: ca.ubc.cs.clustering.ClusteringPlugin
+Bundle-Vendor: UBC Computer Science
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.expressions,
+ org.apache.commons.collections15
+Eclipse-LazyStart: true
+Export-Package: ca.ubc.cs.clustering,
+ ca.ubc.cs.clustering.attrs,
+ ca.ubc.cs.clustering.utils
+Bundle-ClassPath: .
+Import-Package: org.eclipse.jface.resource
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

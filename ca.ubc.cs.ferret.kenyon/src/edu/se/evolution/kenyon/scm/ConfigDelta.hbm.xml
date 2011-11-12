@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.scm.ConfigDelta"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-ConfigDelta.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="destSpec"
+            class="edu.se.evolution.kenyon.scm.SCMReposConfigSpec"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="destSpec"
+        />
+
+        <many-to-one
+            name="originSpec"
+            class="edu.se.evolution.kenyon.scm.SCMReposConfigSpec"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="originSpec"
+        />
+
+        <property
+            name="diffContents"
+            type="text"
+            update="true"
+            insert="true"
+            column="diff"
+        />
+
+        <list
+            name="commitData"
+            lazy="false"
+            cascade="all-delete-orphan"
+        >
+
+            <key
+                column="configdelta_id"
+            >
+            </key>
+
+            <index
+                column="data_index"
+            />
+
+            <one-to-many
+                  class="edu.se.evolution.kenyon.scm.CommitData"
+            />
+
+        </list>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-ConfigDelta.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

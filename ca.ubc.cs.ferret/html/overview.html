@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Ferret Overview</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+</HEAD>
+
+<STYLE>
+<!--
+.guibutton {
+    border:  3pt outset #888888;
+    -moz-border-radius: 5pt;
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 2px;
+    padding-top: 0px;
+    padding-bottom: 1px;
+    padding-right: 2px;
+    font-family: sans-serif;
+    font-size: smaller;
+    font-weight: bold;
+}
+-->
+dl dt { float:left; clear:left; margin-right: 1em;}
+dt:after { content: ':'; }
+</STYLE>
+
+<BODY>
+<H2>Getting Started with Ferret</H2>
+
+<P>Ferret is an <EM>automatic</EM> tool, meaning that, once started,
+it responds automatically to your interactions with the Eclipse
+environment.  For example, selecting an item from the <EM>Outline</EM>
+view causes Ferret to begin ferreting through the system to answer
+a set of queries for that particular item.  The results of the
+queries are then listed in the <EM>Ferret</EM> view using an
+Eclipse tree view.</P>
+
+<DIV ALIGN=CENTER>
+    <IMG SRC="ferret.png">
+</DIV>
+
+<P>Ferret can also be explicitly invoked for items using:
+<UL>
+<LI> the keyboard shortcut <SPAN STYLE="guibutton">F9</SPAN>, or
+<LI> through selecting the <B>Query with Ferret</B> from
+    pop-up context menus, or
+<LI> through <STRONG>Navigate &rarr; Query with Ferret</STRONG>.
+</UL>
+These forms of invocation are useful for issuing queries on text
+such as from a text editor.</P>
+
+<!-- 
+    <P>The queries are indicated with the following icon:
+    <IMG SRC="query.png" title="[query description]">. 
+    Queries in progress are indicated with a small hour-glass: 
+    <IMG SRC="query-busy.png" title="[query in progress]">.</P>
+-->
+
+<H3>Configuration Jump Start</H3>
+
+<P>Ferret is only operational once the Ferret view has been opened.
+This view can either be manually opened using <B>Window &rarr; Show
+View</B>, or selecting <B>Query with Ferret</B> from an object's
+context menu as described above.</P>
+
+<P>Ferret first requires some simple configuration to describe its
+query parameters before it can begin querying.  This is accomplished
+using the <EM>Ferret Sphere Configuration Wizard</EM> which will
+pop-up on the first query, or which can be explicitly invoked
+using the <EM>Configure Spheres...</EM> from the Ferret view's view
+menu (<IMG SRC="view-menu.gif">).  The configuration process is described
+in <A HREF="configuring.html">more detail elsewhere</A>, but for now,
+simply select <B>(1)</B> the <B>Java static program queries</B> and
+<B>(2)</B> click on <B>Finish</B>.</P>
+
+<DIV ALIGN=CENTER>
+    <IMG SRC="config-static-jdt-sphere.png">
+</DIV>
+
+<P>With such a configuration, Ferret performs like a normal Java
+search tool.</P>
+
+<H2>Ferret Walk Through</H2>
+
+<P>Let's take a closer look at the Ferret view.  This view displays
+the results of a set of queries applicable to the query elements.</P>
+
+<DIV ALIGN=CENTER>
+    <IMG SRC="ferret-demo.png">
+</DIV>
+
+<P>This image highlights four parts:</P>
+<OL>
+<LI> This area displays a textual description of the current query element
+    (or elements).  This example features queries for the Java class
+    <TT>EmpiricalFormula</TT>.
+
+<LI> The <EM>Clustering/Fidelity</EM> column provides information
+    about the <A HREF="clustering.html">clusterings of the results
+    of a query</A>.  In this example, the results of <EM>instantiators</EM>
+    has already been clustered by the declaring package of the
+    results.
+
+<LI> We can see the two clusters based on the declared package of the
+    query results.  The cluster <CODE>org.manumission.chem</CODE> 
+    can still be clustered in three different ways.
+
+<LI> The <EM>Clustering/Fidelity</EM> column also indicates the
+    <A HREF="fidelity.html"><EM>fidelity</EM></A> of the result to the
+    original query element(s). 
+
+</OL>
+
+<H4>The Ferret Toolbar</H4>
+
+The Ferret toolbar features five command buttons.
+<UL>
+<LI> <IMG SRC="pin_editor.gif" title="[pin view contents]">:
+    this toggle button supresses Ferret's automatic querying.
+    Queries may still be made explicitly using the keyboard shortcut
+    <SPAN STYLE="guibutton">F9</SPAN> or through the menus.</LI>
+<LI> <IMG SRC="expandCQs.gif" title="[collapse all]">: expand all
+    top-level queries by one level.</LI>
+<LI> <IMG SRC="collapseall.gif" title="[collapse all]">: collapse the
+    tree to show only the top-level queries.</LI>
+<LI> <IMG SRC="nav_home.gif" title="[reopen original query element]">:
+    re-open original query element, or select from previously queried-for
+    elements.  This button is useful for returning to the start after some
+    exploration.  If there are multiple elements,
+    then you will be prompted which parent to open.</LI>
+<LI> <IMG SRC="open-parent.gif">: a useful shortcut to open the containing
+    element of the current query element.  If there are multiple elements,
+    then you will be prompted which parent to open.</LI>
+</UL>
+
+
+<H4>The Ferret Query Results</H4>
+
+The Ferret view is made up of four columns:
+<DL>
+<DT>Description</DT>
+    <DD> A description of the element.</DD>
+<DT>Category</DT>
+    <DD>Queries are grouped by <a href="#queryCategories">category</A>.</DD>
+<DT>#E</DT>
+    <DD>The total number of elements for either the query or the current
+	cluster.</DD>
+<DT>Clustering/Fidelity</DT>
+    <DD>The currently selected clustering, or the number of possible
+	<A HREF="clustering.html">clusterings</A>.
+	For query results, this column displays the
+	<A HREF="fidelity.html"><EM>fidelity</EM></A> of the result.</DD>
+</DL>
+
+<P>When items correspond to elements in the workbench, they can
+opened by either double-clicking or using the <STRONG>Open</STRONG>
+from the item's context menu.  The context menu can be used to
+open the item's container or querying on the item's container (when
+found), and other operations (when supported).</P>
+
+<P>The results of a query can also serve as the context for further
+queries, displayed in the context of the tree.</P>
+
+<H4><a name="queryCategories">Query Categories</A></H4>
+
+<P>Queries are sorted by their category.  There are currently four
+query categories:</P>
+<DL>
+<DT>declarations</DT>
+    <DD> Queries about relations involving the declarations of elements.</DD>
+<DT>inter-class</DT>
+    <DD> Queries about relations between different classes. </DD>
+<DT>intra-class</DT>
+    <DD> Queries about relations within a class. </DD>
+<DT>hierarchical</DT>
+    <DD> Queries about relations involving type inheritance.</DD>
+</DL>
+
+</BODY>
+</HTML>

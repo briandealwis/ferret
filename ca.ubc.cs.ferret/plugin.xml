@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!-- $Header: /home/bsd/research/cvsroot/phd-ca.ubc.cs.ferret/plugin.xml,v 1.39 2007/11/28 19:29:42 bsd Exp $ -->
+<plugin>
+   <extension-point id="cqs" name="Conceptual Queries" schema="schema/cqs.exsd"/>
+   <extension-point id="sphereHelpers" name="Spheres" schema="schema/sphereHelpers.exsd"/>
+   <extension-point id="query_stimulants" name="Stimulants prompting queries" schema="schema/query_stimulants.exsd"/>
+   <extension-point id="typeConverters" name="Ferret Type Converters" schema="schema/typeConverters.exsd"/>
+   <extension-point id="scfs" name="Sphere Composition Functions" schema="schema/tcfs.exsd"/>
+
+   <extension point="org.eclipse.ui.views">
+      <category
+            id="ca.ubc.cs.ferret.views.categories"
+            name="Ferret">
+      </category>
+      <view
+            id="ca.ubc.cs.ferret.views.QueriesDossier"
+            name="Ferret"
+            icon="icons/ferret-1.gif"
+            category="ca.ubc.cs.ferret.views.categories"
+            class="ca.ubc.cs.ferret.views.QueriesDossierView">
+      </view>
+   </extension>
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.TaskList"
+               relationship="right"
+               id="ca.ubc.cs.ferret.views.QueriesDossier">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+         <view
+               ratio="0.4"
+               relative="org.eclipse.ui.editors"
+               relationship="bottom"
+               id="ca.ubc.cs.ferret.views.QueriesDossier">
+         </view>
+      </perspectiveExtension>
+   </extension>
+
+
+	<!-- M1=Ctrl/Command M2=Shift M3=Alt/Option -->
+	<extension point="org.eclipse.ui.bindings">
+		<!-- commandId defined on AbstractAskFerretAction -->
+		<key
+        	commandId="ca.ubc.cs.ferret.commands.askFerret"
+    	    sequence="F9"
+	        schemeId="org.eclipse.ui.defaultAcceleratorConfiguration" />
+        <key
+            commandId="ca.ubc.cs.ferret.commands.toggleDossierPinning"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+F9" />
+        <key
+            commandId="ca.ubc.cs.ferret.commands.toggleCQsExpansion"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M2+F9" />
+        <key
+            commandId="ca.ubc.cs.ferret.commands.populatedAskFerret"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M3+F9" />
+	</extension>  
+	
+	<extension point = "org.eclipse.ui.actionSets">
+		<actionSet id="ca.ubc.cs.ferret.actionSet"
+			label="Ferret ActionSet"
+			visible="true">
+			<action id="ca.ubc.cs.ferret.workbenchQuery"
+				menubarPath="navigate/open.ext2"
+				label="&amp;Query with Ferret"
+				class="ca.ubc.cs.ferret.AskFerretWorkbenchAction"
+				icon="icons/ferret-2.gif"    
+				definitionId="ca.ubc.cs.ferret.commands.askFerret" />
+            <action id="ca.ubc.cs.ferret.toggleDossierPinning"
+                menubarPath="window/additions"
+                label="&amp;Toggle Ferret Pinning"
+                class="ca.ubc.cs.ferret.views.ToggleDossierPinningWorkbenchAction"
+                icon="icons/ferret-2.gif"    
+                definitionId="ca.ubc.cs.ferret.commands.toggleDossierPinning" />
+			<action id="ca.ubc.cs.ferret.expandCQs"
+				label="&amp;Toggle expansion of top-level conceptual queries"
+				class="ca.ubc.cs.ferret.views.ToggleCQsExpansionWorkbenchAction"
+				icon="icons/expandCQs.gif"
+				definitionId="ca.ubc.cs.ferret.commands.toggleCQsExpansion" />
+            <action id="ca.ubc.cs.ferret.workbenchPopulatedQuery"
+                menubarPath="navigate/open.ext2"
+                label="&amp;Select queries for Ferret"
+                class="ca.ubc.cs.ferret.views.PopulatedAskFerretWorkbenchAction"
+                icon="icons/ferret-2.gif"    
+                definitionId="ca.ubc.cs.ferret.commands.populatedAskFerret" />
+		</actionSet>
+	</extension>
+
+	<extension point="org.eclipse.ui.commands">
+		<!-- see org.eclipse.ui/plugin.xml for command category listings -->
+		<command
+	            name="Query with Ferret"
+	            description="Begin an Ferret consultation on the selected elements"
+	            categoryId="org.eclipse.ui.category.window"
+	            id="ca.ubc.cs.ferret.commands.askFerret" />
+        <command
+                name="Toggle Ferret pinning"
+                description="Toggle the pinned state of this window's Ferret view"
+                categoryId="org.eclipse.ui.category.window"
+                id="ca.ubc.cs.ferret.commands.toggleDossierPinning" />
+		<command
+			name="Toggle expansion of top-level conceptual queries"
+			description="Toggle the expansion of the top-level conceptual queries in the window&apos;s Ferret view"
+			categoryId="org.eclipse.ui.category.window"
+			id="ca.ubc.cs.ferret.commands.toggleCQsExpansion" />
+        <command
+                name="Select for Ferret query"
+                description="Select a query for the selected elements"
+                categoryId="org.eclipse.ui.category.window"
+                id="ca.ubc.cs.ferret.commands.populatedAskFerret" />
+	</extension>
+
+<!-- We're not ready for this, I don't think.
+	<extension point="org.eclipse.core.runtime.preferences">
+		<initializer class="ca.ubc.cs.ferret.preferences.FerretPreferencesInitializer" />
+	</extension>
+	-->
+		
+	<extension point="org.eclipse.ui.preferencePages">
+		<page name="Ferret"
+			class="ca.ubc.cs.ferret.preferences.FerretPreferencePage"
+			id="ca.ubc.cs.ferret.preferences.primary" />
+			<!-- id must be kept in sync with FerretPreferencePage.java -->
+	</extension>
+	<!-- other sources should provide preferences pages using:
+			<page name="Ferret X"
+			class="ca.ubc.cs.ferret.X.prefs.FerretPreferencePage"
+			category="ca.ubc.cs.ferret.preferences.primary"
+			id="ca.ubc.cs.ferret.X.preferences" /> -->
+	
+	<extension point="org.eclipse.ui.themes">
+ 		<fontDefinition id="ca.ubc.cs.ferret.dossierFont"
+ 			label="Ferret Text"
+	 		defaultsTo="org.eclipse.jface.dialogfont">
+	 			<description>The text font used in the Ferret Dossier view.</description>
+		</fontDefinition>
+	</extension>
+	
+	<extension point="ca.ubc.cs.ferret.query_stimulants">
+        <command id="org.eclipse.ui.navigate.forwardHistory" />
+        <command id="org.eclipse.ui.navigate.backwardHistory" />
+		<command id="org.eclipse.ui.edit.text.gotoLastEditPosition" />
+		<command id="org.eclipse.ui.window.openEditorDropDown" />
+	</extension>
+
+    <!-- FIXME: does order matter? -->
+    <extension point="ca.ubc.cs.ferret.scfs">
+<!-- Transformation isn't included here -->		
+	 	<sphereCompositor
+			class="ca.ubc.cs.ferret.sphereconfig.ReplacementSphereCompositorFactory"
+			icon="icons/tcf/replacement.gif"
+			helpContextId="ca.ubc.cs.ferret.tcf_replacement" />
+	 	<sphereCompositor
+			class="ca.ubc.cs.ferret.sphereconfig.UnioningSphereFactory"
+			icon="icons/tcf/union.gif"
+			helpContextId="ca.ubc.cs.ferret.tcf_union" />
+<!--
+	 	<sphereCompositor
+			class="ca.ubc.cs.ferret.sphereconfig.IntersectingSphereCompositorFactory"
+			icon="icons/tcf/intersection.gif"
+			helpContextId="ca.ubc.cs.ferret.tcf_intersection" />
+	 	<sphereCompositor
+			class="ca.ubc.cs.ferret.sphereconfig.DisjunctingSphereCompositorFactory"
+			icon="icons/tcf/disjunction.gif" 
+			helpContextId="ca.ubc.cs.ferret.tcf_disjunction"  />
+	 	<sphereCompositor
+			class="ca.ubc.cs.ferret.sphereconfig.DifferenceSphereCompositorFactory"
+			icon="icons/tcf/difference.gif"
+			helpContextId="ca.ubc.cs.ferret.tcf_difference" />
+-->
+    </extension>
+	
+    <extension point="org.eclipse.help.toc">
+	<toc file="toc.xml" primary="true" />
+    </extension>
+	
+    <extension point="org.eclipse.help.contexts">
+        <contexts file="helpContexts.xml"  />
+    </extension>
+	
+</plugin>

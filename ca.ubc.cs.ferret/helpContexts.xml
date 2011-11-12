@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contexts>
+
+    <context id="dossier" title="Ferret Results View">
+	<description>Ferret is a software exploration tool that describes the local context of the currently selected program element: how it relates to the rest of the system. Ferret structures the local context as answers to a set of conceptual queries about that element.  These queries are automatically performed as new elements are selected.</description>
+	<topic href="html/overview.html" label="Ferret Overview"/>
+    </context>
+    
+    <context id="configuration" title="Configuring Ferret">
+	<description>Ferret supports integrating many different sources of information about a program (called <EM>spheres</EM>).  Spheres can be composed using one of the compositors to create a composite sphere.  The Sphere Configuration wizard is used to describe the sphere composition to be used as the source for its queries.  </description>
+	<topic href="html/configuring.html" label="Configuring Ferret" />
+    </context>
+
+    <context id="tcf_difference"
+	    title="Differencing Compositor">
+	<description>This function reports the relations from the first sphere that are not reported by any of the remaining spheres.</description>
+	<topic href="html/configuring.html" label="Configuring Ferret" />
+    </context>
+
+    <context id="tcf_disjuction"
+	    title="Disjunction (or Symmetric Difference) Compositor">
+	<description>This function reports the relations that are not common between any of its constituent spheres.
+	</description>
+	<topic href="html/configuring.html" label="Configuring Ferret" />
+    </context>
+
+    <context id="tcf_intersection"
+	    title="Intersecting Compositor">
+	<description>This function reports the relations in common across its spheres toolboxes.
+	</description>
+	<topic href="html/configuring.html" label="Configuring Ferret" />
+    </context>
+
+    <context id="tcf_union"
+	    title="Union Compositor">
+	<description>This function reports all the relations from any of its constituent toolboxes.
+	</description>
+	<topic href="html/configuring.html" label="Configuring Ferret" />
+    </context>
+
+    <context id="tcf_replacement"
+	    title="Replacement Compositor">
+	<description>This function reports the first relation found from its constituent toolboxes.
+	</description>
+	<topic href="html/configuring.html" label="Configuring Ferret" />
+    </context>
+
+</contexts>

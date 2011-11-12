@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.ConfigData"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-ConfigData.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <many-to-one
+            name="spec"
+            class="edu.se.evolution.kenyon.scm.SCMReposConfigSpec"
+            cascade="save-update"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="spec"
+            not-null="true"
+        />
+
+        <map
+            name="myRelatedData"
+            table="SerializedData"
+            lazy="false"
+            sort="unsorted"
+            cascade="all-delete-orphan"
+        >
+
+            <key
+                column="dataset_id"
+            >
+            </key>
+
+            <index
+                column="data_key"
+                type="string"
+            />
+
+            <element
+                column="serialized_value"
+                type="serializable"
+                not-null="false"
+                unique="false"
+            />
+
+        </map>
+
+        <set
+            name="configGraphs"
+            lazy="true"
+            cascade="all-delete-orphan"
+            sort="unsorted"
+        >
+
+            <key
+                column="config_data_id"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.se.evolution.kenyon.ConfigGraph"
+            />
+
+        </set>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-ConfigData.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+        <query name="findConfigDataBySpec"><![CDATA[
+            from ConfigData dataset where dataset.spec.id = :id
+        ]]></query>
+        <query name="findPrevConfigData"><![CDATA[
+            from ConfigData dataset where dataset.spec.projectIdentifier = :spec_project_id and dataset.spec.branchIdentifier = :spec_branch_id and dataset.spec.time < :spec_time order by dataset.spec.time desc
+        ]]></query>
+
+</hibernate-mapping>

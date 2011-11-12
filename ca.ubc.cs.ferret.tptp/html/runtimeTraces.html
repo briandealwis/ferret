@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Creating Java runtime traces using TPTP</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+<LINK REL="stylesheet" HREF="style.css" TYPE="text/css">
+</HEAD>
+
+<BODY>
+<H1>Creating Java runtime traces using TPTP</H1>
+
+<P>The following notes have been assembled to help jump start you
+to profiling using the Eclipse Test and Performance Tools Project
+(TPTP).  We recommend you skim through this page first, and then
+look at the TPTP documentation.</P>
+
+<P>The Eclipse TPTP provides a suite of tools for testing and
+profiling of Java applications.  Tracing is done using an <EM>agent
+controller</EM> (AC): this acts as an intermediary between the Java
+application being traced and the Eclipse workbench.  The Java
+application is run with a JVMTI/JVMPI agent (with <CODE>-Xrun</CODE>),
+which encodes the primitive trace information provided by the JVM
+and forwards the results to the AC.</P>
+
+<P>There are two forms of AC:  the Remote AC, a long-running process,
+and the Integrated AC, which is spawned as necessary by the workbench.
+The IAC is the simpler to use.  These instructions will use the
+IAC.</P>
+
+Instructions:
+<UL>
+<LI><P><A HREF="#Callisto">Using TPTP 4.3.x for Eclipse R3.2
+    (Callisto)</A></P></LI>
+<LI><P><A HREF="#Europa">Using TPTP 4.4.x for Eclipse R3.3
+    (Europa)</A></P></LI>
+</UL>
+
+<P>
+If you encounter difficulties, some part of the following may be
+of help.  The most up-to-date version of these notes are available
+at:</P>
+<BLOCKQUOTE>
+    <A HREF="http://www.cs.ubc.ca/~bsd/research/ferret/doc/runtimeTraces.html">
+    <CODE>http://www.cs.ubc.ca/~bsd/research/ferret/doc/runtimeTraces.html</CODE>
+    </A>
+</BLOCKQUOTE>
+
+<P><B>Note:</B> Hyades is the code name of earlier versions of TPTP.</P>
+
+<!-- ############################################################ --> <HR>
+
+<H2><A NAME="Callisto">Using TPTP 4.3.x for Eclipse R3.2 (Callisto)</A></H2>
+
+<P>How to create a trace file from running an application:</P>
+<OL>
+<LI><P>Select <B>Run &rarr; Profile...</B>.  This is the profiling
+    equivalent to the Run or Debug dialogs.  Any previously
+    defined run configurations should also appear here.  The most
+    notable difference between the Run and Debug dialogs is the
+    addition of the <B>Monitor</B> and <B>Destination</B> tabs.</P></LI>
+
+<LI><P>Either select an existing configuration, or create an appropriate
+    configuration for your application.</P></LI>
+
+<LI><P>Select the <B>Monitor</B> tab.  Expand the "<B>Java Profiling</B>"
+    item and enable the "<B>Execution Time Analysis</B>."</P>
+    <DIV ALIGN=CENTER>
+	<IMG SRC="43-profile-monitor.png">
+    </DIV>
+
+    <P>Select <B>Edit Options</B> to bring up the Execution Time Analysis
+    wizard.  Select <B>Show execution flow graphical details</B>, and
+    then select <B>Finish</B> to dismiss the wizard.</P>
+    <DIV ALIGN=CENTER>
+	<IMG SRC="43-profile-monitor-options-graph-flow.png">
+    </DIV>
+    <UL>
+    <LI><P>[Optional]  TPTP installs a set of default profiling filters
+	based on the configuration type.  This identifies a set of
+	classes and methods to be removed from the traces, and can lead
+	to significant shrinking of the traces.  To adjust the filters,
+	select the "<B>Java Profiling</B>" and click on the
+	<B>Edit Options</B> button.  See <B><A
+	HREF="http://help.eclipse.org/help32/topic/org.eclipse.tptp.platform.doc.user/tasks/tefilter.htm">Specifying
+	profiling criteria</A></B> for more information.</P></LI>
+	</LI>
+    <LI><P>[Optional] By default, profiling starts immediately upon
+	application launch.  To instead enable manual initiation of
+	profiling, select the "<B>Java Profiling</B>" item, and click
+	on the <B>Edit Options</B> button to bring up the Filter
+	Set wizard.  Select <B>Next</B> to bring up the Limits page.
+	Disable the option for <B>Automatically start monitoring
+	when application is launched</B>.  The monitoring (profiling)
+	can be selectively enabled and paused using the monitor's
+	context menu from the <B>Profiling Monitors</B> view
+	in <EM>Profiling and Logging</EM> perspective.
+	Select <B>Finish</B> to return to the profile dialog.</P></LI>
+    </UL></LI>
+
+<LI><P>Select the <B>Destination</B> tab.  Select the
+    "<B>Send profiling data to a file</B>" and specify a file.
+    Be sure to specify a full path, as it is not necessarily clear
+    where the file will be written otherwise.</P></LI>
+
+<LI><P>You should now be able to click on the <B>Profile</B> button
+    to start profiling.</P>
+    <UL>
+    <LI><P>The profiling can be paused and resumed using the
+	<B>Profiling Monitors</B> view.</P>
+    </LI>
+
+<LI><P>When importing the profiling data set for Ferret, be sure
+    to select the <B>Show full data (execution flow graphical
+    details)</B> from the import wizard.</P></LI>    
+</OL>
+
+<P>Additional troubleshooting notes:</P>
+<UL>
+<LI><P>If you encounter JVM crashes, you may wish to try adding
+    <TT>-Xint</TT> to the JVM arguments.  This causes the JVM to
+    disable its JIT compiler, but will result in significant
+    performance costs.</P></LI>
+
+<LI><P>[Linux/Unix] Note that 
+    <A HREF="https://bugs.eclipse.org/bugs/show_bug.cgi?id=150006">bug
+    150006</A> requires explicitly configuring <TT>DISPLAY</TT>
+    on Unix under the <B>Environment</B> tab.</P></LI>
+</UL>
+
+<P>NB: If using a non-standard perspective, you may need to explicitly
+add the profiling menu items: do <B>Window &rarr; Customize Perspective...</B>,
+select <B>Commands</B>, and tick the <B>Profile</B> command set. </P>
+
+<P>Eclipse documentation:</P>
+<UL>
+<LI> <P><A
+    HREF="http://help.eclipse.org/help32/topic/org.eclipse.tptp.platform.doc.user/tasks/teprlaun.htm">Launching
+    or attaching to a process for profiling</A></P></LI>
+<LI> The Integrated Agent Controller (<A
+    HREF="http://help.eclipse.org/help32/topic/org.eclipse.tptp.platform.agentcontroller.doc.user/concepts/ac/ciacintro.html">Windows</A>,
+    <A
+    HREF="http://help.eclipse.org/help32/topic/org.eclipse.tptp.platform.agentcontroller.doc.user/tasks/rac/tiacprofile.html">Linux</A>).</P></LI>
+<LI> An alternative is to launch the
+    <A HREF="http://help.eclipse.org/help32/topic/org.eclipse.tptp.platform.doc.user/tasks/teprofsa.htm">application in stand-alone mode</A>.</P></LI>
+</UL>
+
+
+<!-- ############################################################ --> <HR>
+<H2><A NAME="Europa">Using TPTP 4.4.x for Eclipse R3.3 (Europa)</A></H2>
+
+<P>How to create a trace file from running an application:</P>
+<OL>
+<LI><P>Select <B>Run &rarr; Profile...</B>.  This is the profiling
+    equivalent to the Run or Debug dialogs.  Any previously
+    defined run configurations should also appear here.  The most
+    notable difference between the Run and Debug dialogs is the
+    addition of the <B>Monitor</B> and <B>Destination</B> tabs.</P></LI>
+
+<LI><P>Either select an existing configuration, or create an appropriate
+    configuration for your application.</P></LI>
+
+<LI><P>Select the <B>Monitor</B> tab.  Expand the "<B>Java Profiling - JRE
+    1.5 or newer</B>" item and select "<B>Execution Time Analysis</B>."</P>
+    <DIV ALIGN=CENTER>
+	<IMG SRC="44-profile-monitor.png">
+    </DIV>
+    <P>Select the <B>Edit Options</B> button and ensure the 
+    "<B>Show execution flow graphical details</B>" is selected.</P>
+    <DIV ALIGN=CENTER>
+	<IMG SRC="44-profile-monitor-options-graph-flow.png">
+    </DIV>
+
+<LI><P>[Optional]  TPTP installs a set of default profiling filters
+    based on the configuration type.  This identifies a set of
+    classes and methods to be removed from the traces, and can lead
+    to significant shrinking of the traces.  To adjust the filters,
+    select the "<B>Java Profiling</B>" and click on the
+    <B>Edit Options</B> button.  See <B><A
+    HREF="http://help.eclipse.org/help33/topic/org.eclipse.tptp.platform.doc.user/tasks/tefilter.htm">Specifying
+    profiling criteria</A></B> for more information.</P></LI>
+
+<LI><P>Select the <B>Destination</B> tab.  Select the
+    "<B>Send profiling data to a file</B>" and specify a file.
+    Be sure to specify a full path, as it is not necessarily clear
+    where the file will be written otherwise.</P></LI>
+
+<LI><P>You should now be able to click on the <B>Profile</B> button
+    to start profiling.</P>
+    <UL>
+    <LI><P>The profiling can be paused and resumed using the
+	<B>Profiling Monitors</B> view.</P>
+    </LI>
+
+<LI><P>When importing the profiling data set for Ferret, be sure
+    to select the <B>Show full data (execution flow graphical
+    details)</B> from the import wizard.</P></LI>    
+</OL>
+
+<P>Additional troubleshooting notes:</P>
+<UL>
+<LI><P>If you encounter JVM crashes, you may wish to try adding
+    <TT>-Xint</TT> to the JVM arguments.  This causes the JVM to
+    disable its JIT compiler, but will result in significant
+    performance costs.</P></LI>
+
+<LI><P>[Linux/Unix] Note that 
+    <A HREF="https://bugs.eclipse.org/bugs/show_bug.cgi?id=150006">bug
+    150006</A> requires explicitly configuring <TT>DISPLAY</TT>
+    on Unix under the <B>Environment</B> tab.
+    This is supposed to have been fixed with TPTP 4.4 (Europa).</P></LI>
+
+<LI><P>The pre-1.5 Java Profiler supports manually starting the
+    profiling instead of automatic starting on startup.</P>
+    <OL>
+    <LI><P>From the <B>Monitor</B> tab, select the "<B>Java Profiling -
+	pre JRE 1.5</B>" item and select <B>Edit Options</B> to
+	bring up the Edit Profiling Options wizard.
+    <LI><P>Click <B>Next</B> to bring up the Limits page, and
+	deselect the option for <B>Automatically start monitoring
+	when application is launched</B>.  The monitoring (profiling)
+	can be selectively enabled and paused using the monitor's
+	context menu from the <B>Profiling Monitors</B> view
+	in <EM>Profiling and Logging</EM> perspective.</P></LI>
+    <LI><P>Select <B>Finish</B> to return to the profile dialog.
+	Select the <B>Execution Time Analysis</B> item and click
+	on <B>Edit Options</B>.  It is <EM>extremely important</EM>
+	to enable <B>Show execution flow graphical details</B>.</P></LI>
+    <LI><P>Select <B>Finish</B> and then continue as normal.
+    </OL></LI>
+
+<LI><P>If using a non-standard perspective, you may need to
+    explicitly add the profiling menu items: do <B>Window &rarr;
+    Customize Perspective...</B>, select <B>Commands</B>, and
+    tick the <B>Profile</B> command set.</P></LI>
+    </OL>
+</UL>
+
+<P>Relevant Eclipse documentation:</P>
+<UL>
+<LI><P>See <A
+    HREF="http://help.eclipse.org/help33/topic/org.eclipse.tptp.platform.doc.user/tasks/teprlaun.htm">Launching
+    or attaching to a process for profiling</A></P></LI>
+<LI><P><A
+HREF="http://help.eclipse.org/help33/topic/org.eclipse.tptp.platform.agentcontroller.doc.user/tasks/rac/tiacprofile.html">Profiling
+    with Local deployment</A></P></LI>
+<LI><P>An alternative is to launch the
+    <A HREF="http://help.eclipse.org/help33/topic/org.eclipse.tptp.platform.doc.user/tasks/teprofsa.htm">application in stand-alone mode</A>.</P></LI>
+</UL>
+
+</BODY>
+</HTML>

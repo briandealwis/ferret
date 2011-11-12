@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ferret TPTP Dynamic Runtime Support Plug-in
+Bundle-SymbolicName: ca.ubc.cs.ferret.tptp; singleton:=true
+Bundle-Version: 0.4.0.qualifier
+Bundle-Activator: ca.ubc.cs.ferret.tptp.TptpPlugin
+Bundle-Vendor: University of British Columbia
+Bundle-Localization: plugin
+Require-Bundle: ca.ubc.cs.ferret.jdt;bundle-version="0.4.0",
+ ca.ubc.cs.ferret;bundle-version="0.4.0",
+ ca.ubc.cs.clustering;bundle-version="0.4.0",
+ org.eclipse.hyades.analysis.engine,
+ org.eclipse.hyades.execution,
+ org.eclipse.hyades.trace.ui,
+ org.eclipse.hyades.trace.views,
+ org.eclipse.tptp.platform.collection.framework,
+ org.eclipse.tptp.platform.models,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.apache.commons.collections15;bundle-version="4.1.0"
+Eclipse-AutoStart: true
+Export-Package: ca.ubc.cs.ferret.tptp,
+ ca.ubc.cs.ferret.tptp.ops,
+ ca.ubc.cs.ferret.tptp.ui
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

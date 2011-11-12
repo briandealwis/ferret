@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.graph.Graph"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Graph.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="myName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="myName"
+        />
+
+        <many-to-one
+            name="attributes"
+            class="edu.se.evolution.kenyon.util.AttributedImpl"
+            cascade="all"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="attributes"
+        />
+
+        <map
+            name="edges"
+            lazy="true"
+            sort="natural"
+            cascade="all-delete-orphan"
+        >
+
+            <key
+                column="graph_id"
+            >
+            </key>
+
+            <index
+                column="edge_name"
+                type="java.lang.String"
+            />
+
+            <one-to-many
+                  class="edu.se.evolution.kenyon.graph.Edge"
+            />
+
+        </map>
+
+        <map
+            name="nodes"
+            lazy="true"
+            sort="natural"
+            cascade="all-delete-orphan"
+        >
+
+            <key
+                column="graph_id"
+            >
+            </key>
+
+            <index
+                column="node_name"
+                type="java.lang.String"
+            />
+
+            <one-to-many
+                  class="edu.se.evolution.kenyon.graph.Node"
+            />
+
+        </map>
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Graph.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+        <joined-subclass
+            name="edu.se.evolution.kenyon.ConfigGraph"
+        >
+            <key
+                column="graph_id"
+            />
+
+        <property
+            name="factexClassname"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="factexClassname"
+        />
+
+        <many-to-one
+            name="buildscript"
+            class="edu.se.evolution.kenyon.extractors.BuildScript"
+            cascade="save-update"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="buildscript"
+        />
+
+        <many-to-one
+            name="summary"
+            class="edu.se.evolution.kenyon.ConfigGraphSummary"
+            cascade="save-update"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="summary"
+        />
+
+        <property
+            name="systemRoot"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="systemRoot"
+        />
+
+        <many-to-one
+            name="schema"
+            class="edu.se.evolution.kenyon.graph.schemas.GraphSchema"
+            cascade="save-update"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="graphSchema"
+        />
+
+        </joined-subclass>
+
+    </class>
+
+</hibernate-mapping>

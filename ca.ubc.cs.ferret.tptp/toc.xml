@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc link_to="../ca.ubc.cs.ferret/toc.xml#specialTopics"
+	label="TPTP Notes">
+    <topic label="Creating Run-time Trace Files"
+	    href="html/runtimeTraces.html" />
+</toc>

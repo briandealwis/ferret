@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension point="ca.ubc.cs.ferret.sphereHelpers">
+		<sphereHelper
+			id="ca.ubc.cs.ferret.sphere.tptp" 
+			class="ca.ubc.cs.ferret.tptp.TptpSphereHelperFactory" />
+	</extension>
+   
+   	<extension 
+		point="org.eclipse.ui.popupMenus"
+		id="ca.ubc.cs.ferret.popup.tptp.object">
+		<objectContribution
+			objectClass="org.eclipse.hyades.models.trace.TRCMethod"
+			id="ca.ubc.cs.ferret.popup.tptp.consult">
+			<action
+				id="ca.ubc.cs.ferret.context.tptp.consult"
+				label="&amp;Query with Ferret"
+				class="ca.ubc.cs.ferret.AskFerretObjectAction"
+				menubarPath="additions"
+				icon="icons/ferret-2.gif"    
+				definitionId="ca.ubc.cs.ferret.commands.askFerret"
+				enablesFor="+" />
+		</objectContribution>
+	</extension>
+
+    <extension point="org.eclipse.help.toc">
+		<toc file="toc.xml" />
+		<toc file="tocImporting.xml" />
+    </extension>
+    
+    <extension point="org.eclipse.help.contexts">
+		<contexts file="helpContexts.xml"  />
+    </extension>
+    
+    <extension point="ca.ubc.cs.ferret.cqs">
+       <conceptualQuery
+             category="inter-class"
+             class="ca.ubc.cs.ferret.tptp.UsedMethodsQuery"
+             id="ca.ubc.cs.ferret.tptp.em">
+          <parameter
+                class="ca.ubc.cs.ferret.types.FerretObject"
+                count="1"
+                fidelity="approximate">
+          </parameter>
+       </conceptualQuery>
+    </extension>
+    
+     <extension point="ca.ubc.cs.clustering.classifiers">
+		<classifier
+          class="ca.ubc.cs.ferret.tptp.attributes.EnclosingPackageClassifier"
+          id="ca.ubc.cs.ferret.tptp.classifier.JavaElementEnclosingPackageProvider"
+          description="declared package"
+          objectType="org.eclipse.hyades.models.trace.TRCLanguageElement" />
+		<classifier
+          class="ca.ubc.cs.ferret.tptp.attributes.DeclaringTypeClassifier"
+          id="ca.ubc.cs.ferret.tptp.classifier.MemberDeclaringType"
+          description="declaring type"
+          objectType="org.eclipse.hyades.models.trace.TRCLanguageElement" />
+		<classifier
+          class="ca.ubc.cs.ferret.tptp.attributes.MethodReturnTypeProvider"
+          id="ca.ubc.cs.ferret.tptp.classifier.MethodReturnTypeProvider"
+          description="return type"
+          objectType="org.eclipse.hyades.models.trace.TRCMethod" />
+    <classifier
+          class="ca.ubc.cs.ferret.tptp.attributes.MethodArgumentsProvider"
+          id="ca.ubc.cs.ferret.tptp.classifier.MethodArgumentsProvider"
+          description="argument types"
+          objectType="org.eclipse.hyades.models.trace.TRCMethod" />
+    <classifier
+          class="ca.ubc.cs.ferret.tptp.attributes.ClassSuperclassProvider"
+          description="superclass"
+          id="ca.ubc.cs.ferret.tptp.attributes.ClassSuperclassProvider"
+          objectType="org.eclipse.hyades.models.trace.TRCClass" />
+    </extension>
+
+</plugin>

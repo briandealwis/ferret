@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contexts>
+    <context id="tb_filtered_jdt" title="Filtered JDT">
+	   <description>This sphere is a special variant of the Java static that only filters all queries to only include methods that were actually executed in one or more program traces.  It requires one or more Java dynamic runtime spheres to also be configured.</description>
+	   <!-- <topic href="html/tb_filtered.html" label="Filtered JDT"/> -->
+	   <topic href="../ca.ubc.cs.ferret/html/configuring.html"
+	       label="Configuring Ferret"/>
+    </context>
+    <context id="tb" title="Java dynamic runtime sphere">
+	   <description>This sphere describes the relations encoded in a dynamic runtime program trace.</description>
+	   <!-- <topic href="html/tb.html" label="The TPTP Sphere"/> -->
+	   <topic href="html/runtimeTraces.html"
+		  label="Creating Run-time Trace Files" />
+	   <topic href="../ca.ubc.cs.ferret/html/configuring.html"
+	      label="Configuring Ferret"/>
+    </context>
+
+    <context id="importing" title="Importing TPTP Runtime Traces">
+	   <description>This wizard is used to select a set of dynamic runtime program traces.</description>
+	   <topic href="html/importingTraces.html"
+		  label="Importing TPTP Runtime Traces" />
+	   <topic href="../ca.ubc.cs.ferret/html/configuring.html"
+	      label="Configuring Ferret"/>
+    </context>
+
+</contexts>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.graph.AbstractGraphElement"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-AbstractGraphElement.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <property
+            name="myName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="myName"
+            not-null="true"
+        />
+
+        <many-to-one
+            name="attributes"
+            class="edu.se.evolution.kenyon.util.AttributedImpl"
+            cascade="all"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="attributes"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-AbstractGraphElement.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+        <joined-subclass
+            name="edu.se.evolution.kenyon.graph.Edge"
+        >
+            <key
+                column="edge_id"
+            />
+
+        <many-to-one
+            name="hibSrcNode"
+            class="edu.se.evolution.kenyon.graph.Node"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="src_node"
+        />
+
+        <many-to-one
+            name="hibDestNode"
+            class="edu.se.evolution.kenyon.graph.Node"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="dest_node"
+        />
+
+        <bag
+            name="endPoints"
+            table="undirected_epts"
+            lazy="true"
+            inverse="true"
+            cascade="none"
+        >
+
+            <key
+                column="edge_id"
+            >
+            </key>
+
+            <many-to-many
+                class="edu.se.evolution.kenyon.graph.Node"
+                column="node_id"
+                outer-join="auto"
+             />
+
+      </bag>
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.se.evolution.kenyon.graph.Node"
+        >
+            <key
+                column="node_id"
+            />
+
+        <many-to-one
+            name="ordermap"
+            class="edu.se.evolution.kenyon.graph.NodesetOrderingImpl"
+            cascade="all"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ordermap"
+        />
+
+        <bag
+            name="inPoints"
+            lazy="true"
+            inverse="true"
+            cascade="none"
+        >
+
+            <key
+                column="dest_node"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.se.evolution.kenyon.graph.Edge"
+            />
+
+      </bag>
+
+        <bag
+            name="outPoints"
+            lazy="true"
+            inverse="true"
+            cascade="none"
+        >
+
+            <key
+                column="src_node"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.se.evolution.kenyon.graph.Edge"
+            />
+
+      </bag>
+
+        <list
+            name="endPoints"
+            table="undirected_epts"
+            lazy="true"
+            cascade="none"
+        >
+
+            <key
+                column="node_id"
+            >
+            </key>
+
+            <index
+                column="edge_position"
+            />
+
+            <many-to-many
+                class="edu.se.evolution.kenyon.graph.Edge"
+                column="edge_id"
+                outer-join="auto"
+             />
+
+        </list>
+
+        <map
+            name="metrics"
+            table="node_metrics"
+            lazy="false"
+            sort="natural"
+            cascade="none"
+        >
+
+            <key
+                column="node_id"
+            >
+            </key>
+
+            <index
+                column="metric_name"
+                type="string"
+            />
+
+            <element
+                column="metric_value"
+                type="serializable"
+                not-null="false"
+                unique="false"
+            />
+
+        </map>
+
+        </joined-subclass>
+
+    </class>
+
+</hibernate-mapping>

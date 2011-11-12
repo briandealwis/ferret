@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping
+>
+    <class
+        name="edu.se.evolution.kenyon.util.Script"
+        mutable="false"
+    >
+
+        <id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+        >
+            <generator class="native">
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Script.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
+            </generator>
+        </id>
+
+        <discriminator
+            column="discriminator"
+        />
+
+        <property
+            name="contents"
+            type="text"
+            update="true"
+            insert="true"
+            column="contents"
+        />
+
+        <property
+            name="command"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="command"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Script.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+        <subclass
+            name="edu.se.evolution.kenyon.extractors.BuildScript"
+            discriminator-value="buildscript"
+        >
+
+	    <!--
+            	To add non XDoclet property mappings, create a file named
+                hibernate-properties-BuildScript.xml
+		containing the additional properties and place it in your merge dir.
+	    -->
+
+        </subclass>
+
+    </class>
+
+</hibernate-mapping>

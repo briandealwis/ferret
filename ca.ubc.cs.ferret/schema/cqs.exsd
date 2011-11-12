@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="ca.ubc.cs.ferret">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="ca.ubc.cs.ferret" id="cqs" name="Conceptual Queries"/>
+      </appInfo>
+      <documentation>
+         This extension point allows clients to contribute new conceptual query implementations.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="conceptualQuery" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  a fully qualified identifier of the target extension point
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  an optional identifier of the extension instance
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  an optional name of the extension instance
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="conceptualQuery">
+      <complexType>
+         <sequence>
+            <element ref="parameter" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  a unique identifier that can be used to reference this conceptual query
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  the class that implements the conceptual query.
+This class must implement a public subclass of &lt;code&gt;ca.ubc.cs.ferret.model.IConceptualQuery&lt;/code&gt; with a public 0-argument constructor.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="ca.ubc.cs.ferret.model.IConceptualQuery"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="category" type="string" use="required">
+            <annotation>
+               <documentation>
+                  a category describing the type of information resulting from the query.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="parameter">
+      <complexType>
+         <attribute name="class" type="string" use="default" value="ca.ubc.cs.ferret.types.FerretObject">
+            <annotation>
+               <documentation>
+                  Specified the expected type for the query.  If unspecified, then defaults to
+&lt;TT&gt;ca.ubc.cs.ferret.types.FerretObject&lt;/TT&gt;
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="fidelity" use="default" value="equivalent">
+            <annotation>
+               <documentation>
+                  The required fidelity of the conversion: do coverted instances correspond exactly to the originals?
+                  Are they equivalent (i.e., there is no better match).  Or are they an approximation?
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="exact">
+                  </enumeration>
+                  <enumeration value="equivalent">
+                  </enumeration>
+                  <enumeration value="approximate">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="count" use="default" value="1">
+            <annotation>
+               <documentation>
+                  The minimum number of elements required for this parameter.  Legitimate values include a number, a number with &quot;+&quot; indicating &quot;or more&quot;
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="*">
+                  </enumeration>
+                  <enumeration value="!">
+                  </enumeration>
+                  <enumeration value="+">
+                  </enumeration>
+                  <enumeration value="1">
+                  </enumeration>
+                  <enumeration value="?">
+                  </enumeration>
+                  <enumeration value="multiple">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="id" type="string" use="default" value="default">
+            <annotation>
+               <documentation>
+                  The parameter id.  Defaults to &quot;default&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         Ferret 0.3.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         Implementations may subclass ca.ubc.cs.ferret.AbstractConceptualQuery.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         Copyright 2005 by the University of British Columbia.
+      </documentation>
+   </annotation>
+
+</schema>

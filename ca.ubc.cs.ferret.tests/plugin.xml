@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension point="ca.ubc.cs.ferret.sphereHelpers">
+		<sphereHelper
+			id="ca.ubc.cs.ferret.sphere.grads" 
+			class="ca.ubc.cs.ferret.tests.GradsSphereHelper" />
+	</extension>
+
+   <extension point="ca.ubc.cs.ferret.cqs">
+    	<conceptualQuery
+           category="tests"
+           class="ca.ubc.cs.ferret.tests.GradSiblings"
+           id="ca.ubc.cs.ferret.tests.gs">
+        <parameter
+              class="ca.ubc.cs.ferret.tests.GraduateStudent"
+              count="1"
+              fidelity="equivalent"
+              id="default">
+        </parameter>
+     </conceptualQuery>
+ 	</extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="qdv.show.conversion.graph"
+            targetID="ca.ubc.cs.ferret.views.QueriesDossier">
+         <action
+               class="ca.ubc.cs.ferret.cg.ShowConversionGraphAction"
+               id="qdv.scg.action"
+               label="Show Conversion &amp;Graph"
+               menubarPath="additions"
+               style="push">
+         </action>
+      </viewContribution>
+   </extension>
+ 	
+
+</plugin>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<fragment>
+
+  	<extension point="ca.ubc.cs.ferret.typeConverters">
+    	<converter
+          class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+          fidelity="equivalent"
+          providedType="org.eclipse.jdt.core.IMember"
+          desiredType="ca.ubc.cs.ferret.kenyon.IKHandlesSource" />
+      <converter
+            class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+            fidelity="exact"
+            providedType="edu.se.evolution.kenyon.graph.Node"
+            desiredType="ca.ubc.cs.ferret.display.IPrettyPrinter" />
+      <converter
+            class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+            fidelity="approximate"
+            providedType="edu.se.evolution.kenyon.graph.Node"
+            desiredType="org.eclipse.jdt.core.IMember" />
+      <converter
+            class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+            fidelity="approximate"
+            providedType="edu.se.evolution.kenyon.graph.Node"
+            desiredType="org.eclipse.jdt.core.IType" />
+      <converter
+            class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+            fidelity="approximate"
+            providedType="edu.se.evolution.kenyon.graph.Node"
+            desiredType="org.eclipse.jdt.core.IMethod" />
+      <converter
+            class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+            fidelity="approximate"
+            providedType="edu.se.evolution.kenyon.graph.Node"
+            desiredType="org.eclipse.jdt.core.IField" />
+
+		<!-- FIXME: this belongs elsewhere -->
+    	<converter
+          class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+          fidelity="equivalent"
+          providedType="org.eclipse.core.resources.IFile"
+          desiredType="ca.ubc.cs.ferret.kenyon.IKHandlesSource" />
+      <converter
+            class="ca.ubc.cs.ferret.kenyon.JdtToKenyonConverter"
+            fidelity="approximate"
+            providedType="edu.se.evolution.kenyon.graph.Node"
+            desiredType="org.eclipse.core.resources.IFile" />
+
+   </extension>
+ 
+
+</fragment>

@@ -1,0 +1,64 @@
+
+org.eclipse.core.runtime.adaptor.EclipseStarter
+
+/*
+ * Sigh, none of this works.  I guess I'll just have to set a breakpoint somewhere. 
+ */
+ org.eclipse.core.launcher.Main main = new org.eclipse.core.launcher.Main();
+String args[] = new String[] {
+        "-product", "org.eclipse.sdk.ide",
+        "-nosplash", "-data", "/var/tmp/junk-workspace",
+        "-configuration", "file:/grads3/bsd/research/eclipse/workspace/.metadata/.plugins/org.eclipse.pde.core/Runtime Workbench",
+        "-dev", "file:/grads3/bsd/research/eclipse/workspace/.metadata/.plugins/org.eclipse.pde.core/Runtime Workbench/dev.properties",
+        "-consolelog" };
+main.run(args);
+
+IWorkspace workspace = ResourcesPlugin.getWorkspace();
+IProject project = workspace.getRoot().getProjects()[0];
+System.out.println("For project: " + project);
+IJavaProject jp = JavaCore.create(project);
+
+System.out.println("referenced: " + project.getReferencedProjects());
+System.out.println("referencing: " + project.getReferencingProjects());
+
+Pattern p = Pattern.compile("^([^{]|\\s)*\\{.*throw\\s.*", Pattern.DOTALL); //[ \t\r\n\f]");
+Matcher m = p.matcher(
+        "public void pad()\n" +
+		"    throws IOException\n" +
+		"{\n" +
+		"     if(size() > 0) { \n" +
+		"         foo();\n" +
+		"     }\n" +
+		"     throw new IOException(size());\n" +
+		"}");
+m.matches()
+
+IType fis = JavaModelHelper.getDefault().resolveType("FileInputStream");An exception occurred during evaluation:  java.lang.ExceptionInInitializerError
+    public final FileDescriptor getFD() throws IOException {
+	if (fd != null) return fd;
+	throw new IOException();
+    }
+
+
+java.lang.NullPointerException
+at org.eclipse.jdt.internal.core.hierarchy.HierarchyBuilder.<init>(HierarchyBuilder.java:86)
+at org.eclipse.jdt.internal.core.hierarchy.RegionBasedHierarchyBuilder.<init>(RegionBasedHierarchyBuilder.java:36)
+at org.eclipse.jdt.internal.core.hierarchy.RegionBasedTypeHierarchy.compute(RegionBasedTypeHierarchy.java:73)
+at org.eclipse.jdt.internal.core.hierarchy.TypeHierarchy.refresh(TypeHierarchy.java:1255)
+at org.eclipse.jdt.internal.core.CreateTypeHierarchyOperation.executeOperation(CreateTypeHierarchyOperation.java:90)
+at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:718)
+at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:777)
+at org.eclipse.jdt.internal.core.JavaProject.newTypeHierarchy(JavaProject.java:2515)
+at org.eclipse.jdt.internal.core.JavaProject.newTypeHierarchy(JavaProject.java:2493)
+at org.eclipse.jdt.internal.junit.util.TestSearchEngine.findTestCases(TestSearchEngine.java:205)
+at org.eclipse.jdt.internal.junit.util.TestSearchEngine.collectTypes(TestSearchEngine.java:182)
+at org.eclipse.jdt.internal.junit.util.TestSearchEngine.doFindTests(TestSearchEngine.java:145)
+at org.eclipse.jdt.internal.junit.launcher.JUnitBaseLaunchConfiguration.findTestsInContainer(JUnitBaseLaunchConfiguration.java:160)
+at org.eclipse.jdt.internal.junit.launcher.JUnitBaseLaunchConfiguration.getTestTypes(JUnitBaseLaunchConfiguration.java:147)
+at org.eclipse.jdt.internal.junit.launcher.JUnitBaseLaunchConfiguration.getTestTypes(JUnitBaseLaunchConfiguration.java:103)
+at org.eclipse.pde.internal.ui.launcher.JUnitLaunchConfiguration.launch(JUnitLaunchConfiguration.java:73)
+at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:590)
+at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:515)
+at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:733)
+at org.eclipse.debug.internal.ui.DebugUIPlugin$6.run(DebugUIPlugin.java:931)
+at org.eclipse.core.internal.jobs.Worker.run(Worker.java:76)

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ca.ubc.cs.ferret.feature"
+      label="Ferret Program Explorer Base + JDT + PDE"
+      version="0.4.0.qualifier"
+      provider-name="University of British Columbia">
+   <install-handler/>
+
+   <description url="http://www.cs.ubc.ca/~bsd/research/ferret/">
+      Ferret is an automated program query tool that presents a unified
+view across a multitude of sources of program information.
+   </description>
+
+   <copyright>
+      Copyright (c) 2004-2007 by the University of British Columbia.
+   </copyright>
+
+   <license url="epl-v10.html">
+      Ferret is provided under the Eclipse Public License 1.0.
+
+Dependencies are provided under the following licenses:
+  * JUNG: BSD
+  * CERN Colt: BSD-like, LGPL
+  * edu.oswego.cs.dl.util.concurrent: public domain
+  * Larva Labs Commons Collections 4.01: Apache license 2.0
+   </license>
+
+   <url>
+      <update label="Ferret Update Site" url="http://www.cs.ubc.ca/~bsd/research/ferret/"/>
+      <discovery label="Eclipse Modelling Framework (for TPTP)" url="http://download.eclipse.org/modeling/emf/updates/"/>
+      <discovery label="Eclipse Test and Performance Tools Platform (TPTP)" url="http://eclipse.org/tptp/updates/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.platform"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.filesystem"/>
+      <import plugin="org.eclipse.ui" version="3.2" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.search"/>
+      <import plugin="org.eclipse.jdt"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.pde"/>
+      <import plugin="org.eclipse.pde.core"/>
+      <import plugin="org.eclipse.pde.ui"/>
+      <import plugin="org.eclipse.pde.runtime"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="edu.uci.lcs.jung.algorithms" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="edu.uci.lcs.jung.api" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="edu.uci.lcs.jung.graph.impl" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.lang"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.update.configurator"/>
+   </requires>
+
+   <plugin
+         id="ca.ubc.cs.ferret"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ca.ubc.cs.ferret.jdt"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ca.ubc.cs.ferret.pde"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ca.ubc.cs.clustering"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ca.ubc.cs.objhdl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.collections15"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.oswego.cs.dl.util.concurrent"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.uci.lcs.jung.algorithms"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.uci.lcs.jung.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.uci.lcs.jung.graph.impl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="cern.colt"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

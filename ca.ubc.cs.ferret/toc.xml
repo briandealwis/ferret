@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Ferret User Guide" topic="html/about.html">
+	<topic label="Quick Start and Overview"  href="html/overview.html" /> 
+	<topic label="Configuring Ferret" href="html/configuring.html">
+	    <anchor id="configuring" />
+	</topic>
+	<topic label="Clustering Query Results" href="html/clustering.html" />
+	<topic label="Fidelity of Mappings"  href="html/fidelity.html" /> 
+	<topic label="Special Topics">
+	    <anchor id="specialTopics" />
+	</topic>
+</toc>

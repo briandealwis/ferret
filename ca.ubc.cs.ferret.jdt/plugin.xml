@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!-- $Header: /Users/bsd/research/cvsroot/phd-ca.ubc.cs.ferret.jdt/plugin.xml,v 1.53 2008/01/21 21:45:49 bsd Exp $ -->
+<plugin>
+
+<!-- Provide JDT Conceptual Queries -->
+   <extension point="ca.ubc.cs.ferret.cqs">
+		<!-- Type-related CQs -->
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.mrt"
+	 			class="ca.ubc.cs.ferret.jdt.MethodsReturningType"
+	 			category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.mit"
+	 			class="ca.ubc.cs.ferret.jdt.MethodsInstantiatingType"
+	 			category="inter-class">
+	 		<parameter
+               class="org.eclipse.jdt.core.IType"
+               count="+"
+               fidelity="approximate"/>
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.margs"
+	 			class="ca.ubc.cs.ferret.jdt.MethodsWithArgumentOfType"
+	 			category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IType" 
+	            count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.ftype"
+		 		class="ca.ubc.cs.ferret.jdt.FieldsOfType"
+		 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.fields"
+		 		class="ca.ubc.cs.ferret.jdt.ClassFields"
+		 		category="declaration">
+	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.superinterfaces"
+		 		class="ca.ubc.cs.ferret.jdt.SuperinterfacesQuery"
+		 		category="inheritance">
+	 		<parameter class="org.eclipse.jdt.core.IType"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.commonImpls"
+		 		class="ca.ubc.cs.ferret.jdt.CommonImplementations"
+		 		category="inheritance">
+	 		<parameter count="multiple" fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.subclasses"
+	 			class="ca.ubc.cs.ferret.jdt.SubclassesQuery"
+	 			category="inheritance">
+	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="approximate" />
+		</conceptualQuery>	
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.implementors"
+	 		class="ca.ubc.cs.ferret.jdt.ImplementorsQuery"
+	 		category="inheritance">
+	 		<parameter class="ca.ubc.cs.ferret.types.FerretObject"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.subinterfaces"
+		 		class="ca.ubc.cs.ferret.jdt.SubinterfacesQuery"
+		 		category="inheritance">
+	 		<parameter class="org.eclipse.jdt.core.IType"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.siblings"
+	 		class="ca.ubc.cs.ferret.jdt.SiblingsQuery"
+	 		category="inheritance">
+	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="approximate" />
+		</conceptualQuery>
+
+		<!-- Method-related CQs -->
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.r2m"
+	 		class="ca.ubc.cs.ferret.jdt.ReferencesToMethod"
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IMethod"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.ciim"
+	 		class="ca.ubc.cs.ferret.jdt.ClassesImplementingInterfaceMethod"
+	 		category="declarations">
+	 		<parameter class="org.eclipse.jdt.core.IMethod" fidelity="approximate" />
+		</conceptualQuery>
+	 	<!-- imscm deals with single method, returns single methods;
+	 		iscm deals with multiple methods, returns interfaces containing all methods -->
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.imscm"
+	 		class="ca.ubc.cs.ferret.jdt.InterfaceMethodsSpecifyingClassMethod"
+	 		category="declarations">
+	 		<parameter class="org.eclipse.jdt.core.IMethod" fidelity="approximate" 
+	 			count="1" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.iscm"
+	 		class="ca.ubc.cs.ferret.jdt.InterfacesSpecifyingClassMethods"
+	 		category="declarations">
+	 		<parameter class="org.eclipse.jdt.core.IMethod" fidelity="approximate"
+	 			count="multiple" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.cmo"
+	 		class="ca.ubc.cs.ferret.jdt.ClassMethodOverriders"
+	 		category="declarations">
+	 		<parameter class="org.eclipse.jdt.core.IMethod" fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.cmso"
+	 		class="ca.ubc.cs.ferret.jdt.ClassMethodsOverridden"
+	 		category="declarations">
+	 		<parameter class="org.eclipse.jdt.core.IMethod" fidelity="approximate" />
+		</conceptualQuery>
+
+		<!-- IJavaElement-related CQs -->
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.uf"
+	 		class="ca.ubc.cs.ferret.jdt.UsedFieldsQuery"
+	 		category="intra-class">
+	 		<parameter class="org.eclipse.jdt.core.IMember"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.sm"
+	 		class="ca.ubc.cs.ferret.jdt.MethodsCalledQuery"
+	 		category="intra-class">
+	 		<parameter class="org.eclipse.jdt.core.IMember"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.tr"
+	 		class="ca.ubc.cs.ferret.jdt.TypesReferencedQuery"
+	 		category="intra-class">
+	 		<parameter count="+" fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.instof"
+	 		class="ca.ubc.cs.ferret.jdt.TestsInstanceof"
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IType"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+        <conceptualQuery id="ca.ubc.cs.ferret.jdt.caststo"
+            class="ca.ubc.cs.ferret.jdt.CastsToType"
+            category="inter-class">
+            <parameter class="org.eclipse.jdt.core.IType"
+                count="+"
+                fidelity="approximate" />
+        </conceptualQuery>
+
+		<!-- Exception-related CQs -->
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.et"
+	 		class="ca.ubc.cs.ferret.jdt.ThrowsException"
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IType"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.ce"
+	 		class="ca.ubc.cs.ferret.jdt.CatchesException"
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IType"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+
+		<!-- IField-related CQs -->
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.fsetters"
+	 		class="ca.ubc.cs.ferret.jdt.FieldSettersQuery"
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IField"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.fgetters"
+	 		class="ca.ubc.cs.ferret.jdt.FieldGettersQuery"
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IField"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+        <conceptualQuery id="ca.ubc.cs.ferret.jdt.shadows"
+            class="ca.ubc.cs.ferret.jdt.FieldShadowsQuery"
+            category="inter-class">
+            <parameter class="ca.ubc.cs.ferret.types.FerretObject" fidelity="approximate" />
+        </conceptualQuery>
+
+        <conceptualQuery id="ca.ubc.cs.ferret.jdt.dt"
+            class="ca.ubc.cs.ferret.jdt.VariableDeclaredTypeQuery"
+            category="declaration">
+            <parameter count="1" fidelity="approximate" />
+        </conceptualQuery>
+
+<!--	ca.ubc.cs.ferret.jdt.ReferencesToType is a very raw query that reports
+		all references found, with no processing as to the type of reference
+		(e.g., casting, instantiation, invoking static methods, etc.). --> 	
+		<conceptualQuery id="ca.ubc.cs.ferret.jdt.r2t"
+	 		class="ca.ubc.cs.ferret.jdt.ReferencesToType" 
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.jdt.core.IType"
+	 			count="+"
+	 			fidelity="approximate" />
+		</conceptualQuery>
+   </extension>
+
+	<extension point="ca.ubc.cs.ferret.query_stimulants">
+		<command id="org.eclipse.jdt.ui.edit.text.java.open.editor" />  <!-- F3 -->
+		<command id="org.eclipse.jdt.ui.edit.text.java.show.outline" /> <!-- C-S-o -->
+		<command id="org.eclipse.jdt.ui.navigate.java.open.structure" /> <!-- C-F3 -->
+		<command id="org.eclipse.jdt.ui.navigate.open.type" />            <!-- C-S-t -->
+		<command id="org.eclipse.jdt.ui.navigate.open.type.in.hierarchy" /> <!-- F4 -->
+		<command id="org.eclipse.jdt.ui.navigate.gotopackage" />
+		<command id="org.eclipse.jdt.ui.navigate.gototype" />
+	</extension>
+
+
+<!--  UI Additions -->
+
+	<extension 
+		point="org.eclipse.ui.popupMenus"
+		id="ca.ubc.cs.ferret.popup.jdt.object">
+		<objectContribution
+			objectClass="org.eclipse.jdt.core.IJavaElement"
+			id="ca.ubc.cs.ferret.popup.jdt.consult">
+			<action
+				id="ca.ubc.cs.ferret.context.jdt.consult"
+				label="&amp;Query with Ferret"
+				class="ca.ubc.cs.ferret.AskFerretObjectAction"
+				menubarPath="additions"
+				icon="icons/ferret-2.gif"    
+				definitionId="ca.ubc.cs.ferret.commands.askFerret"
+				enablesFor="+" />
+		</objectContribution>
+	</extension>
+	
+	<extension
+		point="org.eclipse.ui.popupMenus"
+		id="ca.ubc.cs.ferret.menu2"
+		name="Ferret CompilationUnit Editor Popup">
+		<viewerContribution
+			targetID="#CompilationUnitEditorContext"
+			id="ca.ubc.cs.ferret.popupMenu.javaEditor">
+			<action 
+				label="&amp;Query with Ferret" 
+				icon="icons/ferret-2.gif"    
+				class="ca.ubc.cs.ferret.AskFerretEditorContextMenuAction" 
+				menubarPath="additions" 
+				enablesFor="*"
+				definitionId="ca.ubc.cs.ferret.commands.askFerret"
+				id="ca.ubc.ferret.action.editors" />        
+		</viewerContribution>
+		<viewerContribution
+			targetID="#ClassFileEditorContext"
+			id="ca.ubc.cs.ferret.popupMenu.javaClassEditor">
+			<action 
+				label="&amp;Query with Ferret" 
+				icon="icons/ferret-2.gif"    
+				class="ca.ubc.cs.ferret.AskFerretEditorContextMenuAction" 
+				menubarPath="additions" 
+				enablesFor="*"
+				definitionId="ca.ubc.cs.ferret.commands.askFerret"
+				id="ca.ubc.ferret.action.editors" />        
+		</viewerContribution>
+	</extension>
+
+    <extension
+        point="org.eclipse.ui.popupMenus"
+        id="ca.ubc.cs.ferret.menu.populatedQueries"
+        name="Ferret CompilationUnit Editor Populated Query Popup">
+        <viewerContribution
+            targetID="#CompilationUnitEditorContext"
+            id="ca.ubc.cs.ferret.popupMenu.javaEditor.populatedQueries">
+            <action 
+                label="&amp;Select queries for Ferret" 
+                icon="icons/ferret-2.gif"    
+                class="ca.ubc.cs.ferret.views.PopulatedAskFerretEditorContextMenuAction" 
+                menubarPath="additions" 
+                enablesFor="*"
+                definitionId="ca.ubc.cs.ferret.commands.populatedAskFerret"
+                id="ca.ubc.ferret.action.editors.populated" />
+        </viewerContribution>
+        <viewerContribution
+            targetID="#ClassFileEditorContext"
+            id="ca.ubc.cs.ferret.popupMenu.javaClassEditor.populatedQueries">
+            <action 
+                label="&amp;Select queries for Ferret" 
+                icon="icons/ferret-2.gif"    
+                class="ca.ubc.cs.ferret.views.PopulatedAskFerretEditorContextMenuAction" 
+                menubarPath="additions" 
+                enablesFor="*"
+                definitionId="ca.ubc.cs.ferret.commands.populatedAskFerret"
+                id="ca.ubc.ferret.action.editors.populated" />        
+        </viewerContribution>
+                <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaElement"
+            id="ca.ubc.cs.ferret.popup.jdt.consult">
+            <action
+                id="ca.ubc.cs.ferret.context.jdt.populatedConsult"
+                label="&amp;Select queries for Ferret" 
+                class="ca.ubc.cs.ferret.views.PopulatedAskFerretObjectContribution"
+                menubarPath="additions"
+                icon="icons/ferret-2.gif"    
+                definitionId="ca.ubc.cs.ferret.commands.populatedAskFerret"
+                enablesFor="+" />
+        </objectContribution>
+    </extension>
+	
+	<extension point="ca.ubc.cs.ferret.sphereHelpers">
+		<sphereHelper
+			id="ca.ubc.cs.ferret.sphere.jdt" 
+			class="ca.ubc.cs.ferret.jdt.JdtSphereHelperFactory" />
+	</extension>
+
+<!--
+   <extension
+		id="ca.ubc.cs.ferret.perspectiveExtensions"
+		point="org.eclipse.ui.perspectiveExtensions">
+   	  <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
+   	  	 <actionSet id="ca.ubc.cs.ferret.actionSet"/>
+   	  </perspectiveExtension>
+   </extension>
+-->   
+ 
+ <extension point="ca.ubc.cs.clustering.classifiers">
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.JavaElementDeclaringProjectProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.JavaElementDeclaringProjectProvider"
+          description="declaring project"
+          objectType="org.eclipse.jdt.core.IJavaElement" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.JavaElementEnclosingPackageProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.JavaElementEnclosingPackageProvider"
+          description="declared package"
+          objectType="org.eclipse.jdt.core.IJavaElement" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberAccessProtectectionProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberAccessProtectectionProvider"
+          description="access protection"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberDeclaringFile"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberDeclaringFile"
+          description="declaring file"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberDeclaringType"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberDeclaringType"
+          description="declaring type"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberStaticProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberStaticProvider"
+          description="static/instance"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberDeprecatedProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberDeprecatedProvider"
+          description="deprecation"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberFinalProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberFinalProvider"
+          description="final/overridable"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberNativeProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberNativeProvider"
+          description="native/java"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberAbstractProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MemberAbstractProvider"
+          description="abstract/concrete"
+          objectType="org.eclipse.jdt.core.IMember" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MethodReturnTypeProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MethodReturnTypeProvider"
+          description="return type"
+          objectType="org.eclipse.jdt.core.IMethod" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MethodThrowsProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MethodThrowsProvider"
+          description="thrown exceptions"
+          objectType="org.eclipse.jdt.core.IMethod" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MethodArgumentsProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.MethodArgumentsProvider"
+          description="argument types"
+          objectType="org.eclipse.jdt.core.IMethod" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.JavaElementTypeProvider"
+          id="ca.ubc.cs.ferret.jdt.classifier.JavaElementTypeProvider"
+          description="element type"
+          objectType="org.eclipse.jdt.core.IJavaElement" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.ClassSuperclassProvider"
+          description="superclass"
+          id="ca.ubc.cs.ferret.jdt.attributes.ClassSuperclassProvider"
+          objectType="org.eclipse.jdt.core.IType" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.FieldTypeProvider"
+          description="field type"
+          id="ca.ubc.cs.ferret.jdt.attributes.FieldTypeProvider"
+          objectType="org.eclipse.jdt.core.IField" />
+	 </extension>
+ 
+ 	<extension point="org.eclipse.core.runtime.adapters">
+    	<factory
+			adaptableType="org.eclipse.jdt.core.IJavaElement"
+			class="ca.ubc.cs.ferret.jdt.JdtDisplayObjectFactory">
+				<adapter type="ca.ubc.cs.ferret.display.IDisplayObject" />
+		</factory>
+	</extension>
+
+
+  <extension point="ca.ubc.cs.ferret.typeConverters">
+     <converter
+           class="ca.ubc.cs.ferret.jdt.JDTDebugConverter"
+           providedType="org.eclipse.jdt.debug.core.IJavaStackFrame"
+           desiredType="org.eclipse.jdt.core.IMethod"
+           fidelity="exact" />
+     <converter
+           class="ca.ubc.cs.ferret.jdt.JDTDebugConverter"
+           providedType="org.eclipse.jdt.debug.core.IJavaFieldVariable"
+           desiredType="org.eclipse.jdt.core.IField"
+           fidelity="exact" />
+  </extension>
+
+  <extension point="ca.ubc.cs.ferret.typeConverters">
+     <converter
+           class="ca.ubc.cs.ferret.jdt.JDTRealLifeConverter"
+           providedType="java.lang.reflect.Method"
+           desiredType="org.eclipse.jdt.core.IMethod"
+           fidelity="equivalent" />
+     <converter
+           class="ca.ubc.cs.ferret.jdt.JDTRealLifeConverter"
+           providedType="java.lang.Class"
+           desiredType="org.eclipse.jdt.core.IType"
+           fidelity="equivalent" />
+
+     <converter
+           class="ca.ubc.cs.ferret.jdt.JDTRealLifeConverter"
+           providedType="org.eclipse.jdt.core.IJavaProject"
+           desiredType="org.eclipse.core.resources.IResource"
+           fidelity="exact" />
+     <converter
+           class="ca.ubc.cs.ferret.jdt.JDTRealLifeConverter"
+           providedType="org.eclipse.jdt.core.IJavaProject"
+           desiredType="org.eclipse.core.resources.IProject"
+           fidelity="exact" />
+  </extension>
+
+    <extension point="org.eclipse.help.contexts">
+	<contexts file="helpContexts.xml"  />
+    </extension>
+
+
+</plugin>

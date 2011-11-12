@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Class-Path: lib/activation.jar lib/check-components.jar lib/colt.jar l
+ ib/commons-cli-1.0.jar lib/commons-collections.jar lib/devpgjdbc3.jar
+  lib/gnujaxp.jar lib/icemh.jar lib/jcommon-0.8.8.jar lib/jfreechart-0
+ .9.13.jar lib/jung.jar lib/mail.jar lib/mbox.jar lib/pgjdbc2.jar lib/
+ servlet.jar
+Sealed: true
+Main-Class: startwizard.StartupWithWizard
+

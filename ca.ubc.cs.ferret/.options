@@ -1,0 +1,40 @@
+# Debugging options for the ca.ubc.cs.ferret plugin
+
+# master switch for Ferret debugging
+ca.ubc.cs.ferret/debug=false
+
+# Shows timing information
+ca.ubc.cs.ferret/timings=false
+
+# Prints out messages about cache maintenance
+ca.ubc.cs.ferret/debug/cacheMaintenance=false
+
+# Prints out a message on DossierView selection changes
+ca.ubc.cs.ferret/debug/selectionChanged=false
+
+# Prints object toString() on DossierContentProvider.getChildren()
+ca.ubc.cs.ferret/debug/showGetChildren=false
+
+# Prints object toString() on when issuing consultations, with timings
+ca.ubc.cs.ferret/debug/issuingConsultations=false
+
+# Prints when issuing conceptual queries
+ca.ubc.cs.ferret/debug/issuingConceptualQuery=false
+
+# Shows debugging information when querying plugin extensions
+ca.ubc.cs.ferret/debug/showExtensionQueries=false
+
+# Shows debugging information during type conversions
+ca.ubc.cs.ferret/debug/showTypeConversions=false
+
+# Prints object toString() on while resolving relations through toolboxes
+ca.ubc.cs.ferret/debug/showRelationResolution=false
+
+# Prints configuration messages
+ca.ubc.cs.ferret/debug/showConfigurationDetails=false
+
+# Prints messages about EclipseFutures
+ca.ubc.cs.ferret/debug/showFutures=false
+
+# Prints messages about job submission
+ca.ubc.cs.ferret/debug/showJobDetails=false

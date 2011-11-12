@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!-- $Header: /Users/bsd/research/cvsroot/phd-ca.ubc.cs.ferret.pde/plugin.xml,v 1.20 2008/01/21 21:45:48 bsd Exp $ -->
+<plugin>
+	<extension point="ca.ubc.cs.ferret.cqs">
+ 		<conceptualQuery id="ca.ubc.cs.ferret.pde.namedtypes" 
+ 			class="ca.ubc.cs.ferret.pde.queries.IdentifierUsedInPlugIn"
+	 		category="declaration">
+	 		<parameter class="ca.ubc.cs.ferret.pde.PdeIdentifier" fidelity="equivalent" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.pde.adaptableto" 
+ 			class="ca.ubc.cs.ferret.pde.queries.AdaptableToQuery"
+	 		category="declaration">
+	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="equivalent" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.pde.adaptableto" 
+ 			class="ca.ubc.cs.ferret.pde.queries.AdaptableFromQuery"
+	 		category="declaration">
+	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="equivalent" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.pde.pluginextensions" 
+ 			class="ca.ubc.cs.ferret.pde.queries.DeclaredExtensionsQuery"
+	 		category="declaration">
+	 		<parameter class="ca.ubc.cs.ferret.types.FerretObject" fidelity="equivalent" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.pde.pluginextensionpoints" 
+ 			class="ca.ubc.cs.ferret.pde.queries.DeclaredExtensionPointsQuery"
+	 		category="declaration">
+	 		<parameter class="ca.ubc.cs.ferret.types.FerretObject" fidelity="equivalent" />
+		</conceptualQuery>
+	 	<conceptualQuery id="ca.ubc.cs.ferret.pde.dependencies" 
+ 			class="ca.ubc.cs.ferret.pde.queries.DependentsOf"
+	 		category="inter-class">
+	 		<parameter class="org.eclipse.pde.core.plugin.IPluginModelBase"
+	 			count="+"
+				fidelity="equivalent" />
+		</conceptualQuery>
+		<conceptualQuery id="ca.ubc.cs.ferret.pde.extensions" 
+ 			class="ca.ubc.cs.ferret.pde.queries.ExtensionsQuery"
+	 		category="declaration">
+	 		<parameter class="ca.ubc.cs.ferret.types.FerretObject" fidelity="equivalent" />
+		</conceptualQuery>
+		
+	 </extension>  
+
+	<extension point="ca.ubc.cs.ferret.sphereHelpers">
+		<sphereHelper
+			id="ca.ubc.cs.ferret.sphere.pde" 
+			class="ca.ubc.cs.ferret.pde.PdeSphereHelperFactory" />
+	</extension>
+
+	<extension 
+		point="org.eclipse.ui.popupMenus"
+		id="ca.ubc.cs.ferret.popup.pde.object">
+		<objectContribution
+			objectClass="org.eclipse.pde.core.plugin.IPluginObject"
+			id="ca.ubc.cs.ferret.popup.pde.consult">
+			<action
+				id="ca.ubc.cs.ferret.context.pde.consult"
+				label="&amp;Query with Ferret"
+				class="ca.ubc.cs.ferret.AskFerretObjectAction"
+				menubarPath="additions"
+				icon="icons/maze.gif"
+				definitionId="ca.ubc.cs.ferret.commands.askFerret"
+				enablesFor="+" />
+		</objectContribution>
+	</extension>
+ 	<extension point="ca.ubc.cs.ferret.typeConverters">
+    	<converter
+          class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+          providedType="org.eclipse.pde.core.plugin.IPluginImport"
+          desiredType="org.eclipse.pde.core.plugin.IPluginModelBase"
+          fidelity="exact" />
+    	<converter
+          class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+          providedType="org.eclipse.core.resources.IProject"
+          desiredType="org.eclipse.pde.core.plugin.IPluginModelBase"
+          fidelity="exact" />
+    	<converter
+          class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+          providedType="org.eclipse.core.resources.IProjectNature"
+          desiredType="org.eclipse.pde.core.plugin.IPluginModelBase"
+          fidelity="exact" />
+    	<converter
+          class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+          providedType="org.eclipse.pde.internal.core.plugin.ImportObject"
+          desiredType="org.eclipse.pde.core.plugin.IPluginImport"
+          fidelity="exact" />
+          
+        <converter
+          class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+          providedType="org.eclipse.jdt.core.IType"
+          desiredType="ca.ubc.cs.ferret.pde.PdeIdentifier"
+          fidelity="exact" />
+          
+        <converter
+          class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+          providedType="org.eclipse.core.resources.IResource"
+          desiredType="ca.ubc.cs.ferret.pde.PdeIdentifier"
+          fidelity="exact" />
+          
+	 </extension>
+  <extension point="ca.ubc.cs.clustering.classifiers">
+     <classifier
+           class="ca.ubc.cs.ferret.pde.classifiers.PluginObjectClassifier"
+           description="defining plug-in"
+           id="org.eclipse.pde.core.IPluginObject"
+           objectType="org.eclipse.pde.core.plugin.IPluginObject"/>
+     <classifier
+           class="ca.ubc.cs.ferret.pde.classifiers.EclipseNamingConventionsProvider"
+           description="eclipse api/internal/provisional"
+           id="ca.ubc.cs.ferret.pde.eclipse-api"
+           objectType="org.eclipse.jdt.core.IMember" />
+  </extension>
+
+    <extension point="org.eclipse.help.contexts">
+        <contexts file="helpContexts.xml"  />
+    </extension>
+
+</plugin>

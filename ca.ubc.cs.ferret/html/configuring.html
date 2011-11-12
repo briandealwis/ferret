@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Configuring Sphere Composition</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+</HEAD>
+
+<BODY>
+<H1>Configuring Sphere Composition</H1>
+
+<P>Ferret supports integrating many different sources of information
+about a program in order to provide better answers to conceptual
+queries.  This is accomplished by composing these sources, or
+<EM>spheres</EM>, in a principled manner.  The composition is
+specified through the Ferret Sphere Configuration Wizard.  This
+wizard is automatically invoked when Ferret is first used, and can
+be explicitly summoned through Ferret view menu (<IMG
+SRC="view-menu.gif">).  Each instance of Ferret (such as occurs
+when using multiple windows) is configured separately.</P>
+
+<P>There are five different ways to <A HREF="#Composing_Spheres">compose
+spheres</A>.  But to appreciate this requires a small digression
+into the meaning of a sphere.</P>
+
+<H3><A NAME="Sphere_Definition">Spheres</A></H3>
+
+<P>A <EM>sphere</EM> is a simple formalism based on the relational
+algebra to provide a unified view of any source providing information
+about a software system.  A sphere has a set of elements that it
+knows about, and describes a set of relations between those elements.</P>
+
+<P>The following are examples of spheres:</P>
+<DL>
+<DT> Static Java sphere: </DT>
+<DD> <EM>Elements:</EM> classes, interfaces, fields, methods.<BR>
+    <EM>Relations</EM> extends, implements, calls, accesses,
+    overrides. </DD>
+
+<DT>Dynamic Java runtime sphere:</DT>
+<DD> <EM>Elements:</EM> classes, methods.<BR>
+    <EM>Relations:</EM> calls, instantiates.</DD>
+
+<DT>Plug-in Development:</DT>
+<DD> <EM>Elements:</EM> plug-ins, extension points, extensions.<BR>
+    <EM>Relations:</EM> specifies, extends.
+
+</DL>
+
+<P>The sphere describes the structure of the source of information,
+listing the types of information elements available, and the types
+of relations that may exist between these elements.  Each sphere
+is reified in one or more fact bases.  Spheres can be thought of
+like a database schema, and the fact bases are like individual databases
+structured according to that schema.</P>
+
+<P>Some spheres may only have a single factbase, such as the static
+Java sphere, which corresponds to the version of the source code
+being editted.  Other spheres may have multiple fact bases, such
+as the dynamic Java sphere which creates a separate fact base for
+each trace.</P>
+
+<H3><A NAME="Composing_Spheres">Composing Spheres</A></H3>
+
+<P>Given that spheres may have some relations in common, we need
+some way to identify which sphere's relations should have precendence.
+This is specified using <EM>composition functions</EM> to compose
+the spheres.  We have identified five different functions for
+composing spheres:</P>
+
+<DL>
+
+<DT> replacement: </DT>
+<DD>  The composed spheres are tried in order until the first matching
+    relation is found.</DD>
+
+<DT> union: </DT>
+<DD>  returns the results of the relation on each of the composed sphere.</DD>
+
+<DT> intersection:</DT>
+<DD>  returns the result of intersecting the results from relation
+    on each of the composed spheres. </DD>
+
+<DT> disjuction (symmetric difference):</DT>
+<DD>  returns the results that are not in common between the relation
+    on each of the composed spheres. </DD>
+
+<DT> difference: </DT>
+<DD>  returns the results from the first sphere that are not returned
+    by any of the other subsequent spheres.</DD>
+
+</DL>
+
+<P>A typical composition is using replacement on spheres of
+different types, such as:</P>
+<PRE>
+  {replacement}
+  |
+  +--> PDE
+  |
+  +--> {union}
+  |      |
+  |      +--> Dynamic JDT from trace-1
+  |      |
+  |      +--> Dynamic JDT from trace-2
+  |
+  +--> Static JDT
+</PRE>
+
+<P>In this example, each sphere is tried in order until a sphere is
+found providing the desired relation.</P>
+
+</BODY>
+</HTML>
