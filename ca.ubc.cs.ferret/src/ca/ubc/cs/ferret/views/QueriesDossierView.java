@@ -1381,6 +1381,7 @@ public class QueriesDossierView extends ViewPart
 		}
 		asyncExec(new Runnable() {
 			public void run() {
+                                if(viewer == null) { return; }
 				if(toBeExpanded == null) {
 					Object expanded[] = viewer.getExpandedElements();
 					if(expanded.length > 0) { toBeExpanded = expanded; }
