@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
@@ -65,10 +64,10 @@ import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.core.search.TypeReferenceMatch;
 
+import ca.ubc.cs.ferret.CachingFutureMap;
 import ca.ubc.cs.ferret.EclipseFuture;
 import ca.ubc.cs.ferret.FerretErrorConstants;
 import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.CachingFutureMap;
 import ca.ubc.cs.ferret.model.ExtendibleSourceRange;
 import ca.ubc.cs.ferret.model.IExtendibleSourceRange;
 
@@ -375,9 +374,9 @@ public class JavaModelHelper implements IElementChangedListener {
     
     protected void performSearch(SearchPattern pattern, IJavaSearchScope scope, SearchRequestor requestor, IProgressMonitor monitor) {
         if(pattern == null) {
-            FerretPlugin.log(new Status(IStatus.WARNING, 
-                    FerretJdtPlugin.pluginID, 0, 
-                    "JavaModelHelper search provided null pattern", null));
+			// FerretPlugin.log(new Status(IStatus.WARNING,
+			// FerretJdtPlugin.pluginID, 0,
+			// "JavaModelHelper search provided null pattern", null));
             return;
         }
     	SearchEngine searchEngine = new SearchEngine();
