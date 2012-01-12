@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections15.map.ReferenceMap;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -52,6 +56,10 @@ public class Consultancy {
     protected PriorityQueue<WorkUnit> outstandingConsultations = null;
     protected WorkUnit activeWork = null;
 
+	private AtomicInteger pendingResets = new AtomicInteger(0);
+	private ScheduledExecutorService executor = Executors
+			.newSingleThreadScheduledExecutor();
+
     /**
      * Consultancy is meant to be a singleton.  Access the singleton instance through
      * Consultancy#getDefault()
@@ -89,6 +97,9 @@ public class Consultancy {
     
     protected IResourceChangeListener resourceChangeListener;
     
+	/**
+	 * @since 0.5
+	 */
     public static void shutdown() {
         if (singleton == null) {
             return;
@@ -109,6 +120,9 @@ public class Consultancy {
         if(backgroundJob != null) {
             backgroundJob.cancel();
         }
+		if(executor != null) {
+			executor.shutdown();
+		}
     }
     
     public void start() {
@@ -129,7 +143,7 @@ public class Consultancy {
                     			+ "resetting consultation cache");
                     }
                     if(visitor.wasModified()) {
-                        reset();
+						scheduleReset();
                     }
                 } catch(CoreException e) {
                     FerretPlugin.log(new Status(IStatus.WARNING, FerretPlugin.pluginID, 4,
@@ -137,7 +151,7 @@ public class Consultancy {
                     if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
                     	System.out.println("Exception while investigating workspace change; resetting consultation cache");
                     }
-                    reset();
+					scheduleReset();
                 }
             }};
         getWorkspace().addResourceChangeListener(resourceChangeListener,
@@ -152,6 +166,22 @@ public class Consultancy {
     	return FerretPlugin.getMaximumBackgroundCount();
     }
     
+	/**
+	 * @since 0.5
+	 */
+	protected void scheduleReset() {
+		Runnable r = new Runnable() {
+			public void run() {
+				int pending = pendingResets.decrementAndGet();
+				if(pending == 0) {
+					reset();
+				}
+			}
+		};
+		pendingResets.getAndIncrement();
+		executor.schedule(r, 500, TimeUnit.MILLISECONDS);
+	}
+
     /**
      * Reset the consultancy, generally to avoid inconsistency such as upon workspace
      * change.
