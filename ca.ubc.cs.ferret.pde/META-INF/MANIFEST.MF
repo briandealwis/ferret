@@ -1,10 +1,10 @@
 Bundle-SymbolicName: ca.ubc.cs.ferret.pde; singleton=true
-Bundle-Version: 0.4.0.qualifier
+Bundle-Version: 0.5.0.qualifier
 Bundle-Name: Ferret PDE Support Plug-in
 Bundle-Vendor: University of British Columbia
 Bundle-Activator: ca.ubc.cs.ferret.pde.FerretPdePlugin
-Require-Bundle: ca.ubc.cs.ferret.jdt;bundle-version="[0.4.0,0.5.0)",
- ca.ubc.cs.ferret;bundle-version="[0.4.0,0.5.0)",
+Require-Bundle: ca.ubc.cs.ferret.jdt,
+ ca.ubc.cs.ferret,
  org.eclipse.core.resources,
  org.eclipse.pde,
  org.eclipse.pde.core,

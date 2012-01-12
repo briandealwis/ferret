@@ -7,8 +7,11 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.pde.core.IIdentifiable;
+import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.core.plugin.ImportObject;
 
@@ -41,6 +44,11 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 						PdeModelHelper.getDefault().findPluginModel((IProjectNature)object);
 					if(plugin == null) { return null; }
 					return wrap(spec, Fidelity.Exact, IPluginModelBase.class, plugin);
+				} else if(object instanceof IIdentifiable) {
+					IPluginModelBase plugin =
+							PdeModelHelper.getDefault().findPluginModel(
+									((IIdentifiable)object).getId());
+					return wrap(spec, Fidelity.Exact, IPluginModelBase.class, plugin);
 				}
 			} else if(spec.getDesiredClass() == IPluginImport.class) {
 				// This is more here for proof-of-concept
@@ -72,6 +80,28 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 						return wrap(spec, Fidelity.Equivalent, PdeIdentifier.class,
 								new PdeIdentifier(relativePathname));
 			        }
+				}
+			} else if(spec.getDesiredClass() == IFeatureModel.class) {
+				if(object instanceof IIdentifiable) {
+					IFeatureModel feature =
+							PdeModelHelper.getDefault().findFeatureModel(
+									((IIdentifiable)object).getId());
+					return wrap(spec, Fidelity.Exact, IFeatureModel.class, feature);
+				}
+			} else if(spec.getDesiredClass() == IModel.class) {
+				if(object instanceof IModel) {
+					return wrap(spec, Fidelity.Exact, IModel.class, (IModel)object);
+				} else if(object instanceof IIdentifiable) {
+					IFeatureModel feature =
+							PdeModelHelper.getDefault().findFeatureModel(
+									((IIdentifiable)object).getId());
+					if(feature != null) { return wrap(spec, Fidelity.Exact,
+							IFeatureModel.class, feature); }
+					IPluginModelBase plugin =
+							PdeModelHelper.getDefault().findPluginModel(
+									((IIdentifiable)object).getId());
+					if(feature != null) { return wrap(spec, Fidelity.Exact,
+							IPluginModelBase.class, plugin); }
 				}
 			}
 		} catch(ClassNotFoundException e) {

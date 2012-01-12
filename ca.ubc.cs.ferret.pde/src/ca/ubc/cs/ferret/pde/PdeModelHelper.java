@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.pde.core.IIdentifiable;
+import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IFragmentModel;
 import org.eclipse.pde.core.plugin.IPluginAttribute;
 import org.eclipse.pde.core.plugin.IPluginElement;
@@ -53,6 +54,8 @@ import org.eclipse.pde.internal.core.PluginModelDelta;
 import org.eclipse.pde.internal.core.PluginModelManager;
 import org.eclipse.pde.internal.core.ibundle.IBundlePluginModelBase;
 import org.eclipse.pde.internal.core.ifeature.IFeature;
+import org.eclipse.pde.internal.core.ifeature.IFeatureChild;
+import org.eclipse.pde.internal.core.ifeature.IFeatureImport;
 import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.ifeature.IFeaturePlugin;
 import org.eclipse.pde.internal.core.natures.PDE;
@@ -224,9 +227,13 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	}
 
 	public IPluginModelBase findPluginModel(String pluginId) {
-		// return PDECore.getDefault().getModelManager().findModel(pluginId);
 		verifyModelCaches();
 		return models.get(pluginId);
+	}
+
+	public IFeatureModel findFeatureModel(String id) {
+		verifyModelCaches();
+		return features.get(id);
 	}
 
 	public IPluginModelBase findPluginModel(IProject project) {
@@ -288,7 +295,8 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		return exts;
 	}
 
-	public Collection<IFeatureModel> getRequiringFeatures(IPluginModelBase plugin) {
+	/** Return the features that specify the provided plugin */
+	public Collection<IFeatureModel> getFeaturesPackaging(IPluginModelBase plugin) {
 		verifyModelCaches();
 		String pluginId = getPluginId(plugin);
 		if(pluginId == null) { return Collections.emptyList(); }
@@ -306,6 +314,57 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 			}
 		}
 		return results;
+	}
+
+	/** Return the features that include the provided feature */
+	public Collection<IFeatureModel> getFeaturesIncluding(IFeatureModel source) {
+		verifyModelCaches();
+		String featureId = getFeatureId(source);
+		if(featureId == null) { return Collections.emptyList(); }
+		Collection<IFeatureModel> results = new ArrayList<IFeatureModel>();
+		for(IFeatureModel featureModel : features.values()) {
+			if(!featureModel.isValid()) {
+				continue;
+			}
+			IFeature feature = featureModel.getFeature();
+			for(IFeatureChild p : feature.getIncludedFeatures()) {
+				if(featureId.equals(p.getId())) {
+					results.add(featureModel);
+					break;
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Return the features that require (or import) the provided feature /
+	 * plugin
+	 */
+	public Collection<IFeatureModel> getFeaturesRequiring(IModel source) {
+		verifyModelCaches();
+		String sourceId = getId(source);
+		if(sourceId == null) { return Collections.emptyList(); }
+		Collection<IFeatureModel> results = new ArrayList<IFeatureModel>();
+		for(IFeatureModel featureModel : features.values()) {
+			if(!featureModel.isValid()) {
+				continue;
+			}
+			IFeature feature = featureModel.getFeature();
+			for(IFeatureImport p : feature.getImports()) {
+				if(sourceId.equals(p.getId())) {
+					results.add(featureModel);
+					break;
+				}
+			}
+		}
+		return results;
+	}
+
+	private String getId(IModel model) {
+		if(model instanceof ISharedPluginModel) { return getPluginId((ISharedPluginModel)model); }
+		if(model instanceof IFeatureModel) { return getFeatureId((IFeatureModel)model); }
+		return ((IIdentifiable)model).getId();
 	}
 
 	public Collection<IPluginExtensionPoint>  getExtensionPoints(IPluginModelBase pluginModel) {

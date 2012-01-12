@@ -3,32 +3,31 @@ package ca.ubc.cs.ferret.pde.queries;
 import java.util.Collection;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 
 import ca.ubc.cs.ferret.model.AbstractIntersectionConceptualQuery;
 import ca.ubc.cs.ferret.model.SimpleSolution;
 import ca.ubc.cs.ferret.pde.PdeModelHelper;
 
-public class FeaturesRequiringBundle extends
-		AbstractIntersectionConceptualQuery<IPluginModelBase, IFeatureModel> {
+public class FeaturesIncludingFeature extends
+		AbstractIntersectionConceptualQuery<IFeatureModel, IFeatureModel> {
 
 	@Override
 	protected String getSubDescription() {
-		return "required by features";
+		return "included by";
 	}
 
 	@Override
-	protected Collection<IFeatureModel> performQuery(IPluginModelBase plugin,
+	protected Collection<IFeatureModel> performQuery(IFeatureModel feature,
 			IProgressMonitor monitor) {
-		return PdeModelHelper.getDefault().getRequiringFeatures(plugin);
+		return PdeModelHelper.getDefault().getFeaturesIncluding(feature);
 	}
 
 	@Override
 	protected void processSolution(IFeatureModel dependent) {
 		SimpleSolution s = new SimpleSolution(this, this);
-		s.add("requires", dependent);
-		s.setPrimaryEntityName("requires");
+		s.add("included by", dependent);
+		s.setPrimaryEntityName("included by");
 		addSolution(s);
 	}
 
