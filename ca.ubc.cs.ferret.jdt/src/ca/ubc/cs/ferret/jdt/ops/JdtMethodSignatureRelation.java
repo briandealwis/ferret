@@ -1,6 +1,7 @@
 package ca.ubc.cs.ferret.jdt.ops;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import org.eclipse.jdt.core.IMethod;
@@ -26,7 +27,7 @@ public class JdtMethodSignatureRelation extends AbstractCollectionBasedRelation<
 			return result;
 		} catch(JavaModelException e) {
 			JavaModelHelper.logJME(e);
-			return null;
+			return Collections.emptyList();
 		}
 	}
 }
