@@ -40,6 +40,17 @@
 	 		category="declaration">
 	 		<parameter class="ca.ubc.cs.ferret.types.FerretObject" fidelity="equivalent" />
 		</conceptualQuery>
+  <conceptualQuery
+        category="declaration"
+        class="ca.ubc.cs.ferret.pde.queries.FeaturesRequiringBundle"
+        id="ca.ubc.cs.ferret.pde.featuresforbundle">
+     <parameter
+           class="org.eclipse.pde.core.plugin.IPluginModelBase"
+           count="1"
+           fidelity="equivalent"
+           id="default">
+     </parameter>
+  </conceptualQuery>
 		
 	 </extension>  
 

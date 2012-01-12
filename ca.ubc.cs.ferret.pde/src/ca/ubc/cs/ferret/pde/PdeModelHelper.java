@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IRegistryChangeEvent;
 import org.eclipse.core.runtime.IRegistryChangeListener;
@@ -43,12 +45,16 @@ import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.ISharedPluginModel;
+import org.eclipse.pde.internal.core.FeatureModelManager;
 import org.eclipse.pde.internal.core.IPluginModelListener;
 import org.eclipse.pde.internal.core.PDECore;
 import org.eclipse.pde.internal.core.PDEState;
 import org.eclipse.pde.internal.core.PluginModelDelta;
-import org.eclipse.pde.internal.core.TargetPlatformHelper;
+import org.eclipse.pde.internal.core.PluginModelManager;
 import org.eclipse.pde.internal.core.ibundle.IBundlePluginModelBase;
+import org.eclipse.pde.internal.core.ifeature.IFeature;
+import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
+import org.eclipse.pde.internal.core.ifeature.IFeaturePlugin;
 import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.core.plugin.ExternalFragmentModel;
 import org.eclipse.pde.internal.core.plugin.ExternalPluginModel;
@@ -66,38 +72,48 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 
 	public Map<String,IPluginModelBase> models = null;
 	public Map<String,MultiMap<IPluginExtension,IPluginObject>> extensions = null;
+	public Map<String, IFeatureModel> features = null;
 
 	protected PdeModelHelper() {
+		init();
 	}
 
 	public static PdeModelHelper getDefault() {
 		if(singleton == null) {
 			singleton = new PdeModelHelper();
-			PDECore.getDefault().getModelManager().addPluginModelListener(singleton);
-			Platform.getExtensionRegistry().addRegistryChangeListener(singleton);
 		}
 		return singleton;
 	}
 
 	public static void stop() {
 		if(singleton == null) { return; }
-		PDECore.getDefault().getModelManager().removePluginModelListener(singleton);
-		Platform.getExtensionRegistry().removeRegistryChangeListener(singleton);
-		singleton.reset();
+		singleton.dispose();
 		singleton = null;
 	}
 
-	public void reset() {
+	public void init() {
+		getPluginModelManager().addPluginModelListener(this);
+		getExtensionRegistry().addRegistryChangeListener(this);
+	}
+
+	public void dispose() {
+		getPluginModelManager().removePluginModelListener(this);
+		getExtensionRegistry().removeRegistryChangeListener(this);
 		models = null;
 		extensions = null;
+		features = null;
+	}
+
+	private IExtensionRegistry getExtensionRegistry() {
+		return Platform.getExtensionRegistry();
 	}
 	
 	public void modelsChanged(PluginModelDelta delta) {
-		reset();
+		dispose();
 	}
 
 	public void registryChanged(IRegistryChangeEvent event) {
-		reset();
+		dispose();
 	}
 
 	/**
@@ -143,10 +159,11 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	
 	protected void verifyModelCaches() {
 		// models = null; extensions = null;
-		if(models != null && extensions != null) { return; }
+		if(models != null && extensions != null && features != null) { return; }
 		Map<String,IPluginModelBase> models = new HashMap<String, IPluginModelBase>();
 		Map<String,MultiMap<IPluginExtension,IPluginObject>> extensions = 
 			new HashMap<String,MultiMap<IPluginExtension,IPluginObject>>();
+		Map<String, IFeatureModel> features = new HashMap<String, IFeatureModel>();
 
 		// We create our own state to ensure that extensions are properly resolved
 		// Pieced together from PDECore.findPluginInHost(String), TargetPlatformHelper,
@@ -158,7 +175,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		// Following doesn't work: doesn't resolve extensions
 //		PDEState state = TargetPlatformHelper.getPDEState();
 		// TargetPlatformHelper.getPDEState().getTargetModels()
-		for(IPluginModelBase pluginModel : PDECore.getDefault().getModelManager().getExternalModels()) {
+		for(IPluginModelBase pluginModel : getExternalPluginModels()) {
 			String pluginId = getPluginId(pluginModel);
 			models.put(pluginId, pluginModel);
 			MultiMap<IPluginExtension,IPluginObject> xm =
@@ -176,7 +193,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 			extensions.put(pluginId, xm);
 		}
 		
-		for(IPluginModelBase pluginModel : PDECore.getDefault().getModelManager().getWorkspaceModels()) {
+		for(IPluginModelBase pluginModel : getPluginModelManager().getWorkspaceModels()) {
 			String pluginId = getPluginId(pluginModel);
 			models.put(pluginId, pluginModel);
 			MultiMap<IPluginExtension,IPluginObject> xm =
@@ -193,10 +210,19 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 //			}
 			extensions.put(pluginId, xm);
 		}
+		for(IFeatureModel featureModel : getFeatureModelManager().getExternalModels()) {
+			String featureId = getFeatureId(featureModel);
+			features.put(featureId, featureModel);
+		}
+		for(IFeatureModel featureModel : getFeatureModelManager().getWorkspaceModels()) {
+			String featureId = getFeatureId(featureModel);
+			features.put(featureId, featureModel);
+		}
 		this.models = models;
 		this.extensions = extensions;
+		this.features = features;
 	}
-	
+
 	public IPluginModelBase findPluginModel(String pluginId) {
 		// return PDECore.getDefault().getModelManager().findModel(pluginId);
 		verifyModelCaches();
@@ -206,7 +232,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	public IPluginModelBase findPluginModel(IProject project) {
 		try {
 			if(!project.hasNature(PDE.PLUGIN_NATURE)) { return null; }
-			IPluginModelBase pmb = PDECore.getDefault().getModelManager().findModel(project);
+			IPluginModelBase pmb = getPluginModelManager().findModel(project);
 			if(pmb == null) { return null; }
 			return findPluginModel(pmb.getPluginBase().getId());
 		} catch(CoreException e) {
@@ -262,6 +288,26 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		return exts;
 	}
 
+	public Collection<IFeatureModel> getRequiringFeatures(IPluginModelBase plugin) {
+		verifyModelCaches();
+		String pluginId = getPluginId(plugin);
+		if(pluginId == null) { return Collections.emptyList(); }
+		Collection<IFeatureModel> results = new ArrayList<IFeatureModel>();
+		for(IFeatureModel featureModel : features.values()) {
+			if(!featureModel.isValid()) {
+				continue;
+			}
+			IFeature feature = featureModel.getFeature();
+			for(IFeaturePlugin p : feature.getPlugins()) {
+				if(pluginId.equals(p.getId())) {
+					results.add(featureModel);
+					break;
+				}
+			}
+		}
+		return results;
+	}
+
 	public Collection<IPluginExtensionPoint>  getExtensionPoints(IPluginModelBase pluginModel) {
 		verifyModelCaches();
 		assert getPluginId(pluginModel) != null;
@@ -298,13 +344,12 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		}
 		IResource resource = model.getUnderlyingResource();
 		if(resource != null) {
-			IPluginModelBase modelBase = 
-				PDECore.getDefault().getModelManager().findModel(resource.getProject());
+			IPluginModelBase modelBase = getPluginModel(resource);
 			String id = modelBase.getPluginBase().getId();
 			if(id != null && id.length() > 0) { return id; }
 		}
 		String installationLocation = model.getInstallLocation();
-		for(IPluginModelBase modelBase : PDECore.getDefault().getModelManager().getExternalModels()) {
+		for(IPluginModelBase modelBase : getExternalPluginModels()) {
 			if(modelBase.getInstallLocation().equals(installationLocation)) {
 				String id = modelBase.getPluginBase().getId();
 				if(id != null && id.length() > 0) { return id; }
@@ -312,7 +357,42 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		}
 		throw new FerretFatalError("cannot determine plugin id");
 	}
+
+	private IPluginModelBase getPluginModel(IResource resource) {
+		return getPluginModelManager().findModel(resource.getProject());
+	}
+
+	private IPluginModelBase[] getExternalPluginModels() {
+		return getPluginModelManager().getExternalModels();
+	}
 	
+	private String getFeatureId(IFeatureModel featureModel) {
+		if(featureModel instanceof IIdentifiable) {
+			String id = ((IIdentifiable)featureModel).getId();
+			if(id != null && id.length() > 0) { return id; }
+		}
+		String id = ((IFeatureModel)featureModel).getFeature().getId();
+		if(id != null && id.length() > 0) { return id; }
+
+		IResource resource = featureModel.getUnderlyingResource();
+		if(resource != null) {
+			IFeatureModel model =
+					getFeatureModelManager()
+							.getFeatureModel(resource.getProject());
+			id = model.getFeature().getId();
+			if(id != null && id.length() > 0) { return id; }
+		}
+		String installationLocation = featureModel.getInstallLocation();
+		for(IFeatureModel model : getFeatureModelManager()
+				.getExternalModels()) {
+			if(model.getInstallLocation().equals(installationLocation)) {
+				id = model.getFeature().getId();
+				if(id != null && id.length() > 0) { return id; }
+			}
+		}
+		throw new FerretFatalError("cannot determine feature id");
+	}
+
 	protected MultiMap<IPluginExtension,IPluginObject> loadExtensions(String pluginId, IPluginModelBase pmb) {
 		MultiMap<IPluginExtension,IPluginObject> result =
 			new MultiHashMap<IPluginExtension,IPluginObject>();
@@ -469,36 +549,45 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	}
 
 	public static String generateXPath(IPluginAttribute attr, IPluginExtension extension) {
-			String notableAttributes[] = { "point", "id", "targetId" };
-	//		IPluginObject current = attr;
-	//		while(current != extension) {
-	//			elements.add(current);
-	//			current = current.getParent();
-	//		}
-	//		elements.add(extension);
-	//		
-			StringBuffer generatedName = new StringBuffer();
-			IPluginObject parent = attr.getParent();
-			if(parent instanceof IPluginElement) {
-				IPluginElement e = (IPluginElement)parent;
-				List<String> attributes = new LinkedList<String>();
-				generatedName.append('<');
-				generatedName.append(parent.getName());
-				for(String notableAttribute : notableAttributes) {
-					if(e.getAttribute(notableAttribute) != null) {
-						attributes.add(notableAttribute + "='" + e.getAttribute(notableAttribute).getValue() + "'");
-					}
+		String notableAttributes[] = { "point", "id", "targetId" };
+		// IPluginObject current = attr;
+		// while(current != extension) {
+		// elements.add(current);
+		// current = current.getParent();
+		// }
+		// elements.add(extension);
+		//
+		StringBuffer generatedName = new StringBuffer();
+		IPluginObject parent = attr.getParent();
+		if(parent instanceof IPluginElement) {
+			IPluginElement e = (IPluginElement)parent;
+			List<String> attributes = new LinkedList<String>();
+			generatedName.append('<');
+			generatedName.append(parent.getName());
+			for(String notableAttribute : notableAttributes) {
+				if(e.getAttribute(notableAttribute) != null) {
+					attributes.add(notableAttribute + "='"
+							+ e.getAttribute(notableAttribute).getValue() + "'");
 				}
-				if(!attributes.isEmpty()) {
-					for (Iterator<String> iterator = attributes.iterator(); iterator.hasNext();) {
-						generatedName.append(' ');
-						generatedName.append(iterator.next());
-					}
-				}
-				generatedName.append('>');
 			}
-		
-			return generatedName.toString();
+			if(!attributes.isEmpty()) {
+				for(Iterator<String> iterator = attributes.iterator(); iterator.hasNext();) {
+					generatedName.append(' ');
+					generatedName.append(iterator.next());
+				}
+			}
+			generatedName.append('>');
 		}
+
+		return generatedName.toString();
+	}
+
+	private PluginModelManager getPluginModelManager() {
+		return PDECore.getDefault().getModelManager();
+	}
+
+	private FeatureModelManager getFeatureModelManager() {
+		return PDECore.getDefault().getFeatureModelManager();
+	}
 
 }

@@ -26,6 +26,7 @@ import org.eclipse.pde.core.plugin.IPluginExtensionPoint;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.ISharedPluginModel;
+import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.plugin.PluginReference;
 import org.eclipse.pde.internal.ui.PDEPlugin;
 import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor;
@@ -149,7 +150,7 @@ public class PdeSphereHelper extends SphereHelper {
 
     public boolean canOpen(Object obj) {
     	if (obj instanceof PluginReference || obj instanceof IPluginObject
-				|| obj instanceof IPluginModelBase) {
+				|| obj instanceof IPluginModelBase || obj instanceof IFeatureModel) {
 			return true;
 		}
 		return super.canOpen(obj);
@@ -160,33 +161,44 @@ public class PdeSphereHelper extends SphereHelper {
 		if(element instanceof IPluginObject && ManifestEditor.open(element, false) != null) {
 			return true;
 		}
-		IPluginModelBase model = null;
+
+		String manifestFileName = null;
+		String installationLocation = null;
 		if(element instanceof IPluginModelBase) {
-			model = (IPluginModelBase)element;
+			IPluginModelBase model = (IPluginModelBase)element;
+			manifestFileName = model.isFragmentModel() ? "fragment.xml" : "plugin.xml";
+			installationLocation = model.getInstallLocation();
 		} else if(element instanceof PluginReference) {
-    		model = ((PluginReference)element).getPlugin().getPluginModel();
+			IPluginModelBase model =
+					((PluginReference)element).getPlugin().getPluginModel();
+			manifestFileName = model.isFragmentModel() ? "fragment.xml" : "plugin.xml";
+			installationLocation = model.getInstallLocation();
+		} else if(element instanceof IFeatureModel) {
+			IFeatureModel feature = (IFeatureModel)element;
+			manifestFileName = "feature.xml";
+			installationLocation = feature.getInstallLocation();
     	}
-		if(model != null) {
-			String xmlFileName = model.isFragmentModel() ? "fragment.xml" : "plugin.xml";
+		if(installationLocation != null) {
+
 			IPath path = null;
 			// ExternalPluginModelBase.getLocalFile() is useful
-			File f = new File(model.getInstallLocation());
+			File f = new File(installationLocation);
 			if(f.exists()) {
 				if(f.isFile()) {
 					// then ref is a .jar plugin
 					try {
 						ZipEntryReference jfr = new ZipEntryReference(f.getAbsolutePath(),
-								xmlFileName, -1, -1);
+										manifestFileName, -1, -1);
 						return jfr.open();
 					} catch(IOException e) {
 						return false;
 					}
 				} else if(f.isDirectory()) {
-					path = Path.fromOSString(model.getInstallLocation());
-					path = path.append(xmlFileName);
+					path = Path.fromOSString(installationLocation);
+					path = path.append(manifestFileName);
 				}
 			} else {
-				path = model.getUnderlyingResource().getFullPath();
+				// path = model.getUnderlyingResource().getFullPath();
 			}
 			// Try to resolve the path as within the workspace: findFilesForLocation() works
 			// for absolute files that reference files in the workspace
