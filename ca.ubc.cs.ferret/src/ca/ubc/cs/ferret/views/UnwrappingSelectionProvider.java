@@ -4,26 +4,27 @@
  */
 package ca.ubc.cs.ferret.views;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.jface.util.ListenerList;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 
-public abstract class UnwrappingSelectionProvider implements ISelectionProvider, ISelectionChangedListener {
+import ca.ubc.cs.ferret.util.SelectionUnwrapper;
+
+public class UnwrappingSelectionProvider implements ISelectionProvider,
+		ISelectionChangedListener {
     protected ISelectionProvider wrappedProvider;
+	protected SelectionUnwrapper unwrapper;
     protected ListenerList selectionChangedList = new ListenerList();
     protected ISelection current = null;
     protected ISelection wrappedSelection = null;
     
-    public UnwrappingSelectionProvider(ISelectionProvider _wrappedProvider) {
-        wrappedProvider = _wrappedProvider;
+	public UnwrappingSelectionProvider(ISelectionProvider wrappedProvider,
+			SelectionUnwrapper unwrapper) {
+		this.wrappedProvider = wrappedProvider;
+		this.unwrapper = unwrapper;
     }
 
     public void enableSelectionChangedNotification() {
@@ -48,7 +49,7 @@ public abstract class UnwrappingSelectionProvider implements ISelectionProvider,
         ISelection newWrappedSelection = wrappedProvider.getSelection();
         if(newWrappedSelection.equals(wrappedSelection)) { return current; }
         wrappedSelection = newWrappedSelection;
-        return current = unwrapSelection(wrappedSelection);
+		return current = unwrapper.unwrapSelection(wrappedSelection);
 //        System.out.println("UnwrappingSelectionProvider: getSelection() = {" + FerretPlugin.debugPrint(current) + "}");
 //        return current;
     }
@@ -76,28 +77,4 @@ public abstract class UnwrappingSelectionProvider implements ISelectionProvider,
             ((ISelectionChangedListener)listeners[i]).selectionChanged(event);
         }
     }
-
-    /**
-     * Unwrap the provided selection.
-     * @param selection
-     */
-    protected abstract Object unwrapObject(Object element);
-
-	protected ISelection unwrapSelection(ISelection selection) {
-	    if(selection instanceof StructuredSelection) {
-	        StructuredSelection s = (StructuredSelection)selection;
-	        List<Object> unwrappedObjects = new ArrayList<Object>(s.size());
-	        boolean unwrappingOccurred = false;
-	        for(Iterator iter = s.iterator(); iter.hasNext();) {
-	            Object element = iter.next();
-	            Object unwrapped = unwrapObject(element);
-	            unwrappedObjects.add(unwrapped);
-	            if(element != unwrapped) { unwrappingOccurred = true; }
-	        }
-	        if(unwrappingOccurred) {
-	            selection = new StructuredSelection(unwrappedObjects);
-	        }
-	    }
-	    return selection;
-	}
 }

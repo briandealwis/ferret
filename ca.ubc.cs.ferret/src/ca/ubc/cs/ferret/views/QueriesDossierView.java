@@ -51,10 +51,12 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -255,7 +257,9 @@ public class QueriesDossierView extends ViewPart
 		}
 		getPreferenceStore().addPropertyChangeListener(preferencesChangeListener);
         
-        ChildUnwrappingSelectionProvider provider = new ChildUnwrappingSelectionProvider(viewer);
+		final ChildSelectionUnwrapper unwrapper = new ChildSelectionUnwrapper();
+		UnwrappingSelectionProvider provider =
+				new UnwrappingSelectionProvider(viewer, unwrapper);
         provider.enableSelectionChangedNotification();
         getSite().setSelectionProvider(provider);
         
@@ -265,8 +269,21 @@ public class QueriesDossierView extends ViewPart
 		hookOpenAction();
 		contributeToActionBars();
 		
-// 3.2:	ICommandService cs = (ICommandService)getViewSite().getWorkbenchWindow().getService(ICommandService.class);
-		ICommandService cs = (ICommandService)getWorkbench().getAdapter(ICommandService.class);
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event) {
+				ISelection selection = unwrapper.unwrapSelection(event.getSelection());
+				boolean isStructuredSelection = selection instanceof IStructuredSelection;
+				boolean isMultiObject =
+						isStructuredSelection
+								&& ((IStructuredSelection)selection).size() > 0;
+				openAction.selectionChanged(selection);
+				removeFromViewAction.setEnabled(isMultiObject);
+				removeSiblingsFromViewAction.setEnabled(isMultiObject);
+				openParentAction.selectionChanged(selection);
+				queryParentAction.selectionChanged(selection);
+			}
+		});
+		ICommandService cs = (ICommandService)getSite().getService(ICommandService.class);
 		if(selectionChangingCommandListener == null) {
 			configureQueryCommandIds();
 			selectionChangingCommandListener = new IExecutionListener() {
@@ -503,15 +520,7 @@ public class QueriesDossierView extends ViewPart
                     + selection.getClass().getName() + "], part=" + part);
         }
         if(part == this) {
-        	// If this is us, then selection is made up of the unwrapped objects
-        	boolean isStructuredSelection = selection instanceof IStructuredSelection;
-        	boolean isMultiObject = 
-        		isStructuredSelection && ((IStructuredSelection)selection).size() > 0;
-        	openAction.selectionChanged(selection);
-        	removeFromViewAction.setEnabled(isMultiObject);
-        	removeSiblingsFromViewAction.setEnabled(isMultiObject);
-        	openParentAction.selectionChanged(selection);
-        	queryParentAction.selectionChanged(selection);
+			// If this is us, then don't react
         	return;
     	}
 		if (selection.isEmpty()) {
@@ -972,9 +981,7 @@ public class QueriesDossierView extends ViewPart
     }
 
     protected boolean isOpenable(Object obj) {
-    	if(obj instanceof FerretObject) {
-    		obj = ((FerretObject)obj).getPrimaryObject();
-    	}
+		obj = unwrapObject(obj);
     	if(obj instanceof AbstractReference) { return true; }
     	for(SphereHelper sphere : FerretPlugin.getSphereHelpers()) {
     		if(sphere.canOpen(obj)) { return true; }
@@ -982,7 +989,15 @@ public class QueriesDossierView extends ViewPart
     	return false;
     }
     
-    protected void openInEditor(final Consultation c) {
+	private Object unwrapObject(Object obj) {
+		if(obj instanceof IDisplayObject) { return unwrapObject(((IDisplayObject)obj)
+				.getObject()); }
+		if(obj instanceof FerretObject) { return unwrapObject(((FerretObject)obj)
+				.getPrimaryObject()); }
+		return obj;
+	}
+
+	protected void openInEditor(final Consultation c) {
 		if(c.getOriginalElements().length == 1) {
 			openInEditor(c.getOriginalElements()[0]); 
 			return;

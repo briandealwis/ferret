@@ -5,20 +5,14 @@
 package ca.ubc.cs.ferret.views;
 
 
-import org.eclipse.jface.viewers.ISelectionProvider;
-
 import ca.ubc.cs.clustering.Cluster;
 import ca.ubc.cs.ferret.display.IDisplayObject;
 import ca.ubc.cs.ferret.types.FerretObject;
+import ca.ubc.cs.ferret.util.SelectionUnwrapper;
 
-public class ChildUnwrappingSelectionProvider extends
-        UnwrappingSelectionProvider {
+public class ChildSelectionUnwrapper extends SelectionUnwrapper {
 
-    public ChildUnwrappingSelectionProvider(ISelectionProvider _wrappedProvider) {
-        super(_wrappedProvider);
-    }
-
-    protected Object unwrapObject(Object element) {
+	public Object unwrapObject(Object element) {
     	if(element instanceof FerretObject) {	// FIXME: is this really the right thing to do?
     		return unwrapObject(((FerretObject)element).getPrimaryObject());
     	}
