@@ -18,6 +18,7 @@
   </properties>
 
   <modules>
+    <module>ca.ubc.cs.objhdl</module>
     <module>ca.ubc.cs.clustering</module>
     <module>ca.ubc.cs.ferret</module>
     <module>ca.ubc.cs.ferret-feature.base</module>
@@ -33,9 +34,10 @@
 <!--
     <module>ca.ubc.cs.ferret.tptp</module>
     <module>ca.ubc.cs.ferret.tptp.jdt</module>
+    <module>ca.ubc.cs.ferret.tests.tptp</module>
     <module>ca.ubc.cs.ferret-feature.tptp</module>
 -->
-    <module>ca.ubc.cs.objhdl</module>
+    <module>site</module>
   </modules>
 
   <build>

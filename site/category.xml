@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Ferret" url="http://www.cs.ubc.ca/~bsd/research/ferret/">
+      The Ferret Update Site
+   </description>
+   <feature id="ca.ubc.cs.ferret.feature"><category name="Ferret"/></feature>
+   <category-def name="Ferret" label="Ferret Exploration Tool">
+      <description>
+         The Ferret Software Exploration Development Tool
+      </description>
+   </category-def>
+</site>
