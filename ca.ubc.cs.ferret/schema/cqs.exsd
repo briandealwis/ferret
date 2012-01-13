@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="ca.ubc.cs.ferret">
+<schema targetNamespace="ca.ubc.cs.ferret" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
          <meta.schema plugin="ca.ubc.cs.ferret" id="cqs" name="Conceptual Queries"/>
@@ -11,6 +11,11 @@
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
       <complexType>
          <sequence>
             <element ref="conceptualQuery" minOccurs="0" maxOccurs="unbounded"/>
@@ -70,6 +75,9 @@ This class must implement a public subclass of &lt;code&gt;ca.ubc.cs.ferret.mode
                <documentation>
                   a category describing the type of information resulting from the query.
                </documentation>
+               <appInfo>
+                  <meta.attribute kind="identifier" basedOn="ca.ubc.cs.ferret.cqs/conceptualQuery/@category"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
