@@ -29,7 +29,7 @@ public class ClassLookupCache {
 
 	/**
 	 * Return true if an instance of <code>actualClass</code> could be assigned
-	 * to an instance of <code>assignedClass</code>
+	 * to field or variable with type <code>assignedClass</code>
 	 * @param assignedClass type-name for LHS of assignment
 	 * @param actualClass actual type for RHS of assignment
 	 * @return true if assignment would be permitted
