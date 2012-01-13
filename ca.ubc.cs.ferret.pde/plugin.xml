@@ -70,6 +70,17 @@
            fidelity="equivalent">
      </parameter>
   </conceptualQuery>
+    <conceptualQuery
+          category="declarations"
+          class="ca.ubc.cs.ferret.pde.queries.DefiningBundle"
+          id="ca.ubc.cs.ferret.pde.definingbundle">
+       <parameter
+             class="org.eclipse.jdt.core.IType"
+             count="1"
+             fidelity="equivalent"
+             id="default">
+       </parameter>
+    </conceptualQuery>
 		
 	 </extension>  
 
