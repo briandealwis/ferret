@@ -75,10 +75,11 @@ public class ConversionSpecification {
 	}
 
 	public Class<?> getProvidedClass() throws ClassNotFoundException {
-		if(desiredClass == null) {
-			desiredClass = specification.getClass().getClassLoader().loadClass(desiredType);
+		if(providedClass == null) {
+			Bundle bundle = Platform.getBundle(specification.getNamespaceIdentifier());
+			providedClass = bundle.loadClass(providedType);
 		}
-		return desiredClass; 
+		return providedClass;
 	}
 
 	public Class<?> getDesiredClass() throws ClassNotFoundException {
