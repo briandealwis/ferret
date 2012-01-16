@@ -143,18 +143,20 @@ public class JavaModelHelper implements IElementChangedListener {
         if(typeCache == null) {
         		typeCache = new CachingFutureMap<String,IType>(getCacheSize());
         } else {
-        	synchronized(typeCache) {
-	    	    	if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
-		    			System.out.println("JavaModelHelper: reset(): cancelling futures...");
-	    	    	}
-        		for(Iterator<EclipseFuture<IType>> it = typeCache.values().iterator(); it.hasNext();) {
-        			EclipseFuture<IType> f = it.next();
-        			if(!f.isDone()) {
-        				 f.cancel(true);
-        			} else if(f.get() == null || !f.get().exists()) {
-        				it.remove(); 
-        			} 
-        		}
+			synchronized(typeCache) {
+				if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
+					System.out.println("JavaModelHelper: reset(): cancelling futures...");
+				}
+				for(Iterator<EclipseFuture<IType>> it = typeCache.values().iterator(); it
+						.hasNext();) {
+					EclipseFuture<IType> f = it.next();
+					if(!f.isDone()) {
+						f.cancel(true);
+						it.remove();
+					} else if(f.get() == null || !f.get().exists()) {
+						it.remove();
+					}
+				}
         	}
         }
         numberQueries = numberSatisfiedFromCache = 0;
