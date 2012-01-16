@@ -45,12 +45,18 @@ public class AdaptableToQuery extends PdeSingleParmConceptualQuery<IType> {
 			Set<AdaptationSpecification> adaptationSpecs = new HashSet<AdaptationSpecification>();
 			IRelation results = getSphere().resolve(new SubProgressMonitor(monitor, 5),
 					PdeSphereHelper.OP_ADAPTABLE_TO, parameter);
-			adaptationSpecs.addAll(results.asCollection(AdaptationSpecification.class));
+			if(results != null) {
+				adaptationSpecs.addAll(results
+						.asCollection(AdaptationSpecification.class));
+			}
 			
 			results = new NamedJoinRelation(ObjectOrientedRelations.OP_SUPERTYPES,
 					PdeSphereHelper.OP_ADAPTABLE_TO)
 				.resolve(new SubProgressMonitor(monitor, 5), getSphere(), parameter);
-			adaptationSpecs.addAll(results.asCollection(AdaptationSpecification.class));
+			if(results != null) {
+				adaptationSpecs.addAll(results
+						.asCollection(AdaptationSpecification.class));
+			}
 			
 			for(AdaptationSpecification spec : adaptationSpecs) { processResult(spec); }
 		} finally {
