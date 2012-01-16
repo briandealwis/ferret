@@ -9,10 +9,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -261,11 +261,18 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		if(pointId == null) { return null; }
 		int pointIndex = pointId.lastIndexOf('.');
 		if (pointIndex < 0) { return null; }
+		verifyModelCaches();
 		IPluginModelBase pmb = findPluginModel(pointId.substring(0, pointIndex));
 		if (pmb == null) { return null; }
 		for (IPluginExtensionPoint pep : getExtensionPoints(pmb)) {
 			if (pointId.equals(getFullId(pep))) {
 				return pep;
+			}
+		}
+		for(IPluginModelBase pluginModel : models.values()) {
+			for(IPluginExtensionPoint extpt : pluginModel.getPluginBase()
+					.getExtensionPoints()) {
+				if(pointId.equals(getFullId(extpt))) { return extpt; }
 			}
 		}
 		return null;
@@ -370,15 +377,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	public Collection<IPluginExtensionPoint>  getExtensionPoints(IPluginModelBase pluginModel) {
 		verifyModelCaches();
 		assert getPluginId(pluginModel) != null;
-//		String pluginId = getPluginId(pluginModel);
-//		if(pluginId == null) { return null; }
-//		IExtensions exts = extensions.get(pluginId);
-//		if(exts == null) { return null; }
-		Collection<IPluginExtensionPoint> results = new HashSet<IPluginExtensionPoint>();
-		for(IPluginExtensionPoint xp : pluginModel.getExtensions().getExtensionPoints()) {
-			results.add(xp);
-		}
-		return results;
+		return Arrays.asList(pluginModel.getPluginBase().getExtensionPoints());
 	}
 
 	public String getFullId(IPluginExtensionPoint point) {
