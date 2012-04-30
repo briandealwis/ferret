@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.commons.collections15.Predicate;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -59,7 +60,8 @@ import ca.ubc.cs.ferret.views.ImageImageDescriptor;
 public class PdeSphereHelper extends SphereHelper {
 
 	public static final String HCI_PDE_TB = "ca.ubc.cs.ferret.pde.tb";
-	public static final String OP_DECLARED_EXTENSION_POINTS = "PdeDeclaredExtensionPoints";
+	public static final String OP_DECLARED_EXTENSION_POINTS =
+			"PdeDeclaredExtensionPoints";
 	public static final String OP_DECLARED_EXTENSIONS = "PdeDeclaredExtensions";
 	public static final String OP_IDENTIFIER_REFERENCED = "PdeIdentifierReferenced";
 	public static final String OP_EXTENDED_BY = "PdeExtendedBy";
@@ -68,126 +70,134 @@ public class PdeSphereHelper extends SphereHelper {
 	public static final String OP_ADAPTABLE_FROM = "PdeAdaptableFrom";
 	protected static PdeSphereHelper singleton;
 
-    private PdeSphereHelper() {}
-    
-    public static PdeSphereHelper getDefault() {
+	private PdeSphereHelper() {}
+
+	public static PdeSphereHelper getDefault() {
 		if(singleton == null) {
-			 singleton = new PdeSphereHelper();
-			 singleton.start();
+			singleton = new PdeSphereHelper();
+			singleton.start();
 		}
 		return singleton;
-    }
-    
-    public void start() {}
-    public void reset() {}
-    public void stop() {
-    	PdeModelHelper.stop();
-    }
+	}
 
-    @Override
-    public ImageDescriptor getImage(Object element) {
-    	Image img = PDEPlugin.getDefault().getLabelProvider().getImage(element);
-    	return img != null ? new ImageImageDescriptor(img) : null;
-    }
+	public void start() {}
 
-    @Override
-    public String getLabel(Object element) {
-    	if(element instanceof IPluginExtensionPoint) {
-    		return PdeModelHelper.getDefault().getFullId((IPluginExtensionPoint)element);
-    	} else if(element instanceof IPluginExtension) {
-    		// stolen from PluginSearchResultPage
+	public void reset() {}
+
+	public void stop() {
+		PdeModelHelper.stop();
+	}
+
+	@Override
+	public ImageDescriptor getImage(Object element) {
+		Image img = PDEPlugin.getDefault().getLabelProvider().getImage(element);
+		return img != null ? new ImageImageDescriptor(img) : null;
+	}
+
+	@Override
+	public String getLabel(Object element) {
+		if(element instanceof IPluginExtensionPoint) {
+			return PdeModelHelper.getDefault().getFullId((IPluginExtensionPoint)element);
+		} else if(element instanceof IPluginExtension) {
+			// stolen from PluginSearchResultPage
 			IPluginExtension extension = (IPluginExtension)element;
-			return extension.getPoint() + " - " + 
-				PdeModelHelper.getDefault().getPluginId(extension.getPluginModel()); //$NON-NLS-1$
-    	} else if(element instanceof ISharedPluginModel) {
-    		return PdeModelHelper.getDefault().getPluginId((ISharedPluginModel)element);
-    	}
-    	return getMeaningfulLabel(element, 
-    			PDEPlugin.getDefault().getLabelProvider().getText(element));
-    }
+			return extension.getPoint() + " - "
+					+ PdeModelHelper.getDefault().getPluginId(extension.getPluginModel()); //$NON-NLS-1$
+		} else if(element instanceof ISharedPluginModel) { return PdeModelHelper
+				.getDefault().getPluginId((ISharedPluginModel)element); }
+		return getMeaningfulLabel(element, PDEPlugin.getDefault().getLabelProvider()
+				.getText(element));
+	}
 
-    @Override
-    public String getMinimalLabel(Object element) {
-        return getLabel(element);
-    }
+	@Override
+	public String getMinimalLabel(Object element) {
+		return getLabel(element);
+	}
 
-    public String getHandleIdentifier(Object element) {
-    	String pdeLabel = getLabel(element);
-    	if(pdeLabel != null) { return "pde:" + pdeLabel; }
-    	return super.getHandleIdentifier(element);
-    }
-    
-    @Override
-    public Object[] getSelectedObjects(IEditorPart editor) {
-    	ISelectionProvider provider = editor.getSite().getSelectionProvider();
-		if (provider == null) { return null; }
+	public String getHandleIdentifier(Object element) {
+		String pdeLabel = getLabel(element);
+		if(pdeLabel != null) { return "pde:" + pdeLabel; }
+		return super.getHandleIdentifier(element);
+	}
+
+	@Override
+	public Object[] getSelectedObjects(IEditorPart editor) {
+		ISelectionProvider provider = editor.getSite().getSelectionProvider();
+		if(provider == null) { return null; }
 		ISelection selection = provider.getSelection();
 		if(selection instanceof ITextSelection) {
 			ITextSelection ts = (ITextSelection)selection;
-			if(ts.getLength() > 0 || (ts = expandTextSelection(editor, ts)) != null) {
-				return getSelectedObjects(ts);
-			}
+			if(ts.getLength() > 0 || (ts = expandTextSelection(editor, ts)) != null) { return getSelectedObjects(ts); }
 		}
 		return null;
-    }
-    
-	protected ITextSelection expandTextSelection(IEditorPart editor,
-			ITextSelection ts) {
+	}
+
+	protected ITextSelection expandTextSelection(IEditorPart editor, ITextSelection ts) {
 		return expandTextSelection(editor, ts, new Predicate<Character>() {
 			public boolean evaluate(Character ch) {
 				return Character.isLetterOrDigit(ch) || ch == '.';
-			}});
+			}
+		});
 	}
 
 	protected Object[] getSelectedObjects(ITextSelection ts) {
 		List<Object> objects = new ArrayList<Object>();
-		IPluginModelBase modelBase = PdeModelHelper.getDefault().findPluginModel(ts.getText());
-		if(modelBase != null) { objects.add(modelBase);  }
-		IPluginExtensionPoint extPt = PdeModelHelper.getDefault().findExtensionPoint(ts.getText());
-		if(extPt != null) { objects.add(extPt); }
+		IPluginModelBase modelBase =
+				PdeModelHelper.getDefault().findPluginModel(ts.getText());
+		if(modelBase != null) {
+			objects.add(modelBase);
+		}
+		IPluginExtensionPoint extPt =
+				PdeModelHelper.getDefault().findExtensionPoint(ts.getText());
+		if(extPt != null) {
+			objects.add(extPt);
+		}
 		return objects.toArray();
 	}
 
-    public boolean canOpen(Object obj) {
-    	if (obj instanceof PluginReference || obj instanceof IPluginObject
-				|| obj instanceof IPluginModelBase || obj instanceof IFeatureModel) {
-			return true;
-		}
+	public boolean canOpen(Object obj) {
+		if(obj instanceof PluginReference || obj instanceof IPluginObject
+				|| obj instanceof IPluginModelBase || obj instanceof IFeatureModel) { return true; }
 		return super.canOpen(obj);
-    }
-    
-    @Override
-    public boolean openObject(Object element) {
-		if(element instanceof IPluginObject && ManifestEditor.open(element, false) != null) {
-			return true;
-		}
+	}
 
+	@Override
+	public boolean openObject(Object element) {
+		if(element instanceof IPluginObject
+				&& ManifestEditor.open(element, false) != null) { return true; }
+
+		IResource underlyingResource = null;
 		String manifestFileName = null;
 		String installationLocation = null;
 		if(element instanceof IPluginModelBase) {
 			IPluginModelBase model = (IPluginModelBase)element;
+			underlyingResource = model.getUnderlyingResource();
 			manifestFileName = model.isFragmentModel() ? "fragment.xml" : "plugin.xml";
 			installationLocation = model.getInstallLocation();
 		} else if(element instanceof PluginReference) {
 			IPluginModelBase model =
 					((PluginReference)element).getPlugin().getPluginModel();
+			underlyingResource = model.getUnderlyingResource();
 			manifestFileName = model.isFragmentModel() ? "fragment.xml" : "plugin.xml";
 			installationLocation = model.getInstallLocation();
 		} else if(element instanceof IFeatureModel) {
 			IFeatureModel feature = (IFeatureModel)element;
+			underlyingResource = feature.getUnderlyingResource();
 			manifestFileName = "feature.xml";
 			installationLocation = feature.getInstallLocation();
-    	}
-		if(installationLocation != null) {
-
-			IPath path = null;
+		}
+		IPath path = null;
+		if(underlyingResource != null) {
+			path = underlyingResource.getFullPath();
+		} else if(installationLocation != null) {
 			// ExternalPluginModelBase.getLocalFile() is useful
 			File f = new File(installationLocation);
 			if(f.exists()) {
 				if(f.isFile()) {
 					// then ref is a .jar plugin
 					try {
-						ZipEntryReference jfr = new ZipEntryReference(f.getAbsolutePath(),
+						ZipEntryReference jfr =
+								new ZipEntryReference(f.getAbsolutePath(),
 										manifestFileName, -1, -1);
 						return jfr.open();
 					} catch(IOException e) {
@@ -197,18 +207,22 @@ public class PdeSphereHelper extends SphereHelper {
 					path = Path.fromOSString(installationLocation);
 					path = path.append(manifestFileName);
 				}
-			} else {
-				// path = model.getUnderlyingResource().getFullPath();
 			}
-			// Try to resolve the path as within the workspace: findFilesForLocation() works
+		}
+		if(path != null) {
+			// Try to resolve the path as within the workspace:
+			// findFilesForLocation() works
 			// for absolute files that reference files in the workspace
-			IFile files[] = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(path);
+			IFile files[] =
+					ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(path);
 			for(IFile file : files) {
 				if(file.exists()) {
-					IWorkbenchPage p = FerretPdePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					IWorkbenchPage p =
+							FerretPdePlugin.getDefault().getWorkbench()
+									.getActiveWorkbenchWindow().getActivePage();
 					try {
 						if(IDE.openEditor(p, file, true) != null) { return true; }
-					} catch (PartInitException e) {
+					} catch(PartInitException e) {
 						FerretPlugin.log(e);
 					}
 				}
@@ -216,17 +230,15 @@ public class PdeSphereHelper extends SphereHelper {
 			// Open the file as an external-to-the-workspace file
 			if(new FileReference(path).open()) { return true; }
 		}
-    	return super.openObject(element);
-    }
+		return super.openObject(element);
+	}
 
 	@Override
 	public Object getParent(Object object) {
-		if(object instanceof IPluginObject) {
-			return ((IPluginObject)object).getPluginModel();
-		}
+		if(object instanceof IPluginObject) { return ((IPluginObject)object)
+				.getPluginModel(); }
 		return null;
 	}
-
 
 	public ISphereFactory[] getSphereFactories() {
 		return new ISphereFactory[] { new AbstractSphereFactory() {
@@ -238,19 +250,23 @@ public class PdeSphereHelper extends SphereHelper {
 			public String getDescription() {
 				return "Eclipse plugin-related queries (PDE)";
 			}
-			
+
 			public IStatus canCreate() {
 				return Status.OK_STATUS;
 			}
-			
-			public ISphere createSphere(IProgressMonitor monitor) throws FerretConfigurationException {
+
+			public ISphere createSphere(IProgressMonitor monitor)
+					throws FerretConfigurationException {
 				Sphere tb = new Sphere("Eclipse PDE target image information");
-				tb.register(ObjectOrientedRelations.OP_TYPES_REFERENCED, new PdeTypesReferencedRelation());
-				tb.register(OP_DECLARED_EXTENSION_POINTS, new PdePluginDeclaredExtensionPoints(),
+				tb.register(ObjectOrientedRelations.OP_TYPES_REFERENCED,
+						new PdeTypesReferencedRelation());
+				tb.register(OP_DECLARED_EXTENSION_POINTS,
+						new PdePluginDeclaredExtensionPoints(),
 						new PdeExtensionsExtensionPoint());
 				tb.register(OP_DECLARED_EXTENSIONS, new PdePluginDeclaredExtensions(),
 						new PdeExtensionPointExtensions());
-				tb.register(OP_IDENTIFIER_REFERENCED, new PdeIdentifierReferencedRelation());
+				tb.register(OP_IDENTIFIER_REFERENCED,
+						new PdeIdentifierReferencedRelation());
 				tb.register(OP_EXTENDED_BY, new PdeExtensionPointExtensions());
 				tb.register(OP_EXTENDS, new PdeExtensionsExtensionPoint());
 				tb.register(OP_ADAPTABLE_FROM, new AdaptableFromRelation());
@@ -269,7 +285,8 @@ public class PdeSphereHelper extends SphereHelper {
 
 			public String getHelpContextId() {
 				return HCI_PDE_TB;
-			}}};
+			}
+		} };
 
 	}
 
