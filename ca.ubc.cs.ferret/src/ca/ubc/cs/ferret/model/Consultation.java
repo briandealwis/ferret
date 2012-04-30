@@ -31,8 +31,8 @@ import ca.ubc.cs.ferret.FerretErrorConstants;
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.ICallback;
 import ca.ubc.cs.ferret.types.ConversionResult;
-import ca.ubc.cs.ferret.types.FerretObject;
 import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.ferret.types.FerretObject;
 
 /**
  * This class represents a consultation to the great guru of how a particular set of
@@ -205,10 +205,10 @@ public class Consultation {
     		conceptualQueries = queries.toArray(new IConceptualQuery[queries.size()]);
     	}
         fireUpdateBlocks();
-	}
+    }
 
     protected IConceptualQuery createConceptualQuery(FerretObject[] queryElements, IConfigurationElement element) {
-	    	try {
+    	try {
 	    	IConfigurationElement children[] = element.getChildren();
 	    	if(children.length == 0) {
 	    		FerretPlugin.log(new Status(IStatus.WARNING, element.getNamespaceIdentifier(),
@@ -228,7 +228,10 @@ public class Consultation {
 	    	if(parmClassName == null) { parmClassName = FerretObject.class.getName(); }
 	    	if(parmSpec.getAttribute("id") != null && !IConceptualQuery.DEFAULT_PARAMETER.equals(parmSpec.getAttribute("id"))) {
 	    		FerretPlugin.log(new Status(IStatus.ERROR, element.getNamespaceIdentifier(),
-	    				FerretErrorConstants.CONTRACT_VIOLATION, "ICQs currently don't support named parameters", null));
+						FerretErrorConstants.CONTRACT_VIOLATION,
+						"ICQs currently don't support named parameters [ICQ id="
+								+ element.getAttribute("id") + " defined in "
+								+ element.getNamespaceIdentifier() + "]", null));
 	    		return null;    		
 	    	}
 	    	ArrayList<Object> convertedObjects = new ArrayList<Object>();
