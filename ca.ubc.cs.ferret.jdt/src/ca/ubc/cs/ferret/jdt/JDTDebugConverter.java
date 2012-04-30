@@ -14,8 +14,8 @@ import ca.ubc.cs.ferret.types.AbstractTypeConverter;
 import ca.ubc.cs.ferret.types.ConversionException;
 import ca.ubc.cs.ferret.types.ConversionResult;
 import ca.ubc.cs.ferret.types.ConversionSpecification;
-import ca.ubc.cs.ferret.types.ITypeConverter;
 import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.ferret.types.ITypeConverter;
 
 public class JDTDebugConverter extends AbstractTypeConverter implements
 		ITypeConverter {
@@ -41,7 +41,7 @@ public class JDTDebugConverter extends AbstractTypeConverter implements
 				IMethod equivalent = type.getMethod(frame.getMethodName(), 
 						Signature.getParameterTypes(frame.getSignature().replace('/', '.')));
 				IMethod candidates[] = type.findMethods(equivalent);
-				if(candidates.length < 1) { return null; }
+				if(candidates == null || candidates.length == 0) { return null; }
 				return wrap(spec, Fidelity.Exact, IMethod.class, candidates[0]);
 			} catch(DebugException e) {
 				FerretPlugin.log(e);

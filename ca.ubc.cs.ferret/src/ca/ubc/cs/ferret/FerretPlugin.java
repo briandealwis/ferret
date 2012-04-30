@@ -149,15 +149,17 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
 	}
 
 	public static void log(IStatus status) {
-        getDefault().getLog().log(status);
-    }
+		if(plugin == null) { return; }
+		plugin.getLog().log(status);
+	}
     
 	/**
 	 * Returns the string from the plugin's resource bundle,
 	 * or 'key' if not found.
 	 */
 	public static String getResourceString(String key) {
-		ResourceBundle bundle = FerretPlugin.getDefault().getResourceBundle();
+		if(plugin == null) { return key; }
+		ResourceBundle bundle = plugin.getResourceBundle();
 		try {
 			return (bundle != null) ? bundle.getString(key) : key;
 		} catch (MissingResourceException e) {
@@ -293,10 +295,10 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
 //	}
 
     public static SphereHelper[] getSphereHelpers() {
-		if(plugin == null) {
-    		return new SphereHelper[0];
-    	}
-        return getDefault().basicGetSphereHelpers();
+        if(plugin == null) {
+            return new SphereHelper[0];
+        }
+        return plugin.basicGetSphereHelpers();
     }
 	
     protected SphereHelper[] basicGetSphereHelpers() {
@@ -364,7 +366,7 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
      * @return true if the debugging option is enabled
      */
     public static boolean hasDebugOption(String id, String optionName) {
-        if(!getDefault().isDebugging()) { return false; }
+        if(plugin == null || !plugin.isDebugging()) { return false; }
         String value = Platform.getDebugOption(id + "/" + optionName);
         if(value == null) { return false; }
         return value.equals("true") || value.equals("TRUE") || value.equals("yes") || value.equals("1");

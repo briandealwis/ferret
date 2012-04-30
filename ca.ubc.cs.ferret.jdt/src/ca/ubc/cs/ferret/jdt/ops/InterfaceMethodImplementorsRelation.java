@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
 import ca.ubc.cs.ferret.model.IRelation;
 import ca.ubc.cs.ferret.model.NamedJoinRelation;
@@ -44,7 +43,8 @@ public class InterfaceMethodImplementorsRelation
 				ObjectOrientedRelations.OP_SUBTYPES,
 				ObjectOrientedRelations.OP_IS_CLASS,
 				ObjectOrientedRelations.OP_DECLARED_METHODS)
-		.resolve(monitor, input.getSphere(), input);
+			.resolve(monitor, input.getSphere(), input);
+		if(methods == null) { return Collections.emptySet(); }
 		Collection<FerretObject> results = new HashSet<FerretObject>();
 		for(FerretObject m : methods) {
 			try {
