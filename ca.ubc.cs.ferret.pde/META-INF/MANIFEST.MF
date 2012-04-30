@@ -1,6 +1,8 @@
-Bundle-SymbolicName: ca.ubc.cs.ferret.pde; singleton=true
-Bundle-Version: 0.5.0.qualifier
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Name: Ferret PDE Support Plug-in
+Bundle-SymbolicName: ca.ubc.cs.ferret.pde;singleton:=true
+Bundle-Version: 0.5.0.qualifier
 Bundle-Vendor: University of British Columbia
 Bundle-Activator: ca.ubc.cs.ferret.pde.FerretPdePlugin
 Require-Bundle: ca.ubc.cs.ferret.jdt,
@@ -23,7 +25,5 @@ Import-Package: org.apache.commons.collections15,
  org.apache.commons.collections15.bag,
  org.apache.commons.collections15.multimap,
  org.apache.commons.lang
-Provide-Package: ca.ubc.cs.ferret.pde
-Eclipse-AutoStart: true
 Export-Package: ca.ubc.cs.ferret.pde
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy

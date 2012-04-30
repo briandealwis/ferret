@@ -6,7 +6,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.osgi.service.resolver.ExportPackageDescription;
+import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
 import org.eclipse.pde.core.IIdentifiable;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IPluginImport;
@@ -14,6 +17,7 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.core.plugin.ImportObject;
+import org.eclipse.pde.internal.core.text.bundle.PackageObject;
 
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.ISphere;
@@ -100,9 +104,26 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 					IPluginModelBase plugin =
 							PdeModelHelper.getDefault().findPluginModel(
 									((IIdentifiable)object).getId());
-					if(feature != null) { return wrap(spec, Fidelity.Exact,
+					if(plugin != null) { return wrap(spec, Fidelity.Exact,
 							IPluginModelBase.class, plugin); }
 				}
+			} else if(spec.getDesiredClass() == JavaPackage.class) {
+				if(object instanceof ImportPackageSpecification) {
+					return wrap(
+							spec,
+							Fidelity.Equivalent,
+							JavaPackage.class,
+							new JavaPackage(((ImportPackageSpecification)object)
+									.getName()));
+				} else if(object instanceof ExportPackageDescription) {
+					return wrap(spec, Fidelity.Equivalent, JavaPackage.class,
+							new JavaPackage(((ExportPackageDescription)object).getName()));
+				} else if(object instanceof PackageObject) {
+					return wrap(spec, Fidelity.Equivalent, JavaPackage.class,
+							new JavaPackage(((PackageObject)object).getName()));
+				} else if(object instanceof IPackageFragment) { return wrap(spec,
+						Fidelity.Equivalent, JavaPackage.class, new JavaPackage(
+								((IPackageFragment)object).getElementName())); }
 			}
 		} catch(ClassNotFoundException e) {
 			throw new ConversionException(e);

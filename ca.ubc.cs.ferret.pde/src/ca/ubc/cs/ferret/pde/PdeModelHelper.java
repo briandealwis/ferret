@@ -35,6 +35,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.osgi.service.resolver.ExportPackageDescription;
+import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
 import org.eclipse.pde.core.IIdentifiable;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IFragmentModel;
@@ -63,6 +65,7 @@ import org.eclipse.pde.internal.core.plugin.ExternalFragmentModel;
 import org.eclipse.pde.internal.core.plugin.ExternalPluginModel;
 import org.eclipse.pde.internal.core.plugin.ExternalPluginModelBase;
 import org.eclipse.pde.internal.core.plugin.PluginHandler;
+import org.eclipse.pde.internal.core.text.bundle.PackageObject;
 
 import ca.ubc.cs.ferret.FerretFatalError;
 import ca.ubc.cs.ferret.FerretPlugin;
@@ -536,6 +539,36 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 			}
 		}
 		return dependents;
+	}
+
+	public Collection<IPluginModelBase> getBundlesImporting(PackageObject pkg) {
+		verifyModelCaches();
+		LinkedList<IPluginModelBase> importers = new LinkedList<IPluginModelBase>();
+		for(IPluginModelBase pmb : models.values()) {
+			ImportPackageSpecification[] imports =
+					pmb.getBundleDescription().getImportPackages();
+			for(ImportPackageSpecification dep : imports) {
+				if(pkg.getName().equals(dep.getName())) {
+					importers.add(pmb);
+				}
+			}
+		}
+		return importers;
+	}
+
+	public Collection<IPluginModelBase> getBundlesExporting(PackageObject pkg) {
+		verifyModelCaches();
+		LinkedList<IPluginModelBase> exporters = new LinkedList<IPluginModelBase>();
+		for(IPluginModelBase pmb : models.values()) {
+			ExportPackageDescription[] exports =
+					pmb.getBundleDescription().getExportPackages();
+			for(ExportPackageDescription dep : exports) {
+				if(pkg.getName().equals(dep.getName())) {
+					exporters.add(pmb);
+				}
+			}
+		}
+		return exporters;
 	}
 
 	/**

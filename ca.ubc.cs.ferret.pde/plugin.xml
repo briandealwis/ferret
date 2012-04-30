@@ -77,11 +77,50 @@
        <parameter
              class="org.eclipse.jdt.core.IType"
              count="1"
-             fidelity="equivalent"
-             id="default">
+             fidelity="equivalent">
        </parameter>
     </conceptualQuery>
-		
+	<conceptualQuery
+        category="declarations"
+        class="ca.ubc.cs.ferret.pde.queries.BundlesExportingPackage"
+        id="ca.ubc.cs.ferret.pde.bundlesexportingpackage">
+		 <parameter
+		   class="org.eclipse.pde.internal.core.text.bundle.PackageObject"
+		   count="+"
+		   fidelity="equivalent">
+		 </parameter>
+	</conceptualQuery>
+	<conceptualQuery
+        category="declarations"
+        class="ca.ubc.cs.ferret.pde.queries.BundlesImportingPackage"
+        id="ca.ubc.cs.ferret.pde.bundlesimportingpackage">
+		 <parameter
+		   class="org.eclipse.pde.internal.core.text.bundle.PackageObject"
+		   count="+"
+		   fidelity="equivalent">
+		 </parameter>
+	</conceptualQuery>
+ <conceptualQuery
+       category="declarations"
+       class="ca.ubc.cs.ferret.pde.queries.PackagesExportedByBundle"
+       id="ca.ubc.cs.ferret.pde.exportedpackages">
+    <parameter
+          class="org.eclipse.pde.core.plugin.IPluginModelBase"
+          count="1"
+          fidelity="equivalent">
+    </parameter>
+ </conceptualQuery>
+ <conceptualQuery
+       category="declarations"
+       class="ca.ubc.cs.ferret.pde.queries.PackagesImportedByBundle"
+       id="ca.ubc.cs.ferret.pde.importedpackages">
+    <parameter
+          class="org.eclipse.pde.core.plugin.IPluginModelBase"
+          count="1"
+          fidelity="equivalent">
+    </parameter>
+ </conceptualQuery>
+
 	 </extension>  
 
 	<extension point="ca.ubc.cs.ferret.sphereHelpers">
@@ -174,6 +213,30 @@
            desiredType="org.eclipse.pde.core.IModel"
            fidelity="exact"
            providedType="org.eclipse.pde.internal.core.ifeature.IFeatureModel">
+     </converter>
+     <converter
+           class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+           desiredType="ca.ubc.cs.ferret.pde.JavaPackage"
+           fidelity="equivalent"
+           providedType="org.eclipse.osgi.service.resolver.ImportPackageSpecification">
+     </converter>
+     <converter
+           class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+           desiredType="ca.ubc.cs.ferret.pde.JavaPackage"
+           fidelity="equivalent"
+           providedType="org.eclipse.osgi.service.resolver.ExportPackageDescription">
+     </converter>
+     <converter
+           class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+           desiredType="ca.ubc.cs.ferret.pde.JavaPackage"
+           fidelity="equivalent"
+           providedType="org.eclipse.jdt.core.IPackageFragment">
+     </converter>
+     <converter
+           class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+           desiredType="ca.ubc.cs.ferret.pde.JavaPackage"
+           fidelity="equivalent"
+           providedType="org.eclipse.pde.internal.core.text.bundle.PackageObject">
      </converter>
           
 	 </extension>
