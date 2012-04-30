@@ -27,7 +27,8 @@ import ca.ubc.cs.ferret.types.FerretObject;
 
 public class DossierLabelProvider implements ITableLabelProvider, ILabelProvider {
     
-	protected ResourceManager registry = new LocalResourceManager(JFaceResources.getResources(FerretPlugin.getDefault().getWorkbench().getDisplay()));
+	protected ResourceManager registry = new LocalResourceManager(
+			JFaceResources.getResources());
     
     public DossierLabelProvider() {
         super();

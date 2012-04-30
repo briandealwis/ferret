@@ -86,12 +86,12 @@ public class DossierContentProvider implements IStructuredContentProvider,
         return new Object[0];
 	}
 
-    protected Object singleElement(Collection/*<?E>*/ collection) {
-        if(collection.size() != 1) {
-            throw new IllegalStateException("Collection must contain only a single element"); 
-        }
-        return collection.toArray()[0];
-    }
+	protected <T> T singleElement(Collection<T> collection) {
+		if(collection.size() != 1) {
+			throw new IllegalStateException("Collection must contain only a single element"); 
+		}
+		return collection.iterator().next();
+	}
 
 	public boolean hasChildren(Object parent) {
         if(parent instanceof IDisplayObject) { return ((IDisplayObject)parent).hasChildren(); }
