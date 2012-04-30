@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ca.ubc.cs.ferret.jdt;singleton:=true
 Bundle-Name: Ferret JDT Support Plug-in
-Bundle-Version: 0.4.0.qualifier
+Bundle-Version: 0.5.0.qualifier
 Bundle-Vendor: University of British Columbia
 Bundle-Activator: ca.ubc.cs.ferret.jdt.FerretJdtPlugin
-Require-Bundle: ca.ubc.cs.ferret;bundle-version="[0.4.0,0.5.0)",
- ca.ubc.cs.clustering;bundle-version="[0.4.0,0.5.0)",
+Require-Bundle: ca.ubc.cs.ferret,
+ ca.ubc.cs.clustering,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt,

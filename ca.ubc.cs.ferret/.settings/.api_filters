@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="ca.ubc.cs.ferret" version="2">
+    <resource path="META-INF/MANIFEST.MF">
+        <filter id="923795461">
+            <message_arguments>
+                <message_argument value="0.5.0"/>
+                <message_argument value="0.4.0"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="META-INF/MANIFEST.MF" type="ca.ubc.cs.ferret.LRUFutureMap">
+        <filter id="305324134">
+            <message_arguments>
+                <message_argument value="ca.ubc.cs.ferret.LRUFutureMap"/>
+                <message_argument value="ca.ubc.cs.ferret_0.5.0"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="META-INF/MANIFEST.MF" type="ca.ubc.cs.ferret.views.ChildUnwrappingSelectionProvider">
+        <filter id="305324134">
+            <message_arguments>
+                <message_argument value="ca.ubc.cs.ferret.views.ChildUnwrappingSelectionProvider"/>
+                <message_argument value="ca.ubc.cs.ferret_0.5.0"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/ca/ubc/cs/ferret/views/UnwrappingSelectionProvider.java" type="ca.ubc.cs.ferret.views.UnwrappingSelectionProvider">
+        <filter id="338722907">
+            <message_arguments>
+                <message_argument value="ca.ubc.cs.ferret.views.UnwrappingSelectionProvider"/>
+                <message_argument value="UnwrappingSelectionProvider(ISelectionProvider)"/>
+            </message_arguments>
+        </filter>
+        <filter id="338792546">
+            <message_arguments>
+                <message_argument value="ca.ubc.cs.ferret.views.UnwrappingSelectionProvider"/>
+                <message_argument value="unwrapObject(Object)"/>
+            </message_arguments>
+        </filter>
+        <filter comment="Re-architected" id="338792546">
+            <message_arguments>
+                <message_argument value="ca.ubc.cs.ferret.views.UnwrappingSelectionProvider"/>
+                <message_argument value="unwrapSelection(ISelection)"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

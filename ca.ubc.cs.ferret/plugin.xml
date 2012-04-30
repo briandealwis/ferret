@@ -6,7 +6,7 @@
    <extension-point id="sphereHelpers" name="Spheres" schema="schema/sphereHelpers.exsd"/>
    <extension-point id="query_stimulants" name="Stimulants prompting queries" schema="schema/query_stimulants.exsd"/>
    <extension-point id="typeConverters" name="Ferret Type Converters" schema="schema/typeConverters.exsd"/>
-   <extension-point id="scfs" name="Sphere Composition Functions" schema="schema/tcfs.exsd"/>
+   <extension-point id="scfs" name="Sphere Composition Functions" schema="schema/scfs.exsd"/>
 
    <extension point="org.eclipse.ui.views">
       <category
@@ -33,7 +33,7 @@
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
          <view
                ratio="0.4"
-               relative="org.eclipse.ui.editors"
+               relative="org.eclipse.ui.editorss"
                relationship="bottom"
                id="ca.ubc.cs.ferret.views.QueriesDossier">
          </view>

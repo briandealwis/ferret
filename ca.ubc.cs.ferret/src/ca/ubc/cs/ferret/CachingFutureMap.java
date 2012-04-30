@@ -2,6 +2,9 @@ package ca.ubc.cs.ferret;
 
 import org.apache.commons.collections15.map.ReferenceMap;
 
+/**
+ * @since 0.5
+ */
 @SuppressWarnings("serial")
 public class CachingFutureMap<K, V> extends ReferenceMap<K, EclipseFuture<V>> {
 	public CachingFutureMap(int size) {
