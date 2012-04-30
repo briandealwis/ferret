@@ -3,6 +3,7 @@ package ca.ubc.cs.ferret.views;
 import java.util.Iterator;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -16,7 +17,6 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
-import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 
 import ca.ubc.cs.ferret.display.DwObject;
 
@@ -72,7 +72,8 @@ public class DossierDragNDropAdapter extends ViewerDropAdapter
                 describeOperation(operation) + " transferType=" + transferType);
 //        event.detail = DND.DROP_COPY;
         if(operation != DND.DROP_COPY && operation != DND.DROP_LINK) { return false; }
-        boolean localSup = LocalSelectionTransfer.getInstance().isSupportedType(transferType);
+		boolean localSup =
+				LocalSelectionTransfer.getTransfer().isSupportedType(transferType);
         supported = supported || localSup;
         return supported; 
     }
@@ -102,28 +103,30 @@ public class DossierDragNDropAdapter extends ViewerDropAdapter
 		}
 		IStructuredSelection selection = new StructuredSelection(unwrapped);
 //		System.out.println("dragSetData(): sending " + FerretPlugin.debugPrint(selection));
-		LocalSelectionTransfer.getInstance().setSelection(selection);
+		LocalSelectionTransfer.getTransfer().setSelection(selection);
 		event.data = selection;
 		event.doit = true;
 		return;
 	}
 	
 	public void dragSetData(DragSourceEvent event) {
-		if (!LocalSelectionTransfer.getInstance().isSupportedType(event.dataType)) {
+		if(!LocalSelectionTransfer.getTransfer().isSupportedType(event.dataType)) {
 			event.doit = false;
 			return;
 		}
-		event.data = LocalSelectionTransfer.getInstance().getSelection();
-		LocalSelectionTransfer.getInstance().setSelectionSetTime(event.time & 0xFFFFFFFFL);
-		((DragSource)event.widget).setTransfer(new Transfer[] { LocalSelectionTransfer.getInstance() });
+		event.data = LocalSelectionTransfer.getTransfer().getSelection();
+		LocalSelectionTransfer.getTransfer()
+				.setSelectionSetTime(event.time & 0xFFFFFFFFL);
+		((DragSource)event.widget).setTransfer(new Transfer[] { LocalSelectionTransfer
+				.getTransfer() });
 		event.doit = true;
 		return;
 	}
 	
 	public void dragFinished(DragSourceEvent event) {
 //		System.out.println("dragFinished()");
-		LocalSelectionTransfer.getInstance().setSelection(null);
-		LocalSelectionTransfer.getInstance().setSelectionSetTime(0);
+		LocalSelectionTransfer.getTransfer().setSelection(null);
+		LocalSelectionTransfer.getTransfer().setSelectionSetTime(0);
 	}
 	
 	public boolean isDraggable(Object objs[]) {

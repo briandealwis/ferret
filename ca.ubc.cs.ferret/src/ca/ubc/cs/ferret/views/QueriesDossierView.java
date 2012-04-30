@@ -42,6 +42,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.ListenerList;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLayoutData;
@@ -101,7 +102,6 @@ import org.eclipse.ui.internal.IWorkbenchConstants;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.NavigationHistory;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.clustering.IClusteringsContainer;
@@ -420,8 +420,7 @@ public class QueriesDossierView extends ViewPart
 	}
 	
     protected void configureDragNDropSupport() {
-        Transfer transfers[] = {  LocalSelectionTransfer.getInstance() }; 
-//        DND.DROP_DEFAULT
+        Transfer transfers[] = { LocalSelectionTransfer.getTransfer() };
         if(dndadapter == null) {
         	dndadapter = new DossierDragNDropAdapter(this, viewer);
         }
