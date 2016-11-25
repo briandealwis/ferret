@@ -48,6 +48,7 @@ import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.ISharedPluginModel;
+import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.pde.internal.core.FeatureModelManager;
 import org.eclipse.pde.internal.core.IPluginModelListener;
 import org.eclipse.pde.internal.core.PDECore;
@@ -130,7 +131,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	 */
 	protected URL[] getWorkspacePluginPaths(PDEState state) {
 		ArrayList<URL> list = new ArrayList<URL>();
-		for(IPluginModelBase pmb : state.getWorkspaceModels()) {
+		for(IPluginModelBase pmb : PluginRegistry.getWorkspaceModels()) {
 			try {
 				list.add(new File(pmb.getInstallLocation()).toURL());
 			} catch (MalformedURLException e) {}
