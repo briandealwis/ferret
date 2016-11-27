@@ -1,6 +1,5 @@
 package ca.ubc.cs.ferret.tests;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.collections15.Transformer;
@@ -8,8 +7,8 @@ import org.apache.commons.collections15.iterators.ArrayIterator;
 
 import ca.ubc.cs.ferret.model.AbstractToolRelation;
 import ca.ubc.cs.ferret.types.ConversionResult;
-import ca.ubc.cs.ferret.types.FerretObject;
 import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.ferret.types.FerretObject;
 
 public class TransformingRelation<T> extends AbstractToolRelation {
 	public enum ItemTreatment {

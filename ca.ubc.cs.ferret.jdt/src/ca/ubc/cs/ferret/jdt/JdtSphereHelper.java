@@ -37,8 +37,8 @@ import ca.ubc.cs.ferret.types.TypesConversionManager;
 
 public class JdtSphereHelper extends SphereHelper {
     protected static JdtSphereHelper singleton;
-    protected JavaElementLabelProvider javaMinimalLabelProvider = new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_BASICS);
-    protected JavaElementLabelProvider javaLabelProvider = new JavaElementLabelProvider();
+    protected JavaElementLabelProvider javaMinimalLabelProvider;
+    protected JavaElementLabelProvider javaLabelProvider;
     
     protected JdtSphereHelper() {}
     
@@ -60,12 +60,14 @@ public class JdtSphereHelper extends SphereHelper {
     
     public void start() {
     	if(javaMinimalLabelProvider == null) {
+    		javaMinimalLabelProvider = new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_BASICS);
 	//      javaMinimalLabelProvider.turnOff(JavaElementLabelProvider.SHOW_OVERLAY_ICONS);
 	        javaMinimalLabelProvider.turnOn(JavaElementLabelProvider.SHOW_TYPE);
 	        javaMinimalLabelProvider.turnOff(JavaElementLabelProvider.SHOW_PARAMETERS);
 	        javaMinimalLabelProvider.turnOff(JavaElementLabelProvider.SHOW_SMALL_ICONS);
     	}
     	if(javaLabelProvider == null) {
+    		javaLabelProvider = new JavaElementLabelProvider();
 	//        javaLabelProvider.turnOff(JavaElementLabelProvider.SHOW_OVERLAY_ICONS);
 	        javaLabelProvider.turnOn(JavaElementLabelProvider.SHOW_TYPE);
 	        javaLabelProvider.turnOff(JavaElementLabelProvider.SHOW_PARAMETERS);

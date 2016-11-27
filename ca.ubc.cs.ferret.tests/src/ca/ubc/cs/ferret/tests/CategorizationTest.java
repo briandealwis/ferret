@@ -4,18 +4,19 @@
  */
 package ca.ubc.cs.ferret.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
 import ca.ubc.cs.clustering.Cluster;
 import ca.ubc.cs.clustering.Clustering;
-import ca.ubc.cs.clustering.SqueezerClusterer;
 import ca.ubc.cs.clustering.attrs.AttributeClusteringsFactory;
 import ca.ubc.cs.clustering.attrs.ClusterableCollection;
 
-public class CategorizationTest extends TestCase {
+public class CategorizationTest {
         
     public static Set<GraduateStudent> getPeople() {
         Set<GraduateStudent> people = new HashSet<GraduateStudent>();
@@ -37,6 +38,7 @@ public class CategorizationTest extends TestCase {
         return people;
     }
 
+    @Test
     public void testSimpleCase() {
         AttributeClusteringsFactory<GraduateStudent> cat = new AttributeClusteringsFactory<GraduateStudent> ();
         cat.build(new ClusterableCollection<GraduateStudent>(getPeople()));

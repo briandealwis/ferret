@@ -1,5 +1,11 @@
 package ca.ubc.cs.ferret.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -9,6 +15,7 @@ import junit.framework.TestCase;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 import ca.ubc.cs.ferret.FerretFatalError;
 import ca.ubc.cs.ferret.model.DifferencingSphereCompositor;
@@ -29,8 +36,9 @@ import ca.ubc.cs.ferret.model.TransformingSphereCompositor;
 import ca.ubc.cs.ferret.model.UnioningSphereCompositor;
 import ca.ubc.cs.ferret.types.FerretObject;
 
-public class RelationTests extends TestCase {
+public class RelationTests {
 
+    @Test
 	public void testBasicRelation() {
 		Object o = new Object();
 		ISphere tb = new Sphere("testBasicRelation()");
@@ -42,6 +50,7 @@ public class RelationTests extends TestCase {
 		assertNull(op.next());
 	}
 	
+    @Test
 	public void testSphere() {
 		Object o = new Object();
 		Sphere tb = new Sphere("testSphere()");
@@ -59,6 +68,7 @@ public class RelationTests extends TestCase {
 		assertNull(op.next());
 	}
 	
+    @Test
 	public void testJoinRelation() {
 		Sphere tb = new Sphere("testJoinRelation()");
 		tb.register("pass-through", new UniversalRelation());
@@ -84,6 +94,7 @@ public class RelationTests extends TestCase {
 		} catch(NoSuchElementException e) {/* success */}
 	}
 	
+    @Test
 	public void testPathalogicalJoinRelation() {
 		Sphere tb = new Sphere("testPathalogicalJoinRelation()");
 		tb.register("sink", new NullRelation());
@@ -99,6 +110,7 @@ public class RelationTests extends TestCase {
 		} catch(NoSuchElementException e) {/* success */}
 	}
 	
+    @Test
 	public void testSimpleUnionSphere() {
 		UnioningSphereCompositor tb = new UnioningSphereCompositor();
 		Sphere subtb = new Sphere("simple");
@@ -124,6 +136,7 @@ public class RelationTests extends TestCase {
 		assertEquals("bar", result.iterator().next());
 	}
 	
+    @Test
 	public void testSinkUnionSphere() {
 		UnioningSphereCompositor tb = new UnioningSphereCompositor();
 		Sphere subtb = new Sphere("sink");
@@ -135,6 +148,7 @@ public class RelationTests extends TestCase {
 		assertFalse(op.hasNext());
 	}
 
+    @Test
 	public void testComplexUnionSphere() {
 		UnioningSphereCompositor tb = new UnioningSphereCompositor();
 		Sphere subtb = new Sphere("simple");
@@ -155,6 +169,7 @@ public class RelationTests extends TestCase {
 		assertTrue(result.contains("rab"));
 	}
 	
+    @Test
 	public void testIntersectingSphere() {
 		IntersectingSphereCompositor tb = new IntersectingSphereCompositor();
 		Sphere subtb = new Sphere("simple");
@@ -181,6 +196,7 @@ public class RelationTests extends TestCase {
 		assertFalse(op.hasNext());
 	}
 
+    @Test
 	public void testSimpleDisjunctingCompositor() {
 		DisjunctingSphereCompositor tb = new DisjunctingSphereCompositor ();
 		Sphere subtb = new Sphere("simple");
@@ -191,6 +207,7 @@ public class RelationTests extends TestCase {
 		assertFalse(op.hasNext());
 	}
 
+    @Test
 	public void testComplicatedDisjunctingCompositor() {
 		DisjunctingSphereCompositor tb = new DisjunctingSphereCompositor ();
 		Sphere subtb = new Sphere("simple");
@@ -213,6 +230,7 @@ public class RelationTests extends TestCase {
 		assertTrue(result.contains("f"));
 	}
 
+    @Test
 	public void testDifferenceCompositor() {
 		DifferencingSphereCompositor tb = new DifferencingSphereCompositor ();
 		Sphere subtb = new Sphere("simple");
@@ -236,6 +254,7 @@ public class RelationTests extends TestCase {
 		assertFalse(result.contains("f"));
 	}
 
+    @Test(expected = FerretFatalError.class)
 	public void testRestrictingCompositor() {
 		UnioningSphereCompositor union = new UnioningSphereCompositor();
 		ReplacementSphereCompositor replacement = new ReplacementSphereCompositor();
@@ -276,12 +295,8 @@ public class RelationTests extends TestCase {
 		assertTrue(op.hasNext());
 		assertTrue(op.next().getPrimaryObject() instanceof Integer);
 
-		try {
-			op = transforming.resolve(new NullProgressMonitor(), "alias", 
-					new FerretObject(1, transforming));
-			fail("should have gotten to an " + ErrorRaisingSphere.class.getName());
-		} catch(FerretFatalError e) {
-			// this is supposed to happen
-		}
+		op = transforming.resolve(new NullProgressMonitor(), "alias", 
+				new FerretObject(1, transforming));
+		fail("should have gotten to an " + ErrorRaisingSphere.class.getName());
 	}
 }

@@ -1,18 +1,26 @@
 package ca.ubc.cs.ferret.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
 import ca.ubc.cs.ferret.EclipseFuture;
 
-public class FutureTests extends TestCase {
+public class FutureTests {
 
+    @Test
 	public void testBasicFuture() {
 		EclipseFuture<Object> future = new EclipseFuture<Object>("testBasicFuture");
 		assertFalse(future.isDone());
 	}
 
+    @Test
 	public void testSet() {
 		EclipseFuture<Object> future = new EclipseFuture<Object>("testSet");
 		assertFalse(future.isDone());
@@ -21,6 +29,7 @@ public class FutureTests extends TestCase {
 		assertEquals("test", future.get());
 	}
 	
+    @Test
 	public void testDelayTimeout() {
 		final EclipseFuture<Object> future = new EclipseFuture<Object>("testDelay");
 		assertFalse(future.isDone());
@@ -44,6 +53,7 @@ public class FutureTests extends TestCase {
 		assertFalse(future.isDone());
 	}
 
+    @Test
 	public void testDelayAndSet() {
 		final EclipseFuture<Object> future = new EclipseFuture<Object>("testDelay");
 		assertFalse(future.isDone());

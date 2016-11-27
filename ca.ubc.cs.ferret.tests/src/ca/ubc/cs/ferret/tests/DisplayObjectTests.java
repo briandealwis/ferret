@@ -4,9 +4,14 @@
  */
 package ca.ubc.cs.ferret.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Set;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
 import ca.ubc.cs.ferret.Consultancy;
 import ca.ubc.cs.ferret.display.DwConceptualQuery;
 import ca.ubc.cs.ferret.display.DwConsultation;
@@ -17,7 +22,8 @@ import ca.ubc.cs.ferret.model.Consultation;
 import ca.ubc.cs.ferret.model.IConceptualQuery;
 import ca.ubc.cs.ferret.model.Sphere;
 
-public class DisplayObjectTests extends TestCase {
+public class DisplayObjectTests {
+    @Test
     public void testModel() {
         GraduateStudent me = findGrad("Brian");
         assertNotNull(me);

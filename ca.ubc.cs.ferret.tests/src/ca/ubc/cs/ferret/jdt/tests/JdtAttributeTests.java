@@ -4,13 +4,22 @@
  */
 package ca.ubc.cs.ferret.jdt.tests;
 
-import java.util.Collection;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import junit.framework.TestCase;
+import java.util.Collection;
 
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import ca.ubc.cs.clustering.ClusteringPlugin;
 import ca.ubc.cs.clustering.attrs.IAttributeSource;
@@ -18,18 +27,22 @@ import ca.ubc.cs.clustering.attrs.IClassifier;
 import ca.ubc.cs.ferret.jdt.JavaModelHelper;
 import ca.ubc.cs.ferret.jdt.attributes.MethodThrowsProvider;
 
-public class JdtAttributeTests extends TestCase {
+public class JdtAttributeTests {
 
     IType javaLangString;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeClass
+    public static void createWorkspace() throws Exception {
         JdtTests.createWorkspace();
-        javaLangString = JavaModelHelper.getDefault().resolveType("java.lang.String"); 
-        assertNotNull(javaLangString);
+    }
+    
+    @Before
+    public void setUp() {
+    	javaLangString = JavaModelHelper.getDefault().resolveType("java.lang.String"); 
+    	assertNotNull(javaLangString);
     }
 
+    @Test
     public void testTypeAttributes() {
         IAttributeSource ts = ClusteringPlugin.getDefault().getAttributeSourceManager().getAttributeSource(javaLangString);
         assertFalse(ts.getAttributeNames().size() == 0);
@@ -40,6 +53,7 @@ public class JdtAttributeTests extends TestCase {
         }
     }
 
+    @Test
     public void testMethodAttributes() {
         IAttributeSource ts;
         try {
@@ -55,6 +69,7 @@ public class JdtAttributeTests extends TestCase {
         }
     }
     
+    @Test
     public void testFieldAttributes() {
         IAttributeSource ts;
         try {
@@ -70,6 +85,7 @@ public class JdtAttributeTests extends TestCase {
         }
     }
 
+    @Test
     public void testClassFileAttributes() {
     	Object obj = javaLangString.getClassFile();
         IAttributeSource ts = ClusteringPlugin.getDefault().getAttributeSourceManager().getAttributeSource(obj);
@@ -80,6 +96,7 @@ public class JdtAttributeTests extends TestCase {
         }
     }
 
+    @Test
     public void testMethodThrowsAttributeProvider() {
     	try {
     		IMethod throwsMethod = null;
@@ -105,12 +122,14 @@ public class JdtAttributeTests extends TestCase {
     	}
     }
 
-    
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() {
         javaLangString = null;
+    }
+    
+    @AfterClass
+    public static void destroyWorkspace() throws Exception {
         JdtTests.destroyWorkspace();
-        super.tearDown();
     }
     
     
