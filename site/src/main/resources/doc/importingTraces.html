@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Importing TPTP Runtime Traces</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+<LINK REL="stylesheet" HREF="style.css" TYPE="text/css">
+</HEAD>
+
+<BODY>
+<H1>Importing TPTP Runtime Traces</H1>
+
+<P>The TPTP sphere requires loading one or more 
+<A HREF="runtimeTraces.html">previously obtained</A>
+dynamic runtime traces.  To load such a trace, use the following
+steps:</P>
+<OL>
+<LI><P>From the <B>Ferret Sphere Configuration</B> wizard, select the
+	<B>Java dynamic run-time queries (TPTP)</B> sphere type:</P>
+	<DIV ALIGN=CENTER><IMG SRC="config-wizard-tptp-sphere.png"></DIV>
+	</LI>
+<LI><P>This will bring up the <B>TPTP Profile Selection</B> wizard:</P> 
+	<DIV ALIGN=CENTER>
+		<IMG SRC="tptp-profile-selection.png">
+	</DIV>
+	<P>Select the <B>TPTP Profile Import Wizard</B> link.</P></LI>
+	
+<LI><P>This wizard aids in loading a runtime trace (or profile).
+	Use the <B>Browse...</B> button to find your trace file in the file system.
+	Then be sure to select  the <B>Show full data (execution flow graphical details)</B>
+	radio button.</P>
+	<DIV ALIGN=CENTER>
+		<IMG SRC="import-profile-wizard.png">
+	</DIV>
+	<P>Click <B>Finish</B> to begin the import.  This will return to the
+	<B>TPTP Profile Selection</B> wizard</P>
+
+<LI><P>The newly-loaded trace should now be visible in the wizard,
+	and should have been automatically selected.<P>
+	<DIV ALIGN=CENTER><IMG SRC="tptp-profile-selection-post.png"></DIV></LI>
+	
+<LI><P>You may wish to set the fidelity of the selected trace using the provided
+	combo box.</P></LI>
+	
+<LI><P>Select <B>Finish</B> to complete the configuration of this
+	TPTP sphere instance.</P></LI> 
+</OL>
+
+<H2>Troubleshooting</H2>
+
+<P>Should you be receiving errors when attempting to import a profile,
+please ensure that:</P>
+<OL>
+<LI> <P>You are importing the profile with the <B>Show full data (execution flow graphical details)</B>
+    option selected, as described above.  To remove previously loaded profiles,
+    open the <B>Profiling Monitor</B> view, select the appropriate profiles, and
+    select <B>Delete</B> from the context menu.</P></LI>
+<LI> <P>The trace was <A HREF="runtimeTraces.html">created</A>
+     with the <B>Show execution flow graphical details</B>.</P></LI>
+</OL>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ?
+"https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost +
+"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10898060-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</BODY>
+</HTML>

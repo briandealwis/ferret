@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Ferret: A Tool Supporting Software Exploration</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+<LINK REL="stylesheet" HREF="http://www.cs.ubc.ca/~bsd/style.css" TYPE="text/css">
+</HEAD>
+
+<BODY>
+<TABLE BORDER=0>
+<TR><TD><IMG SRC="XenoFerret.jpg"></TD>
+<TD>&nbsp;</TD>
+<TD><H1>Ferret: A Tool Supporting Software Exploration</H1>
+<A HREF="http://mt.ca/~bsd/">Brian de Alwis</A>,
+<A HREF="http://www.cs.ubc.ca/~murphy/">Gail C Murphy</A>
+</TD>
+</TR></TABLE>
+
+
+<P>Ferret is a tool aimed to help developers during exploration of
+software codebases.  Ferret provides a new Eclipse view that provides a
+structured display of information describing how one or more  program
+elements are situated in the context of the system.
+This context is computed automatically as the program elements are
+selected in the IDE, and is structured as answers to a set of
+<EM>conceptual queries</EM> about those elements.  <P>
+
+<P> Ferret's conceptual queries include and build-on the standard
+queries supported by Eclipse. 
+These conceptual queries include queries
+such as:</P>
+<UL>
+<LI> Where is this method called?
+<LI> What methods return objects of this type?
+<LI> Where are objects of this type instantiated?
+<LI> What interfaces define (or specify) this method?
+<LI> What implementations are there of this interface method?
+<LI> What are the other alternative implementations of this method in
+    the hierarchy?
+</UL>
+<P>More notable is that Ferret's conceptual
+queries can make use of different sources of program information,
+such as the static relations embedded in the source code, the
+dynamic runtime information recorded in a TPTP trace, and
+plugin details as defined in <TT>plugin.xml</TT> and <TT>MANIFEST.MF</TT>.
+Thus dynamic runtime information can be used to replace
+some of the statically-derived relations, transforming the questions
+above to "Where are objects of this type <EM>actually</EM> instantiated?"
+or "Where is this method <EM>actually</EM> called?"</P>
+
+
+<P>The conceptual queries are categorized by whether they involve
+<EM>declarations</EM>, are about <EM>inter-class</EM> or <EM>intra-class</EM>
+relations, or are <EM>hierarchical</EM> in nature.</P>
+
+<P>The results of queries may be clustered by their different
+attributes, as selected by the programmer.  For example: the references
+to a method, which are generally themselves methods, may be clustered
+into different groups identified by attributes such as their access
+protection (public, private, package, or default), their containing
+type, their package, or boolean attributes such as static vs
+non-static.</P>
+
+<P>The Ferret documentation ships with the plugin, and is also available 
+<a href="doc/">online</a>.</P>
+
+<H2>Installation</H2>
+
+<p>Ferret is an Eclipse plug-in and requires Eclipse 4.6 (Neon) or
+later.  To install, use the following update site:</p>
+<BLOCKQUOTE>
+    <TT>http://manumitting.com/tools/eclipse/ferret/</TT>
+</BLOCKQUOTE>
+<p>Source is available at <a
+href="https://github.com/briandealwis/ferret/">GitHub</a>.
+
+<h2>License</h2>
+
+<p>Ferret is made available under the <a
+href="https://www.eclipse.org/legal/epl-v10.html">Eclipse Public License
+v1.0</a>.</p>
+
+
+<P><STRONG>Updates:</STRONG> 
+<UL>
+<LI> Dec 2009: I rebuilt Ferret to correct for a bug in the PDE sphere. 
+    Unfortunately I don't have time to rebuild the TPTP and Kenyon
+    spheres, so they are not included at this time.</LI>
+<LI> Jan 2010: Ferret uses Apache's <TT>commons-lang</TT>, which wasn't
+    declared or included.  This causes breakage when using Ferret in
+    the e4 compatibility environment.  Added as a dependency to the
+    feature, and rebuilt.</LI>
+</UL>
+
+<P>Note:
+You may find references to Ariadne in the Ferret source code.
+Ferret was formerly named Ariadne, but was renamed so as
+to not be confused with another Eclipse plug-in called
+<A HREF="http://awareness.ics.uci.edu/~ariadne/">Ariadne</A>.
+</P>
+
+<H2>Publications</H2>
+
+<P>B de Alwis, GC Murphy (2008).  Answering Conceptual Queries with Ferret. 
+In the Proceedings of the International Conference on Software Engineering
+(ICSE). Leipzig, Germany.
+<A HREF="http://dx.doi.org/10.1145/1368088.1368092">doi:10.1145/1368088.1368092</A>
+(<A HREF="http://www.cs.ubc.ca/~bsd/papers/icse-2008-dealwis.pdf">pdf</A>)
+
+<P>B de Alwis, GC Murphy (2007).  A comparative study of three software
+exploration tools.  In the Proceedings of the International Conference
+on Program Comprehension (ICPC).  Banff, Canada. 
+&lt;<A HREF="http://dx.doi.org/10.1109/ICPC.2007.6">doi:10.1109/ICPC.2007.6</A>&gt;
+(<A
+HREF="http://www.cs.ubc.ca/~bsd/papers/icpc-2007-dealwis.pdf">pdf</A>, <A
+HREF="http://www.cs.ubc.ca/~bsd/research/icpc2007/">supporting
+material</A>)</P>
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ?
+"https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost +
+"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10898060-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</BODY>
+</HTML>

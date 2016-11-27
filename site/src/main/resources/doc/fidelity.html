@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Fidelity of Matches</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<LINK REL="made" HREF="http://www.cs.ubc.ca/~bsd/">
+<LINK REL="stylesheet" HREF="style.css" TYPE="text/css">
+</HEAD>
+
+<BODY>
+<H2>Fidelity of Mappings</H2>
+
+<P>Ferret supports integrating different source of information of
+a program, such as the static information and run-time information.
+We call these sources of information a <EM>sphere</EM>.  But a
+particular element from one sphere may not have a perfect correspondance
+to any single element in a different sphere. 
+For example, what might a Java interface (from the static
+JDT sphere) correspond to when considering the program's run-time
+behaviour?</P>
+
+<P>Ferret's model supports different <EM>fidelities</EM> of
+correspondance for elements between different spheres.  The fidelity
+describes the degree of information preservation in the conversion.
+Ferret provides three levels of fidelity:</P>
+<DL>
+<DT> Exact: </DT>
+<DD> Indicates a perfect one-to-one and onto correspondence.
+    For example, a class' method from a static Java tool will will
+    correspond exactly to the same method from a dynamic runtime
+    tool, assuming the dynamic run-time was taken from the same
+    source base.  </DD>
+
+
+<DT> Equivalent: </DT>
+<DD> Indicates a very near match: there is no perfect conversion,
+    but the elements are felt to be equivalent.
+    For example, the conversion of an Java interface will have an
+    equivalent correspondence to its implementing classes in in the
+    dynamic run-time. </DD>
+
+<DT> Approximate: </DT>
+<DD> Indicates an imperfect match, where there is a similarity between
+    the elements of the two spheres, but with some differences.
+     For example, a representation of a method whose source has been
+     modified will have only an approximate correspondence to that
+     method from a particular version of a file.</DD>
+</DL>
+
+<P>
+The fidelities are propagated across queries: if the query element
+has an imperfect correspondance to its equivalent in a different
+sphere, then any queries from that other sphere must be at least
+as imperfect.  </P>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ?
+"https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost +
+"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10898060-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</BODY>
+</HTML>
