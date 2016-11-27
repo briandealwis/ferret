@@ -8,10 +8,10 @@
 <repository location="http://manumitting.com/resources/p2"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.pde.source.feature.group" version="3.7.1.r37x_v20110810-0800-7b7qFVtFEx2XnmZ4jlM5mjM"/>
-<unit id="org.eclipse.platform.sdk" version="3.7.1.M20110909-1335"/>
-<unit id="org.eclipse.pde.api.tools.ee.fragments.feature.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
-<repository location="http://download.eclipse.org/releases/indigo"/>
+<unit id="org.eclipse.pde.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+<unit id="org.eclipse.pde.api.tools.ee.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/releases/neon"/>
 </location>
 </locations>
 </target>
