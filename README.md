@@ -1,4 +1,4 @@
-= Ferret: A Software Exploration Tool =
+# Ferret: A Software Exploration Tool
 
 ![A cute little ferret](site/src/main/resources/XenoFerret.jpg)
 
@@ -50,7 +50,7 @@ The Ferret documentation ships with the plugin, and is also available
 For more background on the thinking of Ferret, see the _Publications_
 below.
 
-== Notes ==
+## Notes
 
 Kenyon was a research project to index Subversion repositories.  It died
 a long time ago and the Kenyon binding has long been disabled.  It's
@@ -59,20 +59,20 @@ entirely possible that we could rewrite some of its support for JGit.
 TPTP was archived in May 2016 and the TPTP binding has long been
 disabled.
 
-== Installation ==
+## Installation
 
 <p>Ferret is an Eclipse plug-in and requires Eclipse 4.6 (Neon) or
 later.  To install, use the following update site:</p>
 w
     http://manumitting.com/tools/eclipse/ferret/
 
-== License ==
+## License
 
 <p>Ferret is made available under the <a
 href="https://www.eclipse.org/legal/epl-v10.html">Eclipse Public License
 v1.0</a>.</p>
 
-== Publications ==
+## Publications
 
 B de Alwis, GC Murphy (2008).  [Answering Conceptual Queries with
 Ferret](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=Kk_J-4MAAAAJ&citation_for_view=Kk_J-4MAAAAJ:u-x6o8ySG0sC). 

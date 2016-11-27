@@ -1,0 +1,20 @@
+sudo: false
+language: java
+env:
+  global:
+    - DISPLAY=:99.0
+before_script:
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+  - metacity --sm-disable --replace &
+  - sleep 3 # give metacity some time to start
+jdk: oraclejdk8
+script: mvn -Ptravis --fail-at-end verify
+addons:
+  apt:
+    packages:
+      - metacity
+cache:
+  directories:
+   - $HOME/.m2
+
