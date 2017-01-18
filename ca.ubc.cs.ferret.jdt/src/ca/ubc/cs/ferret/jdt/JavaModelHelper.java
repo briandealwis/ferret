@@ -133,10 +133,10 @@ public class JavaModelHelper implements IElementChangedListener {
     	if(modelSearchCache == null) {
             modelSearchCache = new CachingFutureMap<ResultKey,Object>(getCacheSize());
     	} else {
-    		synchronized(modelSearchCache) {
-//    	    	if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
+    	    	if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
     	    		System.out.println("JavaModelHelper: reset(): cancelling futures...");
-//    	    	}
+    	    	}
+    		synchronized(modelSearchCache) {
         		modelSearchCache.clear();
     		}
     	}
