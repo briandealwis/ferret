@@ -1,12 +1,15 @@
 sudo: false
 language: java
+jdk: oraclejdk8
+install: 
+  # use 3.3.9 to ensure faulty test exit states fail the build (#1276)
+  - mvn -N io.takari:maven:wrapper -Dmaven=3.3.9
 before_script:
   - sh -e /etc/init.d/xvfb start
   - sleep 3
   - metacity --sm-disable --replace &
   - sleep 3
-jdk: oraclejdk8
-script: mvn -Ptravis --fail-at-end verify
+script: ./mvnw -Ptravis --fail-at-end verify
 cache:
   directories:
   - $HOME/.m2
