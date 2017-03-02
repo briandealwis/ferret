@@ -7,13 +7,14 @@ package ca.ubc.cs.ferret.jdt;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.apache.commons.collections15.MultiMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IType;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+
 import ca.ubc.cs.clustering.Clustering;
-import ca.ubc.cs.ferret.MultiHashSetMap;
 import ca.ubc.cs.ferret.model.IRelation;
 import ca.ubc.cs.ferret.model.ObjectOrientedRelations;
 import ca.ubc.cs.ferret.model.SimpleSolution;
@@ -26,10 +27,8 @@ import ca.ubc.cs.ferret.types.FerretObject;
 public class MethodsInstantiatingType extends JavaIntersectionConceptualQuery<IType, FerretObject> {
 
 	protected Clustering<Object> clusteringByType;
-	protected MultiMap<FerretObject,FerretObject> mapping = new MultiHashSetMap<FerretObject,FerretObject>();
+	protected Multimap<FerretObject, FerretObject> mapping = MultimapBuilder.hashKeys().hashSetValues().build();
 	
-	public MethodsInstantiatingType() {}
-
 	@Override
 	protected String getSubDescription() {
         return "instantiators";

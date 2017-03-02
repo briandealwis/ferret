@@ -19,10 +19,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.collections15.Bag;
-import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.bag.HashBag;
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -64,7 +60,13 @@ import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.core.search.TypeReferenceMatch;
 
-import ca.ubc.cs.ferret.CachingFutureMap;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
+
 import ca.ubc.cs.ferret.EclipseFuture;
 import ca.ubc.cs.ferret.FerretErrorConstants;
 import ca.ubc.cs.ferret.FerretPlugin;
@@ -117,8 +119,8 @@ public class JavaModelHelper implements IElementChangedListener {
         JavaCore.removeElementChangedListener(this);
     }
 
-    protected Map<ResultKey,EclipseFuture<Object>> modelSearchCache;
-    protected Map<String,EclipseFuture<IType>> typeCache;
+    protected Cache<ResultKey,EclipseFuture<Object>> modelSearchCache;
+    protected Cache<String,EclipseFuture<IType>> typeCache;
     protected int numberQueries = 0;
     protected int numberSatisfiedFromCache = 0;
     protected int javaModelCounter = 0;
@@ -131,38 +133,41 @@ public class JavaModelHelper implements IElementChangedListener {
     		}
     	}
     	if(modelSearchCache == null) {
-            modelSearchCache = new CachingFutureMap<ResultKey,Object>(getCacheSize());
+    		modelSearchCache = newFutureMap(getCacheSize());
     	} else {
     	    	if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
     	    		System.out.println("JavaModelHelper: reset(): cancelling futures...");
     	    	}
     		synchronized(modelSearchCache) {
-        		modelSearchCache.clear();
+        		modelSearchCache.invalidateAll();
     		}
     	}
         if(typeCache == null) {
-        		typeCache = new CachingFutureMap<String,IType>(getCacheSize());
+        		typeCache = newFutureMap(getCacheSize());
         } else {
 			synchronized(typeCache) {
 				if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
 					System.out.println("JavaModelHelper: reset(): cancelling futures...");
 				}
-				for(Iterator<EclipseFuture<IType>> it = typeCache.values().iterator(); it
-						.hasNext();) {
-					EclipseFuture<IType> f = it.next();
-					if(!f.isDone()) {
-						f.cancel(true);
-						it.remove();
-					} else if(f.get() == null || !f.get().exists()) {
-						it.remove();
-					}
-				}
+				typeCache.invalidateAll();
         	}
         }
         numberQueries = numberSatisfiedFromCache = 0;
     }
     
-    protected int getCacheSize() {
+    private static <K, V> Cache<K, EclipseFuture<V>> newFutureMap(int size) {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		CacheBuilder<K, EclipseFuture<V>> builder = (CacheBuilder)CacheBuilder.newBuilder();
+		
+		Cache<K, EclipseFuture<V>> cache = builder.initialCapacity(size).removalListener(notif -> {
+			if (!notif.getValue().isDone()) {
+				notif.getValue().cancel(true);
+			}
+		}).build();
+		return cache;
+	}
+
+	protected int getCacheSize() {
 		return Math.max(250, FerretPlugin.getMaximumBackgroundCount() * 3);
 	}
 
@@ -174,20 +179,20 @@ public class JavaModelHelper implements IElementChangedListener {
         report.append("JavaModelHelper usage summary\n");
         report.append("  type-cache: " + typeCache.size() + " types cached\n");
         report.append("  search cache: " + modelSearchCache.size() + " cached searches\n");
-        Bag<String> keyTypes = new HashBag<String>();
-        for(ResultKey k : modelSearchCache.keySet()) {
+        Multiset<String> keyTypes = HashMultiset.create();
+        for(ResultKey k : modelSearchCache.asMap().keySet()) {
         	keyTypes.add(k.resultType);
         }
         report.append("    search types: ");
-        for(String k : keyTypes.uniqueSet()) {
-        	report.append(k + "[" + keyTypes.getCount(k) + "] ");
+        for(String k : keyTypes.elementSet()) {
+        	report.append(k + "[" + keyTypes.count(k) + "] ");
         }
         report.append("\n");
-        Bag<Class> nonJETypes = new HashBag<Class>();
-        for(Object o : modelSearchCache.values()) {
+        Multiset<Class<?>> nonJETypes = HashMultiset.create();
+        for(Object o : modelSearchCache.asMap().values()) {
             if(o instanceof Collection) {
-                totalElementCount += ((Collection)o).size();
-                for(Object je : (Collection)o) {
+                totalElementCount += ((Collection<?>)o).size();
+                for(Object je : (Collection<?>)o) {
                     if(je instanceof IJavaElement) {
                         totalJEs++;
                         if(!((IJavaElement)je).exists()) {
@@ -213,10 +218,10 @@ public class JavaModelHelper implements IElementChangedListener {
         report.append("     => " + totalJEs + " are JavaElements, of which " + 
                 totalJEsNonExisting + " do not exist\n");
         report.append("         non-JE types: ");
-        for(Class c : nonJETypes.uniqueSet()) {
+        for(Class<?> c : nonJETypes.elementSet()) {
         	report.append(c.getName());
         	report.append("[");
-        	report.append(nonJETypes.getCount(c));
+        	report.append(nonJETypes.count(c));
         	report.append("] ");
         }
         report.append("\n");
@@ -230,13 +235,13 @@ public class JavaModelHelper implements IElementChangedListener {
     	return javaModelCounter;
     }
   
-    private <K,V> V resolveOperation(Map<K, EclipseFuture<V>> cache, K key, Callable<V> creator) {
+    private <K,V> V resolveOperation(Cache<K, EclipseFuture<V>> cache, K key, Callable<V> creator) {
 		Thread.yield();	// try to make UI more responsive
 		EclipseFuture<V> future;
         numberQueries++;
         boolean found;
 		synchronized(cache) {
-			future = cache.get(key);
+			future = cache.getIfPresent(key);
 			found = future != null;
 			if(future == null || future.isCancelled()) {
 				cache.put(key, future = new EclipseFuture<V>(key));
@@ -270,9 +275,9 @@ public class JavaModelHelper implements IElementChangedListener {
 		}
     }
     
-    private <K,V> void storeInCache(Map<K, EclipseFuture<V>> cache, K key, V value) {
+    private <K,V> void storeInCache(Cache<K, EclipseFuture<V>> cache, K key, V value) {
 		synchronized(cache) {
-			EclipseFuture<V> future = cache.get(key);
+			EclipseFuture<V> future = cache.getIfPresent(key);
 			if(future == null || future.isCancelled()) {
 				cache.put(key, future = new EclipseFuture<V>(key));
 				future.set(value);
@@ -946,7 +951,7 @@ public class JavaModelHelper implements IElementChangedListener {
         Set<String> typeNames = new HashSet<String>();
         for(IType t : types) { typeNames.add(t.getFullyQualifiedName()); }
         
-        MultiMap<ITypeRoot,IMember> refs = new MultiHashMap<ITypeRoot,IMember>();
+        Multimap<ITypeRoot,IMember> refs = HashMultimap.create();
  
         for(IType t : types) {
             // Group by their declaring container (classfiles or compilation units), then try resolving with binding

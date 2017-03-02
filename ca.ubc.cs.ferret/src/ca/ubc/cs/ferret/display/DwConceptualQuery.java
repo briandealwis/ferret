@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.collections15.MultiMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+
+import com.google.common.collect.Multimap;
 
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.clustering.IClusteringsProvider;
@@ -147,7 +148,7 @@ public class DwConceptualQuery extends DwClusterableCollection<Object> {
 	}
 
 	@Override
-	protected void buildClusterings(IProgressMonitor monitor, MultiMap<IClusteringsProvider<Object>, Clustering<Object>> newClusterings) {
+	protected void buildClusterings(IProgressMonitor monitor, Multimap<IClusteringsProvider<Object>, Clustering<Object>> newClusterings) {
 		for(Clustering<Object> cp : icq.getAllClusterings()) {
 			if(cp.isRelevant()) {
 				newClusterings.put(icq, cp);
@@ -157,7 +158,7 @@ public class DwConceptualQuery extends DwClusterableCollection<Object> {
 	}
 
 	@Override
-	public MultiMap<IClusteringsProvider<Object>, Clustering<Object>> getAllClusterings() {
+	public Multimap<IClusteringsProvider<Object>, Clustering<Object>> getAllClusterings() {
 		if(!icq.isDone()) { return null; }
 		return super.getAllClusterings();
 	}

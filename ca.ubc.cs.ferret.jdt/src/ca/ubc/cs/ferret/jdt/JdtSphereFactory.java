@@ -1,6 +1,5 @@
 package ca.ubc.cs.ferret.jdt;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -68,7 +67,7 @@ public class JdtSphereFactory extends AbstractSphereFactory {
 	}
 	
 	public String[] getDependencies() {
-		return ArrayUtils.EMPTY_STRING_ARRAY;
+		return new String[0];
 	}
 
 	public IStatus canCreate() {
@@ -182,8 +181,7 @@ public class JdtSphereFactory extends AbstractSphereFactory {
 		return tb;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
 		return null;
 	}
 

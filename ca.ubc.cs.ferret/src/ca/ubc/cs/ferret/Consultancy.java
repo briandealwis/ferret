@@ -4,6 +4,13 @@
  */
 package ca.ubc.cs.ferret;
 
+import ca.ubc.cs.ferret.model.Consultation;
+import ca.ubc.cs.ferret.model.IConceptualQuery;
+import ca.ubc.cs.ferret.model.ISolution;
+import ca.ubc.cs.ferret.model.ISphere;
+import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
+import ca.ubc.cs.ferret.types.FerretObject;
+import com.google.common.collect.MapMaker;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,8 +24,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.commons.collections15.map.ReferenceMap;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspace;
@@ -27,16 +32,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-
-import ca.ubc.cs.ferret.model.Consultation;
-import ca.ubc.cs.ferret.model.IConceptualQuery;
-import ca.ubc.cs.ferret.model.ISolution;
-import ca.ubc.cs.ferret.model.ISphere;
-import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
-import ca.ubc.cs.ferret.types.FerretObject;
 
 /**
  * A Consultancy is a single repository of the consultations made throughout the image.
@@ -126,11 +123,6 @@ public class Consultancy {
     }
     
     public void start() {
-    	if(!Platform.isRunning()) {
-    		FerretPlugin.log(new Status(IStatus.ERROR, FerretPlugin.pluginID, FerretErrorConstants.PLATFORM_NOT_RUNNING,
-    				"Consultancy.start() aborting: platform not running", null));
-    		return;
-		}
     	if(clients != null) { return; }	// already started
     	clients = new HashSet<IConsultancyClient>();
         resourceChangeListener = new IResourceChangeListener() {
@@ -194,7 +186,7 @@ public class Consultancy {
     	 * cooperate with their sphere. */
     	abandonBackground();
     	if(consultationCache == null) {
-    		consultationCache = Collections.synchronizedMap(new ReferenceMap<Set<?>,Consultation>());
+    		consultationCache = new MapMaker().weakValues().makeMap();
     	} else {
     		for(Consultation c : consultationCache.values()) { c.reset(); }
     	}
@@ -238,7 +230,9 @@ public class Consultancy {
     }   
 
     protected void startBackgrounder(final Consultation c) {
-    	if(!Platform.isRunning() || !canSearchInBackground()) { return; }
+		if (!canSearchInBackground()) {
+			return;
+		}
     	if(!c.isDone()) { return; }
         if(c.getPriority() >= BACKGROUND) { return; }
         Job j = new Job("Lodging background consultations") {
@@ -373,10 +367,10 @@ public class Consultancy {
                         "Exception while invoking provided consultation-finished notification", e));                
             }
             return;
-        } else if(!Platform.isRunning()) {
-            FerretPlugin.log(new Status(IStatus.ERROR, FerretPlugin.pluginID, FerretErrorConstants.PLATFORM_NOT_RUNNING,  
-                    "Aborting consultation: Platform not running", null));                
-            return;
+		} else if (stopped) {
+			FerretPlugin.log(new Status(IStatus.ERROR, FerretPlugin.pluginID, FerretErrorConstants.PLATFORM_NOT_RUNNING,
+					"Aborting consultation: not running", null));
+			return;
         }
         
 	    WorkUnit wu;
@@ -389,7 +383,7 @@ public class Consultancy {
         kick();
     }
 
-    protected synchronized void kick() {
+	protected synchronized void kick() {
         if(stopped) { return; }
         if(backgroundJob != null) {
         	if(backgroundJob.getState() != Job.NONE) { return; }
@@ -424,7 +418,7 @@ public class Consultancy {
         }
         backgroundJob = new Job(jobName) {
             public IStatus run(IProgressMonitor monitor) {
-            	if(!Platform.isRunning()) {
+				if (stopped) {
             		return new Status(IStatus.INFO, FerretPlugin.pluginID, FerretErrorConstants.PLATFORM_NOT_RUNNING,
             				"Background query process aborting: platform not running", null);
         		}
@@ -472,8 +466,9 @@ public class Consultancy {
 
 	public void abandon(Consultation c) {
         WorkUnit w = activeWork;
-        if((w != null && c.equals(w.getConsultation())) 
-                || (w = fetchWork(c)) != null) {
+		if (w != null && c.equals(w.getConsultation())) {
+			w.cancel();
+		} else if ((w = fetchWork(c)) != null) {
             w.cancel();
         }
 //        abandonBackground();

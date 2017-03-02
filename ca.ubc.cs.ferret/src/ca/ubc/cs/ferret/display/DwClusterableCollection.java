@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
-import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 import ca.ubc.cs.clustering.Cluster;
 import ca.ubc.cs.clustering.Clustering;
@@ -22,7 +24,7 @@ import ca.ubc.cs.ferret.util.IJob;
 public abstract class DwClusterableCollection<T> extends DwBaseObject 
 		implements IClusteringsContainer<T> {
 
-	private MultiMap<IClusteringsProvider<T>,Clustering<T>> clusterings;
+	private Multimap<IClusteringsProvider<T>,Clustering<T>> clusterings;
     protected Clustering<T> selectedClustering = null;
     protected IJob job;
     protected List<String> facts;
@@ -31,13 +33,13 @@ public abstract class DwClusterableCollection<T> extends DwBaseObject
 		super(_parent);
 	}
 
-    public MultiMap<IClusteringsProvider<T>,Clustering<T>> getAllClusterings() {
+    public Multimap<IClusteringsProvider<T>,Clustering<T>> getAllClusterings() {
     	if(clusterings == null) {
     		if(job != null) { return null; }	// in progress
     		job = new AbstractJob() {
     			public boolean run(IProgressMonitor monitor) {
-    				MultiMap<IClusteringsProvider<T>, Clustering<T>> newClusterings = 
-    					new MultiHashMap<IClusteringsProvider<T>, Clustering<T>>();
+    				Multimap<IClusteringsProvider<T>, Clustering<T>> newClusterings = 
+    					MultimapBuilder.hashKeys().linkedHashSetValues().build();
     				try {
     					buildClusterings(monitor, newClusterings);
     				} catch(OperationCanceledException e) { /* do nothing */ }
@@ -53,13 +55,13 @@ public abstract class DwClusterableCollection<T> extends DwBaseObject
         return clusterings;
     }
 
-	protected void buildClusterings(IProgressMonitor monitor, MultiMap<IClusteringsProvider<T>, Clustering<T>> newClusterings) {
+	protected void buildClusterings(IProgressMonitor monitor, Multimap<IClusteringsProvider<T>, Clustering<T>> newClusterings) {
 		Collection<T> elements = getClusterableElements();
 		if(elements == null || elements.size() < getMinimumElementsForClustering()) {
 			return;
 		}
 		// filter the clusterings by whether they're relevant
-		MultiMap<IClusteringsProvider<T>, Clustering<T>> results = ClusteringPlugin.cluster(elements);
+		Multimap<IClusteringsProvider<T>, Clustering<T>> results = ClusteringPlugin.cluster(elements);
 		facts = new ArrayList<String>();
 		for(IClusteringsProvider<T> factory : results.keySet()) {
 			for(Clustering<T> clustering : results.get(factory)) {
@@ -131,11 +133,11 @@ public abstract class DwClusterableCollection<T> extends DwBaseObject
     }
 
     public int getNumberClusterings() {
-    	MultiMap<IClusteringsProvider<T>,Clustering<T>> clusterings =
+    	Multimap<IClusteringsProvider<T>,Clustering<T>> clusterings =
     		getAllClusterings();
     	int count = 0;
-    	for(IClusteringsProvider<? extends T> f : clusterings.keySet()) {
-    		count += clusterings.size(f);
+    	for(Entry<IClusteringsProvider<T>, Clustering<T>> f : clusterings.entries()) {
+    		count += f.getValue().size();
     	}
 		return count;
 	}

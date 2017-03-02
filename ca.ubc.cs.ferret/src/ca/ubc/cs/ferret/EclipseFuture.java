@@ -4,11 +4,10 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ILock;
+import org.eclipse.core.runtime.jobs.Job;
 
 public class EclipseFuture<T> implements Future<T> {
 	protected Object description;
@@ -20,7 +19,7 @@ public class EclipseFuture<T> implements Future<T> {
 	
 	public EclipseFuture(Object d) {
 		description = d;
-		lock = Platform.getJobManager().newLock();
+		lock = Job.getJobManager().newLock();
 		lock.acquire();
 		acquirer = Thread.currentThread();
 	}
@@ -33,6 +32,7 @@ public class EclipseFuture<T> implements Future<T> {
 			log("set value to '" + FerretPlugin.prettyPrint(v));
 		}
 		value = v;
+		cancelled = false;
 		if(hasValue) {return; }	// allow updates
 		hasValue = true;
 		lock.release();

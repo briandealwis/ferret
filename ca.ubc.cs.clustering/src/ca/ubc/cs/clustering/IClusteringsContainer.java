@@ -4,7 +4,7 @@
  */
 package ca.ubc.cs.clustering;
 
-import org.apache.commons.collections15.MultiMap;
+import com.google.common.collect.Multimap;
 
 
 public interface IClusteringsContainer<T> {
@@ -12,7 +12,7 @@ public interface IClusteringsContainer<T> {
      * Return the set of clusterings available from this container..
      * @return the clusterings, grouped by their provider
      */
-    public MultiMap<IClusteringsProvider<T>, Clustering<T>> getAllClusterings();
+    public Multimap<IClusteringsProvider<T>, Clustering<T>> getAllClusterings();
 
     /**
      * Set the active clustering to be used, or <code>null</code> if no

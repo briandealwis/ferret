@@ -4,6 +4,14 @@
  */
 package ca.ubc.cs.ferret.model;
 
+import ca.ubc.cs.ferret.Consultancy;
+import ca.ubc.cs.ferret.FerretErrorConstants;
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.ICallback;
+import ca.ubc.cs.ferret.types.ConversionResult;
+import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.ferret.types.FerretObject;
+import com.google.common.base.Stopwatch;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,27 +20,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections15.map.SingletonMap;
-import org.apache.commons.lang.time.StopWatch;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.ui.IMemento;
-
-import ca.ubc.cs.ferret.Consultancy;
-import ca.ubc.cs.ferret.FerretErrorConstants;
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.ICallback;
-import ca.ubc.cs.ferret.types.ConversionResult;
-import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
-import ca.ubc.cs.ferret.types.FerretObject;
 
 /**
  * This class represents a consultation to the great guru of how a particular set of
@@ -99,14 +96,12 @@ public class Consultation {
         boolean timingMessages = FerretPlugin.hasDebugOption("timings");
         try {
 	        monitor.beginTask("Querying", 20);
-            StopWatch sw = new StopWatch();
+            Stopwatch sw = Stopwatch.createStarted(); 
 	        if(timingMessages) {
 	        	System.out.println("Building queries...");
-	        	sw.start();
 	        }
 	        buildConceptualQueries(new SubProgressMonitor(monitor, 10));
 	        if(timingMessages) {
-	        	sw.stop();
 	        	System.out.println("Building queries took " + sw.toString());
 	        	sw.reset(); sw.start();
 		        System.out.println("Running queries...");
@@ -138,9 +133,8 @@ public class Consultation {
                 	cq.reset();
                 }
                 monitor.subTask(cq.getDescription());
-                StopWatch sw = new StopWatch();
 				if(debugMessages) { System.out.println("ICQ: " + cq.getDescription()); }
-                sw.start();
+				Stopwatch sw = Stopwatch.createStarted();
                 try {
                     cq.run(new SubProgressMonitor(monitor, 1));
                 } catch(OperationCanceledException e) {
@@ -192,7 +186,7 @@ public class Consultation {
     	synchronized(this) {
     		if(conceptualQueries != null) { return; }
     		List<IConceptualQuery> queries = new ArrayList<IConceptualQuery>();
-    		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+    		IExtensionRegistry extensionRegistry = RegistryFactory.getRegistry();
     		for(IConfigurationElement element : extensionRegistry.getConfigurationElementsFor(FerretPlugin.pluginID, FerretPlugin.conceptualQueriesExtensionPointId)) {
     			if(monitor.isCanceled()) { throw new OperationCanceledException(); }
     			IConceptualQuery query = createConceptualQuery(getQueryElements(), element);
@@ -254,9 +248,8 @@ public class Consultation {
             icq.setCategory(element.getAttribute("category"));
             Object[] convertedObjectsAsArray = convertedObjects.toArray(
             		(Object[])Array.newInstance(parmClass, convertedObjects.size()));
-            if(!icq.setParameters(new SingletonMap<String, Object[]>(
-					IConceptualQuery.DEFAULT_PARAMETER, 
-					convertedObjectsAsArray))) {
+			if (!icq.setParameters(
+					Collections.singletonMap(IConceptualQuery.DEFAULT_PARAMETER, convertedObjectsAsArray))) {
             	return null;
             }
             return icq;

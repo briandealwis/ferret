@@ -86,10 +86,9 @@ public abstract class AbstractSolution implements ISolution, IAdaptable {
         relations.add(r);
     }
 
-    @SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
         if(adapter == IAttributeSource.class) {
-        	return new DelegatingAttributeSource(getPrimaryEntity());
+        	return adapter.cast(new DelegatingAttributeSource(getPrimaryEntity()));
         }
         return null;
     }

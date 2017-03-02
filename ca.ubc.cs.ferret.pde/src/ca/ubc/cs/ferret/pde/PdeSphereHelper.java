@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections15.Predicate;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -133,11 +132,7 @@ public class PdeSphereHelper extends SphereHelper {
 	}
 
 	protected ITextSelection expandTextSelection(IEditorPart editor, ITextSelection ts) {
-		return expandTextSelection(editor, ts, new Predicate<Character>() {
-			public boolean evaluate(Character ch) {
-				return Character.isLetterOrDigit(ch) || ch == '.';
-			}
-		});
+		return expandTextSelection(editor, ts, ch -> Character.isLetterOrDigit(ch) || ch == '.');
 	}
 
 	protected Object[] getSelectedObjects(ITextSelection ts) {
@@ -275,7 +270,7 @@ public class PdeSphereHelper extends SphereHelper {
 			}
 
 			@SuppressWarnings("unchecked")
-			public Object getAdapter(Class adapter) {
+			public <T> T getAdapter(Class<T> adapter) {
 				return null;
 			}
 

@@ -59,7 +59,7 @@ public abstract class PdeObject implements IPluginObject {
 		return true;
 	}
 	
-	public Object getAdapter(Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
 		return getWrappedObject().getAdapter(adapter);
 	}
 

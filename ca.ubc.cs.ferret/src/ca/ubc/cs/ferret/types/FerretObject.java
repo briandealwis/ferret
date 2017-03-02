@@ -69,8 +69,7 @@ public class FerretObject implements IAdaptable {
 	 * manner, if available, are guaranteed to have {@link Fidelity.Exact}.
 	 * @see IAdaptable#getAdapter(Class)
 	 */
-	@SuppressWarnings("unchecked")	// unchecked is necessary to implement IAdaptable
-	public Object getAdapter(Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
 		return getAdapter(adapter, Fidelity.Exact);
 	}
 
@@ -81,18 +80,17 @@ public class FerretObject implements IAdaptable {
 	 * @param fidelity the minimum accepted fidelity of the adaptation
 	 * @return the adapted object, or null if none
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getAdapter(Class<T> adapter, Fidelity fidelity) {
         if(adapter == IAttributeSource.class) {
-        	return (T)new DelegatingAttributeSource(primaryObject);
+        	return adapter.cast(new DelegatingAttributeSource(primaryObject));
         } else if(adapter == IWorkbenchAdapter.class) {
-        	return (T)FerretObjectWorkbenchAdapter.getDefault();
+        	return adapter.cast(FerretObjectWorkbenchAdapter.getDefault());
         } else if(adapter == IDisplayObject.class) {
         	// for types in FerretObjects, use IPrettyPrinter instead
-        	return (T)new DwFerretObject(this);
+        	return adapter.cast(new DwFerretObject(this));
         }
 
-		if(adapter.isInstance(primaryObject)) { return (T)primaryObject; }	// optimization
+		if(adapter.isInstance(primaryObject)) { return adapter.cast(primaryObject); }	// optimization
 //		if(primaryObject instanceof IAdaptable) {
 //			Object adapted = ((IAdaptable)primaryObject).getAdapter(adapter);
 //			if(adapted != null) { return (T)adapted; }

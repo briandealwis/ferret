@@ -9,7 +9,6 @@ Require-Bundle: ca.ubc.cs.ferret;bundle-version="0.4.0",
  ca.ubc.cs.ferret.pde,
  ca.ubc.cs.clustering,
  org.junit,
- edu.uci.lcs.jung.api;bundle-version="2.0.0",
  org.eclipse.jdt.core;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.pde.core;bundle-version="3.6.0",
@@ -18,14 +17,11 @@ Require-Bundle: ca.ubc.cs.ferret;bundle-version="0.4.0",
  org.eclipse.ui.ide;bundle-version="3.6.0",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.jface;bundle-version="3.6.0"
-Import-Package: org.apache.commons.collections15,
- org.apache.commons.collections15.functors,
- org.apache.commons.collections15.iterators,
- org.apache.commons.lang,
- org.apache.commons.lang.time
+Import-Package: com.google.common.collect;version="15.0.0",
+ edu.uci.ics.jung.graph;version="2.1.1"
 Export-Package: ca.ubc.cs.ferret.jdt.tests,
  ca.ubc.cs.ferret.tests,
  ca.ubc.cs.ferret.tests.support
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy

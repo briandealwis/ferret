@@ -4,18 +4,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.expressions.EvaluationResult;
 import org.eclipse.core.expressions.ExpressionConverter;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IRegistryChangeEvent;
 import org.eclipse.core.runtime.IRegistryChangeListener;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 import ca.ubc.cs.clustering.ClusteringPlugin;
 
@@ -45,17 +47,17 @@ public class AttributeSourceManager implements IAttributeSourceManager,
 		if((result = ClusteringPlugin.getAdapter(element, IAttributeSource.class)) != null) {
 			return result;
 		}
-		MultiMap<String,ClassifierDescription> classifierCache = cacheClassifiers();
+		Multimap<String,ClassifierDescription> classifierCache = cacheClassifiers();
 	    AttributeSource source = new AttributeSource();
 	    processClassifiers(source, element, element.getClass(), classifierCache);
 	    attributeSourceCache.put(element.getClass().getName(), source);
 	    return source;
 	}
 	
-	protected MultiMap<String,ClassifierDescription> cacheClassifiers() {
-		MultiMap<String,ClassifierDescription> classifierCache = 
-			new MultiHashMap<String,ClassifierDescription>();
-		for(IConfigurationElement decl :  Platform.getExtensionRegistry().getConfigurationElementsFor(ClusteringPlugin.classifiersExtensionPoint)) {
+	protected Multimap<String,ClassifierDescription> cacheClassifiers() {
+		Multimap<String,ClassifierDescription> classifierCache = 
+			MultimapBuilder.hashKeys().linkedHashSetValues().build();
+		for(IConfigurationElement decl :  getExtensionRegistry().getConfigurationElementsFor(ClusteringPlugin.classifiersExtensionPoint)) {
 			try {
 				String objectType = decl.getAttribute("objectType");
 				ClassifierDescription cd = new ClassifierDescription();
@@ -79,8 +81,12 @@ public class AttributeSourceManager implements IAttributeSourceManager,
 		return classifierCache;
 	}
 	
+	private IExtensionRegistry getExtensionRegistry() {
+		return RegistryFactory.getRegistry();
+	}
+
 	protected void processClassifiers(AttributeSource source, Object element,
-			Class<?> clazz, MultiMap<String,ClassifierDescription> classifierCache) {
+			Class<?> clazz, Multimap<String,ClassifierDescription> classifierCache) {
 		Class<?> superclazz = clazz.getSuperclass();
 		// Start from Object and work our way up, thus overwriting any classifiers
 		// with the most specific classifiers applicable to objects of type clazz.
@@ -94,7 +100,7 @@ public class AttributeSourceManager implements IAttributeSourceManager,
 	}
 
 	protected void processTypeClassifier(AttributeSource source, Object element,
-			Class<?> type, MultiMap<String, ClassifierDescription> classifierCache) {
+			Class<?> type, Multimap<String, ClassifierDescription> classifierCache) {
 		Collection<ClassifierDescription> cds = classifierCache.get(type.getName());
 		if(cds == null) { return; }
 		for(ClassifierDescription cd : cds) {

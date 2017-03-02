@@ -4,9 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 /**
  * The relation container and resolver.  Relations are registered with particular names.
@@ -18,8 +19,8 @@ public class Sphere extends AbstractSphere {
 	/**
      * The actual relation implementations with their original name.
      */
-    protected MultiMap<String,IRelationFactory> relationsMap = 
-    	new MultiHashMap<String,IRelationFactory>();
+    protected Multimap<String,IRelationFactory> relationsMap = 
+    	MultimapBuilder.hashKeys().arrayListValues().build();
     
     /**
      * Associate parameters; may be used my relation implementations.

@@ -6,17 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-
-import junit.framework.TestCase;
-
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.junit.Test;
-
 import ca.ubc.cs.ferret.FerretFatalError;
 import ca.ubc.cs.ferret.model.DifferencingSphereCompositor;
 import ca.ubc.cs.ferret.model.DisjunctingSphereCompositor;
@@ -25,16 +14,19 @@ import ca.ubc.cs.ferret.model.IRelation;
 import ca.ubc.cs.ferret.model.IRelationFactory;
 import ca.ubc.cs.ferret.model.ISphere;
 import ca.ubc.cs.ferret.model.IntersectingSphereCompositor;
-import ca.ubc.cs.ferret.model.JoinRelation;
-import ca.ubc.cs.ferret.model.NameAlreadyRegisteredException;
 import ca.ubc.cs.ferret.model.NamedJoinRelation;
 import ca.ubc.cs.ferret.model.NamedRelation;
 import ca.ubc.cs.ferret.model.NullRelation;
-import ca.ubc.cs.ferret.model.Sphere;
 import ca.ubc.cs.ferret.model.ReplacementSphereCompositor;
+import ca.ubc.cs.ferret.model.Sphere;
 import ca.ubc.cs.ferret.model.TransformingSphereCompositor;
 import ca.ubc.cs.ferret.model.UnioningSphereCompositor;
 import ca.ubc.cs.ferret.types.FerretObject;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 public class RelationTests {
 
@@ -156,10 +148,7 @@ public class RelationTests {
 		tb.add(subtb);
 	
 		subtb = new Sphere("simple");
-		subtb.register("foo", new TransformingRelation<String>(String.class, new Transformer<String, String>() {
-			public String transform(String input) {
-				return StringUtils.reverse(input);
-			}}));
+		subtb.register("foo", new TransformingRelation<String>(String.class, RelationTests::reverse));
 		tb.add(subtb);
 		
 		IRelation op = tb.resolve(new NullProgressMonitor(), "foo", "bar");
@@ -187,10 +176,7 @@ public class RelationTests {
 		assertEquals("bar", result.iterator().next());
 
 		subtb = new Sphere("simple");
-		subtb.register("foo", new TransformingRelation<String>(String.class, new Transformer<String, String>() {
-			public String transform(String input) {
-				return StringUtils.reverse(input);
-			}}));
+		subtb.register("foo", new TransformingRelation<String>(String.class, RelationTests::reverse));
 		tb.add(subtb);
 		op = tb.resolve(new NullProgressMonitor(), "foo", "bar");
 		assertFalse(op.hasNext());
@@ -271,12 +257,7 @@ public class RelationTests {
 		tb.register("alias", new NamedRelation("smile"));	
 		tb.register("frown", new CollectionIterationRelation());
 		TransformingSphereCompositor transforming = new TransformingSphereCompositor("restricting", tb);
-		transforming.addTransform(new TransformingRelation<Integer>(
-				Integer.class, new Transformer<Integer, String>() {
-					public String transform(Integer input) {
-						return input.toString();
-					}
-				}));
+		transforming.addTransform(new TransformingRelation<Integer>(Integer.class, input -> input.toString()));
 		replacement.add(transforming);		
 		
 		IRelation op = transforming.createResolverState(null).process(new NullProgressMonitor(), "frown", 
@@ -298,5 +279,9 @@ public class RelationTests {
 		op = transforming.resolve(new NullProgressMonitor(), "alias", 
 				new FerretObject(1, transforming));
 		fail("should have gotten to an " + ErrorRaisingSphere.class.getName());
+	}
+
+	private static String reverse(String input) {
+		return new StringBuilder(input).reverse().toString();
 	}
 }

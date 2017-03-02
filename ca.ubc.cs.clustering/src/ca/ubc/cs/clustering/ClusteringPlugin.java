@@ -1,13 +1,7 @@
 package ca.ubc.cs.clustering;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
-import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.expressions.EvaluationResult;
 import org.eclipse.core.expressions.Expression;
@@ -15,11 +9,16 @@ import org.eclipse.core.expressions.ExpressionConverter;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 import ca.ubc.cs.clustering.attrs.AttributeSourceManager;
 import ca.ubc.cs.clustering.attrs.ClusterableCollection;
@@ -52,9 +51,9 @@ public class ClusteringPlugin extends Plugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		attributeSourceManager = new AttributeSourceManager();
-		Platform.getExtensionRegistry().addRegistryChangeListener(attributeSourceManager,
+		RegistryFactory.getRegistry().addRegistryChangeListener(attributeSourceManager,
 				getBundle().getSymbolicName());
-		getPluginPreferences()	.setDefault(SqueezerClusteringFactory.SQUEEZER_THRESHOLD, 3);
+		getPluginPreferences().setDefault(SqueezerClusteringFactory.SQUEEZER_THRESHOLD, 3);
 		plugin = this;
 	}
 
@@ -63,20 +62,20 @@ public class ClusteringPlugin extends Plugin {
 	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		Platform.getExtensionRegistry().removeRegistryChangeListener(attributeSourceManager);
+		RegistryFactory.getRegistry().removeRegistryChangeListener(attributeSourceManager);
 		attributeSourceManager = null;
 		plugin = null;
 		super.stop(context);
 	}
 
 	public static <T> T getAdapter(Object object, Class<T> clazz) {
-        if(clazz.isInstance(object)) { return (T)object; }
+        if(clazz.isInstance(object)) { return clazz.cast(object); }
         if(object instanceof IAdaptable) {
         	T adapter = (T)((IAdaptable)object).getAdapter(clazz);
         	if(adapter != null) { return adapter; }
         }
         Object adapter = Platform.getAdapterManager().getAdapter(object, clazz);
-        if(adapter != null) { return (T)adapter; }
+        if(adapter != null) { return clazz.cast(adapter); }
 		return null;
 	}
 
@@ -88,17 +87,17 @@ public class ClusteringPlugin extends Plugin {
 		return plugin;
 	}
 
-	public static <T> MultiMap<IClusteringsProvider<T>,Clustering<T>> cluster(Collection<? extends T> objects) {
+	public static <T> Multimap<IClusteringsProvider<T>,Clustering<T>> cluster(Collection<? extends T> objects) {
 		ClusterableCollection<T> cc = new ClusterableCollection<T>(objects); 
 		return cluster(cc);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> MultiMap<IClusteringsProvider<T>,Clustering<T>> cluster(ClusterableCollection<T> objects) {
+	public static <T> Multimap<IClusteringsProvider<T>,Clustering<T>> cluster(ClusterableCollection<T> objects) {
 		//objects.getElements()
-		final MultiMap<IClusteringsProvider<T>,Clustering<T>> clusterings =
-			new MultiHashMap<IClusteringsProvider<T>,Clustering<T>>();
-		for(IConfigurationElement decl :  Platform.getExtensionRegistry().getConfigurationElementsFor(clusterersExtensionPoint)) {
+		final Multimap<IClusteringsProvider<T>,Clustering<T>> clusterings =
+			MultimapBuilder.hashKeys().linkedHashSetValues().build();//<IClusteringsProvider<T>,Clustering<T>>();
+		for(IConfigurationElement decl :  getExtensionRegistry().getConfigurationElementsFor(clusterersExtensionPoint)) {
 			try {
 				IConfigurationElement[] children = decl.getChildren();
 				Integer precedence = Integer.MAX_VALUE;
@@ -144,6 +143,10 @@ public class ClusteringPlugin extends Plugin {
 //			}});
 //		return result;
 		return clusterings;
+	}
+
+	private static IExtensionRegistry getExtensionRegistry() {
+		return RegistryFactory.getRegistry();
 	}
 
 	public static void log(Exception e) {

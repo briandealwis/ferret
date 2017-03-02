@@ -229,7 +229,7 @@ public class TptpSphereWizardPage extends WizardPage {
 
 
 	protected IStatus launchTraceImportWizard(Shell shell) {
-        IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint("org.eclipse.ui.importWizards");
+        IExtensionPoint point = RegistryFactory.getRegistry().getExtensionPoint("org.eclipse.ui.importWizards");
         MultiStatus errorStatus = new MultiStatus(TptpPlugin.pluginID, 0,
         		"Unable to find TPTP ImportTraceXMLWizard", null);
         for(IExtension extension : point.getExtensions()) {
