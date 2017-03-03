@@ -64,7 +64,7 @@ disabled.
 <p>Ferret is an Eclipse plug-in and requires Eclipse 4.6 (Neon) or
 later.  To install, use the following update site:</p>
 w
-    http://manumitting.com/tools/eclipse/ferret/
+    http://manumitting.com/tools/eclipse/ferret/stable
 
 ## License
 
