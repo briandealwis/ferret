@@ -1,12 +1,12 @@
 package ca.ubc.cs.clustering;
 
+import ca.ubc.cs.clustering.attrs.ClusterableCollection;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import ca.ubc.cs.clustering.attrs.ClusterableCollection;
+import org.eclipse.core.runtime.Assert;
 
 /**
  * Algorithm taken from
@@ -56,6 +56,7 @@ public class SqueezerClusterer<T> {
 						maxSimilarity = similarity;
 					}
 				}
+				Assert.isNotNull(maxCluster);
 				if(maxSimilarity >= threshold) {
 					maxCluster.add(tuple);
 				} else {
