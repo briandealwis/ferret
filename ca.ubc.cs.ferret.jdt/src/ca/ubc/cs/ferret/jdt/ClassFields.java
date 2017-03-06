@@ -1,19 +1,16 @@
 package ca.ubc.cs.ferret.jdt;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IType;
-
 import ca.ubc.cs.clustering.Cluster;
 import ca.ubc.cs.clustering.Clustering;
-import ca.ubc.cs.ferret.model.IConceptualQuery;
 import ca.ubc.cs.ferret.model.IRelation;
 import ca.ubc.cs.ferret.model.ObjectOrientedRelations;
 import ca.ubc.cs.ferret.model.SimpleSolution;
 import ca.ubc.cs.ferret.types.FerretObject;
+import java.util.HashSet;
+import java.util.Set;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IType;
 
 public class ClassFields extends JavaRelatedConceptualQuery<IType> {
 
@@ -21,7 +18,7 @@ public class ClassFields extends JavaRelatedConceptualQuery<IType> {
 	}
 
 	public String getDescription() {
-		return "declared fields";
+		return "fields declared";
 	}
 
 	@Override
