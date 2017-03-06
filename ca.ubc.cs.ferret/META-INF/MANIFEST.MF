@@ -22,6 +22,7 @@ Import-Package: ca.ubc.cs.objhdl,
  edu.uci.ics.jung.algorithms.shortestpath;version="[2.1.1,2.2)",
  edu.uci.ics.jung.graph;version="[2.1.1,2.2)",
  org.eclipse.core.runtime;version="3.5.0",
+ org.eclipse.core.runtime.content,
  org.eclipse.search.ui,
  org.osgi.framework;version="1.8.0"
 Export-Package: ca.ubc.cs.ferret,
