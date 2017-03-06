@@ -4,7 +4,7 @@
  */
 package ca.ubc.cs.ferret.views;
 
-import org.eclipse.jface.util.ListenerList;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -17,7 +17,7 @@ public class UnwrappingSelectionProvider implements ISelectionProvider,
 		ISelectionChangedListener {
     protected ISelectionProvider wrappedProvider;
 	protected SelectionUnwrapper unwrapper;
-    protected ListenerList selectionChangedList = new ListenerList();
+    protected ListenerList<ISelectionChangedListener> selectionChangedList = new ListenerList<>();
     protected ISelection current = null;
     protected ISelection wrappedSelection = null;
     

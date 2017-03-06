@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import org.apache.commons.collections15.Bag;
-import org.apache.commons.collections15.bag.HashBag;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionListener;
@@ -21,22 +19,26 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.MapMaker;
+import com.google.common.collect.Multiset;
+
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.views.QueriesDossierView;
 
 public class HistoryMonitor implements IWindowListener, ISelectionListener {
 
-	protected Bag<Object> counts;
+	protected Multiset<Object> counts;
 	
 	/**
 	 * Records the <value> that transitions to <key>
 	 */
-	protected Map<Object,Bag<Object>> transitionsTo;
+	protected Map<Object,Multiset<Object>> transitionsTo;
 	
 	/**
 	 * Records the <key> that transitions to <value>
 	 */
-	protected Map<Object,Bag<Object>> transitionsFrom;
+	protected Map<Object,Multiset<Object>> transitionsFrom;
 	protected LinkedList<Object> history;
 	protected int selectionCounter = 0;
 	
@@ -51,9 +53,9 @@ public class HistoryMonitor implements IWindowListener, ISelectionListener {
 	}
 
 	public void reset() {
-		counts = new HashBag<Object>();
-		transitionsTo = new WeakHashMap<Object,Bag<Object>>();
-		transitionsFrom = new WeakHashMap<Object,Bag<Object>>();
+		counts = HashMultiset.create();
+		transitionsTo = new MapMaker().weakKeys().makeMap();
+		transitionsFrom = new MapMaker().weakKeys().makeMap();
 		history = new LinkedList<Object>();
 	}
 
@@ -118,7 +120,7 @@ public class HistoryMonitor implements IWindowListener, ISelectionListener {
 		if(history.size() > getMaximumHistorySize()) {
 			Object last = history.removeFirst();
 			counts.remove(last);
-			int n = counts.getCount(last);
+			int n = counts.count(last);
 			if(n == 0) {
 				for(Object to : transitionsTo.remove(last)) {
 					transitionsFrom.get(to).remove(last, Integer.MAX_VALUE);
@@ -129,12 +131,12 @@ public class HistoryMonitor implements IWindowListener, ISelectionListener {
 			}
 		}
 
-		Bag<Object> from = transitionsFrom.get(previous);
-		if(from == null) { transitionsFrom.put(previous, from = new HashBag<Object>()); }
+		Multiset<Object> from = transitionsFrom.get(previous);
+		if(from == null) { transitionsFrom.put(previous, from = HashMultiset.create()); }
 		from.add(object);
 		
-		Bag<Object> to = transitionsTo.get(object);
-		if(to == null) { transitionsTo.put(object, to = new HashBag<Object>()); }
+		Multiset<Object> to = transitionsTo.get(object);
+		if(to == null) { transitionsTo.put(object, to = HashMultiset.create()); }
 		to.add(previous);
 	}
 
@@ -146,14 +148,14 @@ public class HistoryMonitor implements IWindowListener, ISelectionListener {
 		return determineTransitions(transitionsFrom.get(item), item, maximum);
 	}
 
-	protected synchronized Collection<Object> determineTransitions(Bag<Object> transitions,
+	protected synchronized Collection<Object> determineTransitions(Multiset<Object> transitions,
 			Object item, int maximum) {
 		if(transitions == null) { return Collections.emptyList(); }
 		// Process the transitions list, choosing the top <maximum> items.
-		List<Object[]> assessment = new ArrayList<Object[]>(transitions.uniqueSet().size());
-		for(Object o : transitions.uniqueSet()) {
+		List<Object[]> assessment = new ArrayList<Object[]>(transitions.elementSet().size());
+		for(Object o : transitions.elementSet()) {
 			if(o.equals(item)) { continue; }	// no point adding ourselves
-			double relevance = calculateRelevance(o, transitions.getCount(o));
+			double relevance = calculateRelevance(o, transitions.count(o));
 			assessment.add(new Object[] { o, relevance });
 		}
 		Collections.sort(assessment, new Comparator<Object[]>() {

@@ -14,34 +14,57 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding> <!-- tycho not yet using p.b.sE -->
     <findbugs.version>2.3.2-SNAPSHOT</findbugs.version>
-    <eclipse.repo>http://download.eclipse.org/releases/neon</eclipse.repo>
 
      <!-- OS-specific JVM flags, empty for the default case but redefined below -->
      <os-jvm-flags/>
   </properties>
 
   <modules>
+    <module>site</module>
     <module>ca.ubc.cs.objhdl</module>
     <module>ca.ubc.cs.clustering</module>
     <module>ca.ubc.cs.ferret</module>
     <module>ca.ubc.cs.ferret-feature.base</module>
     <module>ca.ubc.cs.ferret.history</module>
     <module>ca.ubc.cs.ferret.jdt</module>
+    <module>ca.ubc.cs.ferret.pde</module>
+    <module>ca.ubc.cs.ferret.tests</module>
+    <module>ca.ubc.cs.ferret.jung</module>
 <!--
+  Kenyon is no longer with us
     <module>ca.ubc.cs.ferret.kenyon</module>
     <module>ca.ubc.cs.ferret.kenyon.jdt</module>
     <module>ca.ubc.cs.ferret-feature.kenyon</module>
 -->
-    <module>ca.ubc.cs.ferret.pde</module>
-    <module>ca.ubc.cs.ferret.tests</module>
 <!--
+  TPTP is no longer with us
     <module>ca.ubc.cs.ferret.tptp</module>
     <module>ca.ubc.cs.ferret.tptp.jdt</module>
     <module>ca.ubc.cs.ferret.tests.tptp</module>
     <module>ca.ubc.cs.ferret-feature.tptp</module>
 -->
-    <module>site</module>
   </modules>
+
+  <dependencies>
+    <dependency>
+      <!-- bundle: com.google.gson -->
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.7</version>
+    </dependency>
+    <dependency>
+      <!-- bundle: com.google.guava -->
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>21.0</version>
+    </dependency>
+    <dependency>
+      <!-- bundle: jackson-core-asl -->
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>1.9.13</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -65,6 +88,9 @@
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>target-platform-configuration</artifactId>
         <version>${tycho.version}</version>
+        <configuration>
+          <pomDependencies>consider</pomDependencies>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -85,13 +111,12 @@
     <repository>
       <id>eclipse-neon</id>
       <layout>p2</layout>
-      <url>${eclipse.repo}</url>
+      <url>http://download.eclipse.org/releases/neon</url>
     </repository>
-
     <repository>
-      <id>bundles</id>
+      <id>eclipse-neon-orbit</id>
       <layout>p2</layout>
-      <url>http://manumitting.com/resources/p2</url>
+      <url>http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository</url>
     </repository>
   </repositories>
 

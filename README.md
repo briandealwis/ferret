@@ -1,11 +1,16 @@
 # Ferret: A Software Exploration Tool
 
-![A cute little ferret](site/src/main/resources/XenoFerret.jpg)
+![A little ferret](site/src/main/resources/XenoFerret.jpg)
 
-Ferret is a tool aimed to help developers during exploration of
-software codebases.  Ferret is an Eclipse view that provides a
-structured display of information describing how one or more program
-elements are situated in the context of the system.
+Ferret is a software exploration tool.  Boild down to its essence,
+Ferrit is Eclipse Search on steroids.
+
+![Ferret in action](site/src/main/resources/doc/ferret-demo.png)
+
+Ferret is an Eclipse view that provides a structured display of
+information describing how one or more program elements are situated
+in the context of the system.
+
 This context is computed automatically as the program elements are
 selected in the IDE, and is structured as answers to a set of
 _conceptual queries_ about those elements. 

@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.collections15.MultiMap;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.pde.core.plugin.IPluginAttribute;
@@ -14,6 +13,8 @@ import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginExtensionPoint;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
+
+import com.google.common.collect.Multimap;
 
 import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
 import ca.ubc.cs.ferret.pde.AdaptationSpecification;
@@ -55,7 +56,7 @@ public abstract class PossibleAdaptationsRelation extends
             if(extpt == null) { return Collections.EMPTY_LIST; }
             monitor.worked(5);
             results = new HashSet<AdaptationSpecification>();
-            MultiMap<IPluginExtension,IPluginObject> extensions =
+            Multimap<IPluginExtension,IPluginObject> extensions =
             	PdeModelHelper.getDefault().getExtensions(extpt);
             for(IPluginExtension extension : extensions.keySet()) {
                 if(monitor.isCanceled()) { throw new OperationCanceledException(); }

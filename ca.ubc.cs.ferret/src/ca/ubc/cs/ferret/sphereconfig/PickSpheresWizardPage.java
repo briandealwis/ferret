@@ -1,17 +1,21 @@
 package ca.ubc.cs.ferret.sphereconfig;
 
+import ca.ubc.cs.ferret.FerretErrorConstants;
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.model.ISphereCompositorFactory;
+import ca.ubc.cs.ferret.model.ISphereFactory;
+import ca.ubc.cs.ferret.model.SphereHelper;
+import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,12 +46,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-
-import ca.ubc.cs.ferret.FerretErrorConstants;
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.model.ISphereCompositorFactory;
-import ca.ubc.cs.ferret.model.ISphereFactory;
-import ca.ubc.cs.ferret.model.SphereHelper;
 
 public class PickSpheresWizardPage extends WizardPage {
 	public static final String pageId = "Pick Spheres";
@@ -86,16 +84,18 @@ public class PickSpheresWizardPage extends WizardPage {
 
 	protected void addSphereFactory(final ISphereFactory f) {
 		final ISphereCompositorFactory compositor = getDestinationCompositor();
-		if(compositor == null && getRoot() != null) {
+		ISphereFactory root = getRoot();
+		if(compositor == null && root != null) {
 			return;
 		}
 		if(!showFactoryConfigurationDialog(f, false)) {
 			return;
 		}
-		if(getRoot() == null) {
+		if(root == null) {
 			setRoot(f);
 			refresh();
 		} else {
+			Preconditions.checkNotNull(compositor);
 			compositor.add(f);
 			refresh(compositor);
 		}
@@ -126,11 +126,15 @@ public class PickSpheresWizardPage extends WizardPage {
 
 	protected void addSphereComposition(ISphereCompositorFactory c) {
 		ISphereCompositorFactory compositor = getDestinationCompositor();
-		if(compositor == null && getRoot() != null) { return; }
-		if(getRoot() == null) {
+		ISphereFactory root = getRoot();
+		if (compositor == null && root != null) {
+			return;
+		}
+		if (root == null) {
 			setRoot(c);
 			refresh();
 		} else {
+			Preconditions.checkNotNull(compositor);
 			compositor.add(c);
 			refresh(compositor);
 		}
@@ -271,7 +275,7 @@ public class PickSpheresWizardPage extends WizardPage {
 		compositionFunctionLabels = new ArrayList<Label>();
 		
         for(final IConfigurationElement element : 
-    			Platform.getExtensionRegistry().getConfigurationElementsFor(FerretPlugin.pluginID, FerretPlugin.scfsExtensionPointId)) {
+    			RegistryFactory.getRegistry().getConfigurationElementsFor(FerretPlugin.pluginID, FerretPlugin.scfsExtensionPointId)) {
     		ISphereCompositorFactory cf;
         	try {
         		cf = (ISphereCompositorFactory)element.createExecutableExtension(ATTR_CLASS);
@@ -464,7 +468,7 @@ public class PickSpheresWizardPage extends WizardPage {
 	protected Object getParent(Object child) {
 		for(TreePath tp : configurationViewer.getExpandedTreePaths()) {
 			Object leaf = tp.getSegment(tp.getSegmentCount() - 1);
-			if(ArrayUtils.contains(contentProvider.getChildren(leaf), child)) {
+			if(contains(contentProvider.getChildren(leaf), child)) {
 				return leaf;
 			}
 			// we use `i > 0' as the root doesn't have a parent
@@ -475,6 +479,15 @@ public class PickSpheresWizardPage extends WizardPage {
 			}
 		}
 		return null;
+	}
+
+	private static boolean contains(Object[] arr, Object sought) {
+		for(Object o : arr) {
+			if(o.equals(sought)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected Object[] getSelectedObjects(ISelectionProvider provider) {

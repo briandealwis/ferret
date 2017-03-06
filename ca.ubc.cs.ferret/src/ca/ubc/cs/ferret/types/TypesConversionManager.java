@@ -1,29 +1,32 @@
 package ca.ubc.cs.ferret.types;
 
+import ca.ubc.cs.ferret.FerretErrorConstants;
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.model.ISphere;
+import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.objhdl.ClassLookupCache;
+import com.google.common.base.Function;
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections15.Transformer;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IRegistryChangeEvent;
 import org.eclipse.core.runtime.IRegistryChangeListener;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
-
-import ca.ubc.cs.ferret.FerretErrorConstants;
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.model.ISphere;
-import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
-import ca.ubc.cs.objhdl.ClassLookupCache;
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.Graph;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 /**
  * Manager for type conversions.  Type conversions can be chained, as necessary.
@@ -45,11 +48,12 @@ public class TypesConversionManager implements IRegistryChangeListener {
 	protected Map<Fidelity,DijkstraShortestPath<String, ConversionSpecification>> tcDijk;
 
 	protected Map<Fidelity,Map<String,Map<String,List<ConversionPipeline>>>> knownConversions;
+	private IAdapterManager adapterManager;
 
 	public static void stop() {
 		if(singleton == null) { return; }
 		singleton.reset();
-		Platform.getExtensionRegistry().removeRegistryChangeListener(singleton);
+		RegistryFactory.getRegistry().removeRegistryChangeListener(singleton);
 		singleton = null;
 	}
 
@@ -58,7 +62,7 @@ public class TypesConversionManager implements IRegistryChangeListener {
 	public static TypesConversionManager getDefault() {
 		if(singleton == null) {
 			singleton = new TypesConversionManager ();
-			Platform.getExtensionRegistry().addRegistryChangeListener(singleton, FerretPlugin.pluginID);
+			RegistryFactory.getRegistry().addRegistryChangeListener(singleton, FerretPlugin.pluginID);
 		}
 		return singleton;
 	}
@@ -66,7 +70,7 @@ public class TypesConversionManager implements IRegistryChangeListener {
 	protected synchronized DirectedGraph<String,ConversionSpecification> getConversionGraph() {
 		if(typesConversionGraph != null) { return typesConversionGraph; }
 		typesConversionGraph = new DirectedSparseMultigraph<String, ConversionSpecification>();
-		for(IConfigurationElement decl : Platform.getExtensionRegistry().getConfigurationElementsFor(conversionExtensionPoint)) {
+		for(IConfigurationElement decl : RegistryFactory.getRegistry().getConfigurationElementsFor(conversionExtensionPoint)) {
 			if(decl.getChildren().length > 0) { 
 				FerretPlugin.log(new Status(IStatus.ERROR, FerretPlugin.pluginID,
 						FerretErrorConstants.CONFIGURATION_ERROR,
@@ -91,16 +95,12 @@ public class TypesConversionManager implements IRegistryChangeListener {
 		return typesConversionGraph;
 	}
 	
-	protected Transformer<ConversionSpecification, Number> getDijkTransformer(final Fidelity fidelity) {
+	protected Function<ConversionSpecification, Number> getDijkTransformer(final Fidelity fidelity) {
 		// Return a transformer that will compare the fidelity of a particular
 		// conversionspec against a configured minimum fidelity
 		// if the conversion spec isn't sufficiently high-enough fidelity,
 		// then return infinity
-		return new Transformer<ConversionSpecification,Number>() {
-			public Number transform(ConversionSpecification cs) {
-				return cs.getFidelity().compareTo(fidelity) < 0
-					? Double.POSITIVE_INFINITY : 1;
-			}};
+		return cs -> cs == null || cs.getFidelity().compareTo(fidelity) < 0 ? Double.POSITIVE_INFINITY : 1;
 	}
 
 	protected void addConversionSpec(ConversionSpecification cs) {
@@ -198,7 +198,7 @@ public class TypesConversionManager implements IRegistryChangeListener {
 	public ConversionResult<?> convert(Object object, String adapterType,
 			Fidelity fidelity, ISphere sphere) {
 		Object adapted;
-		if((adapted = Platform.getAdapterManager().loadAdapter(object, adapterType)) != null){
+		if ((adapted = getAdapterManager().loadAdapter(object, adapterType)) != null) {
             if(FerretPlugin.hasDebugOption("debug/showTypeConversions")) {
             	System.out.println("Conversion using Eclipse Adapter Framework: " 
             			+ object.getClass().getName() + " -> " + adapterType);
@@ -220,11 +220,24 @@ public class TypesConversionManager implements IRegistryChangeListener {
 		return null;
 	}
 
+	/**
+	 * @return
+	 */
+	private IAdapterManager getAdapterManager() {
+		if (adapterManager == null) {
+			BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+			ServiceReference<IAdapterManager> reference = bundleContext.getServiceReference(IAdapterManager.class);
+			adapterManager = bundleContext.getService(reference);
+			Assert.isNotNull(adapterManager);
+		}
+		return adapterManager;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T getAdapter(Object e, Class<T> clazz, Fidelity fidelity) {
 		ConversionResult cr = getDefault().convert(e, clazz.getName(), fidelity, null);
 		if(cr != null && cr.hasSingleResult()) {
-			return (T)cr.getSingleResult();
+			return clazz.cast(cr.getSingleResult());
 		}
 		return null;
 	}

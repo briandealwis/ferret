@@ -9,20 +9,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.util.ListenerList;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
 import ca.ubc.cs.ferret.ICallback;
 
 public class SelectOneOfManyAction<T> extends Action implements IMenuCreator {
-    protected ListenerList selectionChangedList = new ListenerList();
+    protected ListenerList<ICallback<T>> selectionChangedList = new ListenerList<>();
     protected List<String> descriptions;
     protected List<T> objects;
     protected List<ImageDescriptor> images;

@@ -4,6 +4,9 @@
  */
 package ca.ubc.cs.ferret.pde.queries;
 
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.jdt.JavaModelHelper;
+import ca.ubc.cs.ferret.model.SimpleSolution;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -11,18 +14,13 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.pde.internal.core.natures.PDE;
-
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.jdt.JavaModelHelper;
-import ca.ubc.cs.ferret.model.ISphere;
-import ca.ubc.cs.ferret.model.SimpleSolution;
 
 public class UnreferencedWorkbenchPart extends PdeSingleParmConceptualQuery<IType> {
     
@@ -87,7 +85,7 @@ public class UnreferencedWorkbenchPart extends PdeSingleParmConceptualQuery<ITyp
     private boolean isReferencedInPluginXml(IType t, IProgressMonitor monitor) throws JavaModelException {
         try {
             String fqtn = t.getFullyQualifiedName();
-            IExtensionRegistry registry = Platform.getExtensionRegistry();
+            IExtensionRegistry registry = RegistryFactory.getRegistry();
             monitor.beginTask(getDescription(), extensionPoints.length);
             for (int i = 0; i < extensionPoints.length; i++) {
                 IExtensionPoint point = registry.getExtensionPoint(extensionPoints[i]);

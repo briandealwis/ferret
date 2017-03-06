@@ -1,18 +1,17 @@
 package ca.ubc.cs.ferret.model;
 
-import java.util.Map;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import ca.ubc.cs.ferret.model.AbstractSphere.AbstractRelationResolvingState;
-import ca.ubc.cs.ferret.types.FerretObject;
 import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.ferret.types.FerretObject;
+import java.util.Map;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface ISphere {
 
 	/**
-	 * Perform a relation by the given name.  Arguments will be converted to instances of
-	 * @{link FerretObject} with fidelity of {@link Fidelity.Exact}
+	 * Perform a relation by the given name. Arguments will be converted to
+	 * instances of {@link FerretObject} with fidelity of {@link Fidelity.Exact}
+	 * 
 	 * @param monitor
 	 * @param relationName
 	 * @param arguments

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.jface.util.ListenerList;
+import org.eclipse.core.runtime.ListenerList;
 
 import ca.ubc.cs.ferret.model.ISphereFactory;
 
@@ -20,7 +20,7 @@ public abstract class AbstractItemSelectionModel<T,L> {
 	public AbstractItemSelectionModel() {}
 	protected List<T> unselected = new ArrayList<T>();
 	protected List<T> selected = new ArrayList<T>();
-	protected ListenerList listeners = new ListenerList();
+	protected ListenerList<L> listeners = new ListenerList<>();
 
 	abstract protected void notifyListener(L listener);
 

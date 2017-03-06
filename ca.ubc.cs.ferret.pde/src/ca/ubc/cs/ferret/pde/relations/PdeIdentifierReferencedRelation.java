@@ -11,13 +11,14 @@ import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.collections15.MultiMap;
 import org.eclipse.pde.core.plugin.IPluginAttribute;
 import org.eclipse.pde.core.plugin.IPluginElement;
 import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.IPluginParent;
+
+import com.google.common.collect.Multimap;
 
 import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
 import ca.ubc.cs.ferret.pde.PdeIdentifier;
@@ -44,7 +45,7 @@ public class PdeIdentifierReferencedRelation extends
 	    		String pluginId = PdeModelHelper.getDefault().getPluginId(pluginModel);
 	    		monitor.subTask("Examining extensions in " + pluginId);
 	
-	    		MultiMap<IPluginExtension,IPluginObject> extensions =
+	    		Multimap<IPluginExtension,IPluginObject> extensions =
 	    			PdeModelHelper.getDefault().getExtensions(pluginModel);
 	    		for(IPluginExtension ext : extensions.keySet()) {
 	    			for(IPluginObject child : extensions.get(ext)) {

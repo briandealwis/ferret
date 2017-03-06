@@ -14,8 +14,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 public class AttributeSource implements IAttributeSource {
     
-    protected Map<String, IClassifier> map = new HashMap<String, IClassifier>();
-    protected Map<String, String> descriptions = new HashMap<String, String>();
+    protected Map<String, IClassifier> map = new HashMap<>();
+    protected Map<String, String> descriptions = new HashMap<>();
     
     public AttributeSource() {
     }

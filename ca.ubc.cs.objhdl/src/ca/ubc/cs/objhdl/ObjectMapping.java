@@ -5,8 +5,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IRegistryChangeEvent;
 import org.eclipse.core.runtime.IRegistryChangeListener;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
@@ -45,7 +45,7 @@ public class ObjectMapping extends Plugin implements IRegistryChangeListener {
 	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		Platform.getExtensionRegistry().removeRegistryChangeListener(this);
+		RegistryFactory.getRegistry().removeRegistryChangeListener(this);
 		mapper = null;
 		ClassLookupCache.stop();
 		plugin = null;
@@ -67,7 +67,7 @@ public class ObjectMapping extends Plugin implements IRegistryChangeListener {
 	
 	public IObjectMapper internalGetPlatformMapper() {
 		if(mapper == null) {
-			Platform.getExtensionRegistry().addRegistryChangeListener(this, PLUGIN_ID);
+			RegistryFactory.getRegistry().addRegistryChangeListener(this, PLUGIN_ID);
 			mapper = buildPlatformMapper(); 
 		}
 		return mapper;
@@ -75,7 +75,7 @@ public class ObjectMapping extends Plugin implements IRegistryChangeListener {
 
 	protected IObjectMapper buildPlatformMapper() {
 		CompositeMapper newMapper = new CompositeMapper();
-		for(IConfigurationElement ce : Platform.getExtensionRegistry().getConfigurationElementsFor(mappersExtensionPoint)) {
+		for(IConfigurationElement ce : RegistryFactory.getRegistry().getConfigurationElementsFor(mappersExtensionPoint)) {
 			if(!"mapper".equals(ce.getName())) {
 				getLog().log(new Status(IStatus.WARNING, ce.getNamespaceIdentifier(), -1,
 						"Unknown configuration element '" + ce.getName() + "' for " + mappersExtensionPoint, null));

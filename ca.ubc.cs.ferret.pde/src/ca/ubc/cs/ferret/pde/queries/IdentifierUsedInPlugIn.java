@@ -7,7 +7,6 @@ package ca.ubc.cs.ferret.pde.queries;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.apache.commons.collections15.MultiMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.pde.core.plugin.IPluginAttribute;
 import org.eclipse.pde.core.plugin.IPluginElement;
@@ -16,6 +15,8 @@ import org.eclipse.pde.core.plugin.IPluginExtensionPoint;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.IPluginParent;
+
+import com.google.common.collect.Multimap;
 
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.clustering.StupidlySimpleRelation;
@@ -54,7 +55,7 @@ public class IdentifierUsedInPlugIn extends PdeSingleParmConceptualQuery<PdeIden
         		String pluginId = PdeModelHelper.getDefault().getPluginId(pluginModel);
         		monitor.subTask("Examining extensions in " + pluginId);
 
-        		MultiMap<IPluginExtension,IPluginObject> extensions =
+        		Multimap<IPluginExtension,IPluginObject> extensions =
         			PdeModelHelper.getDefault().getExtensions(pluginModel);
         		for(IPluginExtension ext : extensions.keySet()) {
         			for(IPluginObject child : extensions.get(ext)) {

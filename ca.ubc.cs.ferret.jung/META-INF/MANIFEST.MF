@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ca.ubc.cs.ferret.jung
+Bundle-Version: 2.1.1.qualifier
+Bundle-Name: JUNG Dependencies for Ferret
+Bundle-Vendor: University of British Columbia
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/jung-algorithms.jar,
+ lib/jung-api.jar,
+ lib/jung-graph-impl.jar
+Export-Package: edu.uci.ics.jung.algorithms.blockmodel;version="2.1.1",
+ edu.uci.ics.jung.algorithms.cluster;version="2.1.1",
+ edu.uci.ics.jung.algorithms.filters;version="2.1.1",
+ edu.uci.ics.jung.algorithms.flows;version="2.1.1",
+ edu.uci.ics.jung.algorithms.generators;version="2.1.1",
+ edu.uci.ics.jung.algorithms.generators.random;version="2.1.1",
+ edu.uci.ics.jung.algorithms.importance;version="2.1.1",
+ edu.uci.ics.jung.algorithms.layout;version="2.1.1",
+ edu.uci.ics.jung.algorithms.layout.util;version="2.1.1",
+ edu.uci.ics.jung.algorithms.metrics;version="2.1.1",
+ edu.uci.ics.jung.algorithms.scoring;version="2.1.1",
+ edu.uci.ics.jung.algorithms.scoring.util;version="2.1.1",
+ edu.uci.ics.jung.algorithms.shortestpath;version="2.1.1",
+ edu.uci.ics.jung.algorithms.transformation;version="2.1.1",
+ edu.uci.ics.jung.algorithms.util;version="2.1.1",
+ edu.uci.ics.jung.graph;version="2.1.1",
+ edu.uci.ics.jung.graph.event;version="2.1.1",
+ edu.uci.ics.jung.graph.util;version="2.1.1"
+Import-Package: com.google.common.base;version="[19.0.0,22.0.0)",
+ com.google.common.cache;version="[19.0.0,22.0.0)",
+ com.google.common.collect;version="[19.0.0,22.0.0)"

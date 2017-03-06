@@ -53,12 +53,8 @@ Dependencies are provided under the following licenses:
       <import plugin="org.eclipse.pde.runtime"/>
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.core.expressions"/>
-      <import plugin="edu.uci.lcs.jung.algorithms" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="edu.uci.lcs.jung.api" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="edu.uci.lcs.jung.graph.impl" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.lang"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.update.configurator"/>
+      <import plugin="com.google.guava"/>
    </requires>
 
    <plugin
@@ -97,54 +93,9 @@ Dependencies are provided under the following licenses:
          unpack="false"/>
 
    <plugin
-         id="net.sourceforge.collections"
+         id="ca.ubc.cs.ferret.jung"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-<!--
-   <plugin
-         id="edu.oswego.cs.dl.util.concurrent"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
--->
-
-   <plugin
-         id="edu.uci.lcs.jung.algorithms"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.uci.lcs.jung.api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.uci.lcs.jung.graph.impl"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="cern.colt"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.commons.lang"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>

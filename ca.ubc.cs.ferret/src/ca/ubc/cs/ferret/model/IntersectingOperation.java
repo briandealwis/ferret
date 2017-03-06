@@ -5,10 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.commons.collections15.CollectionUtils;
-import org.apache.commons.collections15.iterators.EmptyIterator;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 
 import ca.ubc.cs.ferret.types.FerretObject;
 
@@ -36,7 +38,7 @@ public class IntersectingOperation extends RelationalFunction {
 
 	protected void computeIntersection() {
 		if(operations.isEmpty()) {
-			iterator = EmptyIterator.getInstance();
+			iterator = Iterators.forArray();
 			return;
 		}
 		List<Collection<FerretObject>> results = new ArrayList<Collection<FerretObject>>(operations.size());
@@ -47,9 +49,9 @@ public class IntersectingOperation extends RelationalFunction {
 			public int compare(Collection<FerretObject> o1, Collection<FerretObject> o2) {
 				return o1.size() - o2.size();
 			}});
-		Collection<FerretObject> intersection = results.remove(0);
+		Set<FerretObject> intersection = new LinkedHashSet<>(results.remove(0));
 		for(Collection<FerretObject> coll : results) {
-			intersection = CollectionUtils.intersection(intersection, coll);
+			intersection = Sets.intersection(intersection, new LinkedHashSet<>(coll));
 		}
 		iterator = intersection.iterator();
 	}

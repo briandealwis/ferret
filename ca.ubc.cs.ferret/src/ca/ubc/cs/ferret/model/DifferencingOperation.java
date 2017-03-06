@@ -3,10 +3,10 @@ package ca.ubc.cs.ferret.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.apache.commons.collections15.CollectionUtils;
-import org.apache.commons.collections15.iterators.EmptyIterator;
+import com.google.common.collect.Iterators;
 
 import ca.ubc.cs.ferret.types.FerretObject;
 
@@ -35,16 +35,16 @@ public class DifferencingOperation extends RelationalFunction {
 
 	protected void computeDifference() {
 		if(operations.isEmpty()) {
-			iterator = EmptyIterator.getInstance();
+			iterator = Iterators.forArray();
 			return;
 		}
 		List<Collection<FerretObject>> results = new ArrayList<Collection<FerretObject>>(operations.size());
 		for(IRelation op : operations) {
 			results.add(op.asCollection());
 		}
-		Collection<FerretObject> difference = results.remove(0);
+		Collection<FerretObject> difference = new LinkedHashSet<>(results.remove(0));
 		for(Collection<FerretObject> coll : results) {
-			difference = CollectionUtils.subtract(difference, coll);
+			difference.removeAll(coll);
 		}
 		iterator = difference.iterator();
 	}

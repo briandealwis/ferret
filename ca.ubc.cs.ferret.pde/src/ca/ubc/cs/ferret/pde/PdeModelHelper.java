@@ -1,5 +1,12 @@
 package ca.ubc.cs.ferret.pde;
 
+import ca.ubc.cs.ferret.FerretFatalError;
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.references.AbstractReference;
+import ca.ubc.cs.ferret.references.FileReference;
+import ca.ubc.cs.ferret.references.ZipEntryReference;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
@@ -32,7 +36,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IRegistryChangeEvent;
 import org.eclipse.core.runtime.IRegistryChangeListener;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.osgi.service.resolver.ExportPackageDescription;
@@ -68,17 +72,11 @@ import org.eclipse.pde.internal.core.plugin.ExternalPluginModelBase;
 import org.eclipse.pde.internal.core.plugin.PluginHandler;
 import org.eclipse.pde.internal.core.text.bundle.PackageObject;
 
-import ca.ubc.cs.ferret.FerretFatalError;
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.references.AbstractReference;
-import ca.ubc.cs.ferret.references.FileReference;
-import ca.ubc.cs.ferret.references.ZipEntryReference;
-
 public class PdeModelHelper implements IPluginModelListener, IRegistryChangeListener {
 	protected static PdeModelHelper singleton;
 
 	public Map<String,IPluginModelBase> models = null;
-	public Map<String,MultiMap<IPluginExtension,IPluginObject>> extensions = null;
+	public Map<String,Multimap<IPluginExtension,IPluginObject>> extensions = null;
 	public Map<String, IFeatureModel> features = null;
 
 	protected PdeModelHelper() {
@@ -112,7 +110,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	}
 
 	private IExtensionRegistry getExtensionRegistry() {
-		return Platform.getExtensionRegistry();
+		return RegistryFactory.getRegistry();
 	}
 	
 	public void modelsChanged(PluginModelDelta delta) {
@@ -168,9 +166,8 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		// models = null; extensions = null;
 		if(models != null && extensions != null && features != null) { return; }
 		Map<String,IPluginModelBase> models = new HashMap<String, IPluginModelBase>();
-		Map<String,MultiMap<IPluginExtension,IPluginObject>> extensions = 
-			new HashMap<String,MultiMap<IPluginExtension,IPluginObject>>();
-		Map<String, IFeatureModel> features = new HashMap<String, IFeatureModel>();
+		Map<String,Multimap<IPluginExtension,IPluginObject>> extensions = new HashMap<>();
+		Map<String, IFeatureModel> features = new HashMap<>();
 
 		// We create our own state to ensure that extensions are properly resolved
 		// Pieced together from PDECore.findPluginInHost(String), TargetPlatformHelper,
@@ -185,7 +182,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		for(IPluginModelBase pluginModel : getExternalPluginModels()) {
 			String pluginId = getPluginId(pluginModel);
 			models.put(pluginId, pluginModel);
-			MultiMap<IPluginExtension,IPluginObject> xm =
+			Multimap<IPluginExtension,IPluginObject> xm =
 				loadExtensions(pluginId, pluginModel);
 //			for(IPluginExtensionPoint extpt : pluginModel.getExtensions().getExtensionPoints()) {
 //				if(!extpt.getFullId().startsWith(pluginId)) {
@@ -203,7 +200,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		for(IPluginModelBase pluginModel : getPluginModelManager().getWorkspaceModels()) {
 			String pluginId = getPluginId(pluginModel);
 			models.put(pluginId, pluginModel);
-			MultiMap<IPluginExtension,IPluginObject> xm =
+			Multimap<IPluginExtension,IPluginObject> xm =
 				loadExtensions(pluginId, pluginModel);
 //			for(IPluginExtensionPoint extpt : pluginModel.getExtensions().getExtensionPoints()) {
 //				if(!extpt.getFullId().startsWith(pluginId)) {
@@ -282,12 +279,11 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		return null;
 	}
 
-	public MultiMap<IPluginExtension,IPluginObject> getExtensions(IPluginExtensionPoint point) {
+	public Multimap<IPluginExtension,IPluginObject> getExtensions(IPluginExtensionPoint point) {
 		verifyModelCaches();
 		String pointId = getFullId(point);
-		MultiMap<IPluginExtension,IPluginObject> xts =
-			new MultiHashMap<IPluginExtension,IPluginObject>();
-		for (MultiMap<IPluginExtension,IPluginObject> exts : extensions.values()) {
+		Multimap<IPluginExtension,IPluginObject> xts = HashMultimap.create();
+		for (Multimap<IPluginExtension,IPluginObject> exts : extensions.values()) {
 			for(IPluginExtension ext : exts.keySet()) {
 				if (pointId.equals(ext.getPoint())) {
 					xts.putAll(ext, exts.get(ext));
@@ -297,11 +293,11 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		return xts;
 	}
 
-	public MultiMap<IPluginExtension,IPluginObject> getExtensions(IPluginModelBase pluginModel) {
+	public Multimap<IPluginExtension,IPluginObject> getExtensions(IPluginModelBase pluginModel) {
 		verifyModelCaches();
 		String pluginId = getPluginId(pluginModel);
 		if(pluginId == null) { return null; }
-		MultiMap<IPluginExtension,IPluginObject> exts = extensions.get(pluginId);
+		Multimap<IPluginExtension,IPluginObject> exts = extensions.get(pluginId);
 		if(exts == null) { return null; }
 		return exts;
 	}
@@ -455,9 +451,8 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		throw new FerretFatalError("cannot determine feature id");
 	}
 
-	protected MultiMap<IPluginExtension,IPluginObject> loadExtensions(String pluginId, IPluginModelBase pmb) {
-		MultiMap<IPluginExtension,IPluginObject> result =
-			new MultiHashMap<IPluginExtension,IPluginObject>();
+	protected Multimap<IPluginExtension,IPluginObject> loadExtensions(String pluginId, IPluginModelBase pmb) {
+		Multimap<IPluginExtension,IPluginObject> result = HashMultimap.create();
 		if(pmb.getExtensions().getExtensions().length == 0) {
 			// nothing to do, so don't bother
 			return result;

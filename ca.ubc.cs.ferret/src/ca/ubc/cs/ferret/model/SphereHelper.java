@@ -4,7 +4,8 @@
  */
 package ca.ubc.cs.ferret.model;
 
-import org.apache.commons.collections15.Predicate;
+import java.util.function.Predicate;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -138,12 +139,12 @@ public abstract class SphereHelper {
 		try { 
 			while(startIndex > 0) {
 				char ch = document.getChar(startIndex - 1); 
-				if(!bounds.evaluate(ch)) { break; }
+				if(!bounds.test(ch)) { break; }
 				startIndex--;
 			}
 			while(stopIndex + 1 < docLength) {
 				char ch = document.getChar(stopIndex + 1); 
-				if(!bounds.evaluate(ch)) { break; }
+				if(!bounds.test(ch)) { break; }
 				stopIndex++;
 			}
 			return new TextSelection(document, startIndex, stopIndex - startIndex + 1);

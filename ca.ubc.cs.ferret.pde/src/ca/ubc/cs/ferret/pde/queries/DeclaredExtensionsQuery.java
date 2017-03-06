@@ -1,12 +1,6 @@
 package ca.ubc.cs.ferret.pde.queries;
 
-import java.util.Collection;
-
-import org.apache.commons.collections15.MultiMap;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.pde.core.plugin.IPluginExtension;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
-import org.eclipse.pde.core.plugin.IPluginObject;
 
 import ca.ubc.cs.clustering.StupidlySimpleRelation;
 import ca.ubc.cs.ferret.FerretPlugin;

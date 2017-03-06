@@ -3,12 +3,13 @@ package ca.ubc.cs.ferret.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.commons.collections15.CollectionUtils;
-import org.apache.commons.collections15.iterators.EmptyIterator;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 
 import ca.ubc.cs.ferret.types.FerretObject;
 
@@ -39,20 +40,17 @@ public class DisjunctingOperation extends RelationalFunction {
 
 	protected void computeDisjunction() {
 		if(operations.isEmpty()) {
-			iterator = EmptyIterator.getInstance();
+			iterator = Iterators.forArray();
 			return;
 		}
 		List<Collection<FerretObject>> results = new ArrayList<Collection<FerretObject>>(operations.size());
 		for(IRelation op : operations) {
 			results.add(op.asCollection());
 		}
-		Collections.sort(results, new Comparator<Collection<FerretObject>>() {
-			public int compare(Collection<FerretObject> o1, Collection<FerretObject> o2) {
-				return o1.size() - o2.size();
-			}});
-		Collection<FerretObject> disjunction = results.remove(0);
+		Collections.sort(results, (o1, o2) -> o1.size() - o2.size());
+		Set<FerretObject> disjunction = new LinkedHashSet<>(results.remove(0));
 		for(Collection<FerretObject> coll : results) {
-			disjunction = CollectionUtils.disjunction(disjunction, coll);
+			disjunction = Sets.symmetricDifference(disjunction, new LinkedHashSet<>(coll));
 		}
 		iterator = disjunction.iterator();
 	}

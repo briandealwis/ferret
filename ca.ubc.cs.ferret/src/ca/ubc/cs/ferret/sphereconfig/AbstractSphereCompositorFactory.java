@@ -78,8 +78,7 @@ public abstract class AbstractSphereCompositorFactory
 	
 	public abstract IStatus canCreateCompositor();
 
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
 		return null;
 	}
 

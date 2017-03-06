@@ -4,7 +4,6 @@
  */
 package ca.ubc.cs.ferret.jdt;
 
-import org.apache.commons.collections15.Predicate;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugException;
@@ -103,18 +102,15 @@ public class JdtSphereHelper extends SphereHelper {
 		ISelection selection = provider.getSelection();
 		if(selection instanceof ITextSelection) {
 			ITextSelection ts = (ITextSelection)selection;
-			if(ts.getLength() > 0 || (ts = expandTextSelection(editor, ts, getJavaIdentifierPredicate())) != null) {
+			if(ts.getLength() > 0 || (ts = expandTextSelection(editor, ts, JdtSphereHelper::isJavaIdentifier)) != null) {
 				return getSelectedObjects(ts);
 			}
 		}
         return null;
     }
     
-    protected Predicate<Character> getJavaIdentifierPredicate() {
-    	return new Predicate<Character>() {
-			public boolean evaluate(Character ch) {
-				return Character.isLetterOrDigit(ch) || ch == '.';
-			}};
+    protected static boolean isJavaIdentifier(Character ch) {
+    	return Character.isLetterOrDigit(ch) || ch == '.';
     }
     
     protected Object[] getSelectedObjects(ITextSelection ts) {

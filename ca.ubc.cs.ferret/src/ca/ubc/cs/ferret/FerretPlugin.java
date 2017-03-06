@@ -1,5 +1,12 @@
 package ca.ubc.cs.ferret;
 
+import ca.ubc.cs.ferret.model.SphereHelper;
+import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
+import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.ferret.types.FerretObject;
+import ca.ubc.cs.ferret.types.TypesConversionManager;
+import ca.ubc.cs.ferret.util.JobManager;
+import ca.ubc.cs.ferret.views.DossierConstants;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -7,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -16,6 +22,7 @@ import org.eclipse.core.runtime.IRegistryChangeEvent;
 import org.eclipse.core.runtime.IRegistryChangeListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -31,14 +38,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import ca.ubc.cs.ferret.model.SphereHelper;
-import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
-import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
-import ca.ubc.cs.ferret.types.FerretObject;
-import ca.ubc.cs.ferret.types.TypesConversionManager;
-import ca.ubc.cs.ferret.util.JobManager;
-import ca.ubc.cs.ferret.views.DossierConstants;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -108,7 +107,7 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		Platform.getExtensionRegistry().addRegistryChangeListener(this, pluginID);
+    RegistryFactory.getRegistry().addRegistryChangeListener(this, pluginID);
 //        Consultancy.getDefault().activate();
 		if(getPreferenceStore().contains(IFerretPreferenceConstants.PREF_DOSSIER_FONT)) {
 			FontData fontData[] = PreferenceConverter.getFontDataArray(getPreferenceStore(), IFerretPreferenceConstants.PREF_DOSSIER_FONT);
@@ -126,7 +125,7 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
 		if(plugin == this) {
 			plugin = null;
 		}
-		Platform.getExtensionRegistry().removeRegistryChangeListener(this);
+		RegistryFactory.getRegistry().removeRegistryChangeListener(this);
         Consultancy.shutdown();
         // getSpheres() may recreate the sphereHelpers, causing problems on
         // shutdown.  Downstream plugins are responsible for shutting down
@@ -306,7 +305,7 @@ public class FerretPlugin extends AbstractUIPlugin implements IRegistryChangeLis
         
         List<SphereHelper> foundSphereHelpers = new ArrayList<SphereHelper>();
         for(IConfigurationElement element : 
-        		Platform.getExtensionRegistry().getConfigurationElementsFor(pluginID, sphereHelpersExtensionPointId)) {
+        		RegistryFactory.getRegistry().getConfigurationElementsFor(pluginID, sphereHelpersExtensionPointId)) {
         	if(!element.getName().equals(SPHERE_HELPER_ELEMENT)) {
         		FerretPlugin.log(new Status(IStatus.ERROR, element.getNamespaceIdentifier(),
         				FerretErrorConstants.CONFIGURATION_ERROR,

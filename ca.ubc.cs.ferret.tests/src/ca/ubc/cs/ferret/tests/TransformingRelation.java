@@ -1,9 +1,9 @@
 package ca.ubc.cs.ferret.tests;
 
 import java.util.Iterator;
+import java.util.function.Function;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.iterators.ArrayIterator;
+import com.google.common.collect.Iterators;
 
 import ca.ubc.cs.ferret.model.AbstractToolRelation;
 import ca.ubc.cs.ferret.types.ConversionResult;
@@ -16,17 +16,16 @@ public class TransformingRelation<T> extends AbstractToolRelation {
 	};
 
 	protected Class<T> clazz;
-	protected Transformer<T,?> transformer;
+	protected Function<T,?> transformer;
 	protected Iterator<FerretObject> iterator;
 	protected ItemTreatment argumentTreatment = ItemTreatment.PassThroughNonConformant;
 	
-	public TransformingRelation(Class<T> c, Transformer<T,?> t) {
+	public TransformingRelation(Class<T> c, Function<T,?> t) {
 		clazz = c;
 		transformer = t;
 	}
 	
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected boolean configure(FerretObject... arguments) {
 		if(argumentTreatment == ItemTreatment.AllMustBeConformant) {
@@ -37,7 +36,7 @@ public class TransformingRelation<T> extends AbstractToolRelation {
 				}
 			}
 		}
-		iterator = new ArrayIterator<FerretObject>(arguments);
+		iterator = Iterators.forArray(arguments);
 		return true;
 	}
 
@@ -53,7 +52,7 @@ public class TransformingRelation<T> extends AbstractToolRelation {
 			return argumentTreatment == ItemTreatment.PassThroughNonConformant
 					? fo : null;
 		}
-		return new FerretObject(transformer.transform(result.getSingleResult()), result.getFidelity(),
+		return new FerretObject(transformer.apply(result.getSingleResult()), result.getFidelity(),
 				fo.getSphere());
 	}
 

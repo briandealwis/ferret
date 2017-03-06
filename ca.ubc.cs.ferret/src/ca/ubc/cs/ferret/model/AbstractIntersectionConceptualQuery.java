@@ -1,17 +1,16 @@
 package ca.ubc.cs.ferret.model;
 
+import ca.ubc.cs.ferret.FerretErrorConstants;
+import ca.ubc.cs.ferret.FerretPlugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-
-import ca.ubc.cs.ferret.FerretErrorConstants;
-import ca.ubc.cs.ferret.FerretPlugin;
 
 public abstract class AbstractIntersectionConceptualQuery<IT,OT> extends
 		AbstractConceptualQuery {
@@ -61,6 +60,7 @@ public abstract class AbstractIntersectionConceptualQuery<IT,OT> extends
 	        		smallest = candidate;
 	        	}
 	        }
+			Assert.isNotNull(smallest);
 	        references.remove(smallest);
 	        for(OT e : smallest) {
 	        	boolean containedInAll = true;

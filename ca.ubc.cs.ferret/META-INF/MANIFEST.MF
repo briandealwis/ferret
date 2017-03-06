@@ -4,26 +4,27 @@ Bundle-Version: 0.5.0.qualifier
 Bundle-Name: Ferret
 Bundle-Vendor: University of British Columbia
 Bundle-Activator: ca.ubc.cs.ferret.FerretPlugin
-Require-Bundle: org.eclipse.jface,
- org.eclipse.jface.text,
- org.eclipse.core.runtime,
- org.eclipse.core.resources,
- org.eclipse.ui,
- org.eclipse.ui.workbench,
+Require-Bundle: org.eclipse.equinox.registry,
+ org.eclipse.swt;bundle-version="3.105.2",
+ org.eclipse.core.resources;bundle-version="3.11.1",
+ org.eclipse.core.commands;bundle-version="3.8.0",
+ org.eclipse.jface;bundle-version="3.12.1",
+ org.eclipse.ui.workbench;bundle-version="3.108.2",
+ org.eclipse.jface.text;bundle-version="3.11.2",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.10.1",
+ ca.ubc.cs.clustering;bundle-version="0.4.0",
+ org.eclipse.ui.ide;bundle-version="3.12.2",
  org.eclipse.ui.editors,
- org.eclipse.ui.ide,
- org.eclipse.search,
- ca.ubc.cs.clustering,
- ca.ubc.cs.objhdl,
- edu.uci.lcs.jung.api;bundle-version="2.0.0",
- edu.uci.lcs.jung.algorithms;bundle-version="2.0.0",
- edu.uci.lcs.jung.graph.impl;bundle-version="2.0.0"
-Import-Package: org.apache.commons.collections15,
- org.apache.commons.collections15.iterators,
- org.apache.commons.collections15.map,
- org.apache.commons.collections15.multimap,
- org.apache.commons.lang,
- org.apache.commons.lang.time
+ org.eclipse.core.jobs;bundle-version="3.8.0"
+Import-Package: ca.ubc.cs.objhdl,
+ com.google.common.base;version="[21,22)",
+ com.google.common.collect;version="[21,22)",
+ edu.uci.ics.jung.algorithms.shortestpath;version="[2.1.1,2.2)",
+ edu.uci.ics.jung.graph;version="[2.1.1,2.2)",
+ org.eclipse.core.runtime;version="3.5.0",
+ org.eclipse.core.runtime.content,
+ org.eclipse.search.ui,
+ org.osgi.framework;version="1.8.0"
 Export-Package: ca.ubc.cs.ferret,
  ca.ubc.cs.ferret.display,
  ca.ubc.cs.ferret.model,
@@ -33,6 +34,6 @@ Export-Package: ca.ubc.cs.ferret,
  ca.ubc.cs.ferret.types,
  ca.ubc.cs.ferret.util,
  ca.ubc.cs.ferret.views
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ManifestVersion: 2
 Bundle-ActivationPolicy: lazy

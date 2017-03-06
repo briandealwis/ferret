@@ -5,14 +5,15 @@ Bundle-SymbolicName: ca.ubc.cs.clustering;singleton:=true
 Bundle-Version: 0.4.0.qualifier
 Bundle-Activator: ca.ubc.cs.clustering.ClusteringPlugin
 Bundle-Vendor: UBC Computer Science
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.expressions
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.core.expressions,
+ org.eclipse.equinox.common;bundle-version="3.8.0",
+ org.eclipse.equinox.registry;bundle-version="3.6.100",
+ org.eclipse.core.runtime;bundle-version="3.12.0"
 Export-Package: ca.ubc.cs.clustering,
  ca.ubc.cs.clustering.attrs,
  ca.ubc.cs.clustering.utils
-Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Import-Package: org.apache.commons.collections15,
- org.apache.commons.collections15.multimap,
- org.eclipse.jface.resource
+Import-Package: org.eclipse.jface.resource,
+ org.osgi.framework;version="1.8.0",
+ com.google.common.collect;version="[21,22)"

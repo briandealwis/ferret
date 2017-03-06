@@ -4,6 +4,30 @@
  */
 package ca.ubc.cs.ferret.views;
 
+import ca.ubc.cs.clustering.Clustering;
+import ca.ubc.cs.clustering.IClusteringsContainer;
+import ca.ubc.cs.clustering.IClusteringsProvider;
+import ca.ubc.cs.ferret.Consultancy;
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.ICallback;
+import ca.ubc.cs.ferret.IConsultancyClient;
+import ca.ubc.cs.ferret.display.DwBaseObject;
+import ca.ubc.cs.ferret.display.DwConceptualQuery;
+import ca.ubc.cs.ferret.display.IDisplayObject;
+import ca.ubc.cs.ferret.model.Consultation;
+import ca.ubc.cs.ferret.model.IConceptualQuery;
+import ca.ubc.cs.ferret.model.ISphere;
+import ca.ubc.cs.ferret.model.ISphereFactory;
+import ca.ubc.cs.ferret.model.SphereHelper;
+import ca.ubc.cs.ferret.preferences.FerretPreferencePage;
+import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
+import ca.ubc.cs.ferret.references.AbstractReference;
+import ca.ubc.cs.ferret.sphereconfig.SphereConfigurationWizard;
+import ca.ubc.cs.ferret.types.FerretObject;
+import ca.ubc.cs.ferret.types.TypesConversionManager;
+import ca.ubc.cs.ferret.ui.WorkbenchAdapterLabelProvider;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,9 +37,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.collections15.MultiMap;
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
@@ -24,8 +45,9 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -41,7 +63,6 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.ListenerList;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -60,7 +81,7 @@ import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.search.ui.ISearchResultPage;
@@ -103,29 +124,6 @@ import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.NavigationHistory;
 import org.eclipse.ui.part.ViewPart;
 
-import ca.ubc.cs.clustering.Clustering;
-import ca.ubc.cs.clustering.IClusteringsContainer;
-import ca.ubc.cs.clustering.IClusteringsProvider;
-import ca.ubc.cs.ferret.Consultancy;
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.ICallback;
-import ca.ubc.cs.ferret.IConsultancyClient;
-import ca.ubc.cs.ferret.display.DwBaseObject;
-import ca.ubc.cs.ferret.display.DwConceptualQuery;
-import ca.ubc.cs.ferret.display.IDisplayObject;
-import ca.ubc.cs.ferret.model.Consultation;
-import ca.ubc.cs.ferret.model.IConceptualQuery;
-import ca.ubc.cs.ferret.model.ISphere;
-import ca.ubc.cs.ferret.model.ISphereFactory;
-import ca.ubc.cs.ferret.model.SphereHelper;
-import ca.ubc.cs.ferret.preferences.FerretPreferencePage;
-import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
-import ca.ubc.cs.ferret.references.AbstractReference;
-import ca.ubc.cs.ferret.sphereconfig.SphereConfigurationWizard;
-import ca.ubc.cs.ferret.types.FerretObject;
-import ca.ubc.cs.ferret.types.TypesConversionManager;
-import ca.ubc.cs.ferret.ui.WorkbenchAdapterLabelProvider;
-
 
 /**
  * A view on the results of the various conceptual queries issued against the current selection.
@@ -160,7 +158,7 @@ public class QueriesDossierView extends ViewPart
     protected TextToolTip toolTip;
     protected DossierDragNDropAdapter dndadapter;
     protected IMemento viewStateMemento;
-    protected ListenerList queryListeners = new ListenerList();
+    protected ListenerList<IQueryListener> queryListeners = new ListenerList<>();
     protected DossierLabelProvider labelProvider;
     protected DossierContentProvider contentProvider;
     protected Object toBeExpanded[];
@@ -188,7 +186,7 @@ public class QueriesDossierView extends ViewPart
     protected boolean selectionServiceRegistered = false;
     protected IPropertyChangeListener preferencesChangeListener;
 	protected ISphereFactory sphereFactory;
-	class NameSorter extends ViewerSorter {
+	class NameComparator extends ViewerComparator {
 
         @Override
         public int category(Object element) {
@@ -225,7 +223,7 @@ public class QueriesDossierView extends ViewPart
 	    viewer.getTree().setLinesVisible(true);
 		viewer.setContentProvider(contentProvider = new DossierContentProvider());
 		viewer.setLabelProvider(labelProvider = new DossierLabelProvider());
-		viewer.setSorter(new NameSorter());
+		viewer.setComparator(new NameComparator());
 		viewer.setInput(null);
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 //				new GridData(GridData.FILL_HORIZONTAL));
@@ -401,7 +399,7 @@ public class QueriesDossierView extends ViewPart
 
 	protected void configureQueryCommandIds() {
 		queryCommandIds = new HashSet<String>();
-        IExtensionPoint point = Platform.getExtensionRegistry()
+        IExtensionPoint point = RegistryFactory.getRegistry()
         	.getExtensionPoint(FerretPlugin.pluginID + "." + queryStimulantsExtensionPointId);
         for(IExtension extension : point.getExtensions()) {
             for(IConfigurationElement element : extension.getConfigurationElements()) {
@@ -628,7 +626,7 @@ public class QueriesDossierView extends ViewPart
                 clusteringChanged(container, selected);
              }});
         clusteringAction.add("no clustering", null);
-        MultiMap<IClusteringsProvider<T>, Clustering<T>> clusterings =
+        Multimap<IClusteringsProvider<T>, Clustering<T>> clusterings =
         	container.getAllClusterings();
         for(IClusteringsProvider<T> cf : clusterings.keySet()) {
         	clusteringAction.addSeparator();
@@ -889,7 +887,7 @@ public class QueriesDossierView extends ViewPart
 	}
 	protected boolean findPreferenceSubPages(Set<String> displayIds) {
 		boolean additionsMade = false;
-		for(IConfigurationElement elmt : Platform.getExtensionRegistry().getConfigurationElementsFor(PREFERENCE_PAGE_XP)) {
+		for(IConfigurationElement elmt : RegistryFactory.getRegistry().getConfigurationElementsFor(PREFERENCE_PAGE_XP)) {
 			if(elmt.getName().equals("page") && displayIds.contains(elmt.getAttribute("category"))
 					&& !displayIds.contains(elmt.getAttribute("id"))) {
 				displayIds.add(elmt.getAttribute("id"));
@@ -915,7 +913,7 @@ public class QueriesDossierView extends ViewPart
 	protected void removeSiblingsFromView() {
         ISelection sel = viewer.getSelection();
         if(sel == null || !(sel instanceof IStructuredSelection)) { return; }
-        MultiMap<IDisplayObject,Object> map = new MultiHashMap<IDisplayObject, Object>();
+        Multimap<IDisplayObject,Object> map = MultimapBuilder.hashKeys().arrayListValues().build();
         for(Iterator<?> it = ((IStructuredSelection)sel).iterator(); it.hasNext();) {
         	Object current = it.next();
     		if(current instanceof IDisplayObject) {

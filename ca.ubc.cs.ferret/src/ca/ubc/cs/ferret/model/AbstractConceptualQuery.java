@@ -7,9 +7,10 @@ package ca.ubc.cs.ferret.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.time.StopWatch;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
+
+import com.google.common.base.Stopwatch;
 
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.ferret.FerretPlugin;
@@ -73,8 +74,7 @@ public abstract class AbstractConceptualQuery
         try {
             if(monitor.isCanceled()) { return; }
             monitor.beginTask("Performing " + getClass() + ": " + getDescription(), 100);
-            StopWatch watch = new StopWatch();
-            watch.start();
+            Stopwatch watch = Stopwatch.createStarted();
             internalRun(new SubProgressMonitor(monitor, 50));
             watch.stop();
             if(FerretPlugin.hasDebugOption("timings")) {

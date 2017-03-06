@@ -2,7 +2,6 @@ package ca.ubc.cs.ferret.views;
 
 import java.util.Iterator;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,7 +23,8 @@ import ca.ubc.cs.ferret.display.DwObject;
 public class DossierDragNDropAdapter extends ViewerDropAdapter
 	implements DropTargetListener, DragSourceListener {
 
-    protected QueriesDossierView view;
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+	protected QueriesDossierView view;
 
     public DossierDragNDropAdapter(QueriesDossierView _view, Viewer viewer) {
         super(viewer);
@@ -165,7 +165,7 @@ public class DossierDragNDropAdapter extends ViewerDropAdapter
 			}
 			return unwrapped;
 		}
-		return ArrayUtils.EMPTY_OBJECT_ARRAY;
+		return EMPTY_OBJECT_ARRAY;
 	}
 
 }

@@ -39,8 +39,7 @@ public class URLReference extends AbstractReference {
             public IPersistableElement getPersistable() { return null; }
             public String getToolTipText() { return name; }
             
-            @SuppressWarnings("unchecked")
-			public Object getAdapter(Class adapter) {
+			public <T> T getAdapter(Class<T> adapter) {
                 System.out.println("URLReference asked to adapt to " + adapter.getName());
                 return null; }
         };
