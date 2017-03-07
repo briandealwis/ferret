@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+<!--
+  This product exists to bring in any required 3rd part,
+  but remains invisible.
+-->
+<product uid="ca.ubc.cs.ferret.dist" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="false">
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+   </launcherArgs>
+
+   <plugins>
+      <plugin id="com.google.guava"/>
+   </plugins>
+
+   <configurations>
+   </configurations>
+
+</product>
