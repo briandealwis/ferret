@@ -33,7 +33,7 @@
 		</conceptualQuery>
 	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.fields"
 		 		class="ca.ubc.cs.ferret.jdt.ClassFields"
-		 		category="declaration">
+		 		category="intra-class">
 	 		<parameter class="org.eclipse.jdt.core.IType" fidelity="approximate" />
 		</conceptualQuery>
 	 	<conceptualQuery id="ca.ubc.cs.ferret.jdt.superinterfaces"
