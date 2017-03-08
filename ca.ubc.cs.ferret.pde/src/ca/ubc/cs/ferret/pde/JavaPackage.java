@@ -1,5 +1,6 @@
 package ca.ubc.cs.ferret.pde;
 
+/** Representation of a named Java Package. */
 public class JavaPackage {
 	private String pkg;
 
