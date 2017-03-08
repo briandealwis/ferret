@@ -85,7 +85,7 @@
         class="ca.ubc.cs.ferret.pde.queries.BundlesExportingPackage"
         id="ca.ubc.cs.ferret.pde.bundlesexportingpackage">
 		 <parameter
-		   class="org.eclipse.pde.internal.core.text.bundle.PackageObject"
+		   class="ca.ubc.cs.ferret.pde.JavaPackage"
 		   count="+"
 		   fidelity="equivalent">
 		 </parameter>
@@ -95,7 +95,7 @@
         class="ca.ubc.cs.ferret.pde.queries.BundlesImportingPackage"
         id="ca.ubc.cs.ferret.pde.bundlesimportingpackage">
 		 <parameter
-		   class="org.eclipse.pde.internal.core.text.bundle.PackageObject"
+		   class="ca.ubc.cs.ferret.pde.JavaPackage"
 		   count="+"
 		   fidelity="equivalent">
 		 </parameter>

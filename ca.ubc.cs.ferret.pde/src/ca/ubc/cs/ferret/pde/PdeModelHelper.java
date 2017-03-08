@@ -70,7 +70,6 @@ import org.eclipse.pde.internal.core.plugin.ExternalFragmentModel;
 import org.eclipse.pde.internal.core.plugin.ExternalPluginModel;
 import org.eclipse.pde.internal.core.plugin.ExternalPluginModelBase;
 import org.eclipse.pde.internal.core.plugin.PluginHandler;
-import org.eclipse.pde.internal.core.text.bundle.PackageObject;
 
 public class PdeModelHelper implements IPluginModelListener, IRegistryChangeListener {
 	protected static PdeModelHelper singleton;
@@ -537,14 +536,14 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		return dependents;
 	}
 
-	public Collection<IPluginModelBase> getBundlesImporting(PackageObject pkg) {
+	public Collection<IPluginModelBase> getBundlesImporting(JavaPackage pkg) {
 		verifyModelCaches();
 		LinkedList<IPluginModelBase> importers = new LinkedList<IPluginModelBase>();
 		for(IPluginModelBase pmb : models.values()) {
 			ImportPackageSpecification[] imports =
 					pmb.getBundleDescription().getImportPackages();
 			for(ImportPackageSpecification dep : imports) {
-				if(pkg.getName().equals(dep.getName())) {
+				if (pkg.getPackage().equals(dep.getName())) {
 					importers.add(pmb);
 				}
 			}
@@ -552,14 +551,14 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		return importers;
 	}
 
-	public Collection<IPluginModelBase> getBundlesExporting(PackageObject pkg) {
+	public Collection<IPluginModelBase> getBundlesExporting(JavaPackage pkg) {
 		verifyModelCaches();
 		LinkedList<IPluginModelBase> exporters = new LinkedList<IPluginModelBase>();
 		for(IPluginModelBase pmb : models.values()) {
 			ExportPackageDescription[] exports =
 					pmb.getBundleDescription().getExportPackages();
 			for(ExportPackageDescription dep : exports) {
-				if(pkg.getName().equals(dep.getName())) {
+				if (pkg.getPackage().equals(dep.getName())) {
 					exporters.add(pmb);
 				}
 			}
