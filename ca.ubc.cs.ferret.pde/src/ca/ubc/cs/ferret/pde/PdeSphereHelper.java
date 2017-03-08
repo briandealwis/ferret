@@ -4,40 +4,7 @@
  */
 package ca.ubc.cs.ferret.pde;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.text.ITextSelection;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.pde.core.plugin.IPluginExtension;
-import org.eclipse.pde.core.plugin.IPluginExtensionPoint;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
-import org.eclipse.pde.core.plugin.IPluginObject;
-import org.eclipse.pde.core.plugin.ISharedPluginModel;
-import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
-import org.eclipse.pde.internal.core.plugin.PluginReference;
-import org.eclipse.pde.internal.ui.PDEPlugin;
-import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.ide.IDE;
-
 import ca.ubc.cs.ferret.FerretConfigurationException;
-import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.AbstractSphereFactory;
 import ca.ubc.cs.ferret.model.ISphere;
 import ca.ubc.cs.ferret.model.ISphereFactory;
@@ -52,9 +19,29 @@ import ca.ubc.cs.ferret.pde.relations.PdeIdentifierReferencedRelation;
 import ca.ubc.cs.ferret.pde.relations.PdePluginDeclaredExtensionPoints;
 import ca.ubc.cs.ferret.pde.relations.PdePluginDeclaredExtensions;
 import ca.ubc.cs.ferret.pde.relations.PdeTypesReferencedRelation;
-import ca.ubc.cs.ferret.references.FileReference;
-import ca.ubc.cs.ferret.references.ZipEntryReference;
 import ca.ubc.cs.ferret.views.ImageImageDescriptor;
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.pde.core.plugin.IPluginExtension;
+import org.eclipse.pde.core.plugin.IPluginExtensionPoint;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.core.plugin.IPluginObject;
+import org.eclipse.pde.core.plugin.ISharedPluginModel;
+import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
+import org.eclipse.pde.internal.core.plugin.PluginReference;
+import org.eclipse.pde.internal.ui.PDEPlugin;
+import org.eclipse.pde.internal.ui.editor.feature.FeatureEditor;
+import org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IEditorPart;
 
 public class PdeSphereHelper extends SphereHelper {
 
@@ -158,72 +145,25 @@ public class PdeSphereHelper extends SphereHelper {
 
 	@Override
 	public boolean openObject(Object element) {
-		if(element instanceof IPluginObject
-				&& ManifestEditor.open(element, false) != null) { return true; }
+		if (element instanceof IPluginObject && ManifestEditor.open(element, false) != null) {
+			return true;
+		}
+		if (element instanceof IPluginModelBase
+				&& ManifestEditor.openPluginEditor((IPluginModelBase) element) != null) {
+			return true;
+		}
+		if (element instanceof PluginReference
+				&& ManifestEditor.openPluginEditor(((PluginReference) element).getPlugin().getPluginModel()) != null) {
+			return true;
+		}
 
-		IResource underlyingResource = null;
-		String manifestFileName = null;
-		String installationLocation = null;
-		if(element instanceof IPluginModelBase) {
-			IPluginModelBase model = (IPluginModelBase)element;
-			underlyingResource = model.getUnderlyingResource();
-			manifestFileName = model.isFragmentModel() ? "fragment.xml" : "plugin.xml";
-			installationLocation = model.getInstallLocation();
-		} else if(element instanceof PluginReference) {
-			IPluginModelBase model =
-					((PluginReference)element).getPlugin().getPluginModel();
-			underlyingResource = model.getUnderlyingResource();
-			manifestFileName = model.isFragmentModel() ? "fragment.xml" : "plugin.xml";
-			installationLocation = model.getInstallLocation();
-		} else if(element instanceof IFeatureModel) {
-			IFeatureModel feature = (IFeatureModel)element;
-			underlyingResource = feature.getUnderlyingResource();
-			manifestFileName = "feature.xml";
-			installationLocation = feature.getInstallLocation();
+		if (element instanceof BundleDescription
+				&& ManifestEditor.openPluginEditor((BundleDescription) element) != null) {
+			return true;
 		}
-		IPath path = null;
-		if(underlyingResource != null) {
-			path = underlyingResource.getFullPath();
-		} else if(installationLocation != null) {
-			// ExternalPluginModelBase.getLocalFile() is useful
-			File f = new File(installationLocation);
-			if(f.exists()) {
-				if(f.isFile()) {
-					// then ref is a .jar plugin
-					try {
-						ZipEntryReference jfr =
-								new ZipEntryReference(f.getAbsolutePath(),
-										manifestFileName, -1, -1);
-						return jfr.open();
-					} catch(IOException e) {
-						return false;
-					}
-				} else if(f.isDirectory()) {
-					path = Path.fromOSString(installationLocation);
-					path = path.append(manifestFileName);
-				}
-			}
-		}
-		if(path != null) {
-			// Try to resolve the path as within the workspace:
-			// findFilesForLocation() works
-			// for absolute files that reference files in the workspace
-			IFile files[] =
-					ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(path);
-			for(IFile file : files) {
-				if(file.exists()) {
-					IWorkbenchPage p =
-							FerretPdePlugin.getDefault().getWorkbench()
-									.getActiveWorkbenchWindow().getActivePage();
-					try {
-						if(IDE.openEditor(p, file, true) != null) { return true; }
-					} catch(PartInitException e) {
-						FerretPlugin.log(e);
-					}
-				}
-			}
-			// Open the file as an external-to-the-workspace file
-			if(new FileReference(path).open()) { return true; }
+		if (element instanceof IFeatureModel) {
+			FeatureEditor.openFeatureEditor((IFeatureModel) element);
+			return true;
 		}
 		return super.openObject(element);
 	}
