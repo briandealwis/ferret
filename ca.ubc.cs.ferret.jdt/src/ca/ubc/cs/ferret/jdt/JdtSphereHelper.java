@@ -4,6 +4,10 @@
  */
 package ca.ubc.cs.ferret.jdt;
 
+import ca.ubc.cs.ferret.model.ISphereFactory;
+import ca.ubc.cs.ferret.model.SphereHelper;
+import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import ca.ubc.cs.ferret.types.TypesConversionManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugException;
@@ -28,11 +32,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
-
-import ca.ubc.cs.ferret.model.ISphereFactory;
-import ca.ubc.cs.ferret.model.SphereHelper;
-import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
-import ca.ubc.cs.ferret.types.TypesConversionManager;
 
 public class JdtSphereHelper extends SphereHelper {
     protected static JdtSphereHelper singleton;
@@ -150,8 +149,18 @@ public class JdtSphereHelper extends SphereHelper {
     public String getLabel(Object object) {
         if(object instanceof IMethod) {
             IMethod m = (IMethod)object;
-            return javaMinimalLabelProvider.getText(m.getDeclaringType())
-                +"." + javaMinimalLabelProvider.getText(m);
+			String methodLabel = javaMinimalLabelProvider.getText(m.getDeclaringType()) + "."
+					+ javaMinimalLabelProvider.getText(m);
+			try {
+				IType type = m.getDeclaringType();
+				if (type.isAnonymous()) {
+					return type.getTypeQualifiedName() + " - " + methodLabel;
+				}
+			} catch (JavaModelException e) {
+				// ignore
+			}
+
+			return methodLabel;
         } else if(object instanceof IField) {
             IField f = (IField)object;
             return javaMinimalLabelProvider.getText(f.getDeclaringType())+ "." 
@@ -160,6 +169,16 @@ public class JdtSphereHelper extends SphereHelper {
         		&& !(object instanceof JarPackageFragmentRoot)) {
         	IPackageFragmentRoot pfr = (IPackageFragmentRoot)object;
         	return pfr.getParent().getElementName() + "/" + pfr.getElementName();  
+		} else if (object instanceof IType) {
+			try {
+				IType type = (IType) object;
+				if (type.isAnonymous()) {
+					return type.getTypeQualifiedName() + " - " + javaLabelProvider.getText(type);
+				}
+			} catch (JavaModelException e) {
+				// ignore
+			}
+			return javaLabelProvider.getText(object);
         } else if(object instanceof IJavaElement) {
         	return javaLabelProvider.getText(object);
         } else if(object instanceof IJavaStackFrame) {
