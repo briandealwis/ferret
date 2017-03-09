@@ -8,6 +8,7 @@ import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.clustering.IClusteringsContainer;
 import ca.ubc.cs.clustering.IClusteringsProvider;
 import ca.ubc.cs.ferret.Consultancy;
+import ca.ubc.cs.ferret.FerretConfigurationException;
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.ICallback;
 import ca.ubc.cs.ferret.IConsultancyClient;
@@ -41,9 +42,11 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -186,6 +189,7 @@ public class QueriesDossierView extends ViewPart
     protected boolean selectionServiceRegistered = false;
     protected IPropertyChangeListener preferencesChangeListener;
 	protected ISphereFactory sphereFactory;
+
 	class NameComparator extends ViewerComparator {
 
         @Override
@@ -606,12 +610,58 @@ public class QueriesDossierView extends ViewPart
         manager.add(collapseAllAction);
         manager.add(new Separator());
         manager.add(launchConfigWizardAction);
+		for (ISphereFactory factory : getConfiguredSphereFactories()) {
+			Action action = new Action() {
+				@Override
+				public void run() {
+					try {
+						setSphere(factory);
+					} catch (FerretConfigurationException ex) {
+						ex.printStackTrace();
+					}
+				}
+			};
+			action.setText(" " + factory.getDescription());
+			manager.add(action);
+		}
+
+		manager.add(new Separator());
         manager.add(openPreferencesAction);
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
         if(FerretPlugin.getDefault().isDebugging()) {
             manager.add(new Separator());
 			manager.add(debugResetSpheres);
         }
+	}
+
+	/**
+	 * @param factory
+	 */
+	protected void setSphere(ISphereFactory factory) throws FerretConfigurationException {
+		this.sphereFactory = factory;
+		this.sphere = factory.createSphere(new NullProgressMonitor());
+		consultancyReset();
+	}
+
+	/**
+	 */
+	private Collection<ISphereFactory> getConfiguredSphereFactories() {
+		IExtensionRegistry registry = getExtensionRegistry();
+		List<ISphereFactory> factories = new ArrayList<>();
+		for (IConfigurationElement ce : registry.getConfigurationElementsFor("ca.ubc.cs.ferret.sphereConfigurations")) {
+			if ("factory".equals(ce.getName())) {
+				try {
+					factories.add((ISphereFactory) ce.createExecutableExtension("class"));
+				} catch (CoreException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+		return factories;
+	}
+
+	private IExtensionRegistry getExtensionRegistry() {
+		return getSite().getService(IExtensionRegistry.class);
 	}
 
 	protected <T> void addClusteringActions(final IClusteringsContainer<T> container,
@@ -868,8 +918,8 @@ public class QueriesDossierView extends ViewPart
 	      sphereFactory = wizard.getSphereFactoryRoot();
 	      for(Object o : queryListeners.getListeners()) {
 	    	  ((IQueryListener)o).reconfigured();
-	      }	      
-	      if((sphere = wizard.getSphere()) == null && result == WizardDialog.OK) {
+		}
+		if ((sphere == wizard.getSphere()) && result == WizardDialog.OK) {
 	    	  ErrorDialog.openError(getShell(), "Error", "Unable to create sphere", 
 	    			  new Status(IStatus.ERROR, FerretPlugin.pluginID, -1,
 	    					  wizard.getClass().getName() + ".getSphere() == null", null));

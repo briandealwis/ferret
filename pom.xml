@@ -30,6 +30,7 @@
     <module>ca.ubc.cs.ferret.pde</module>
     <module>ca.ubc.cs.ferret.tests</module>
     <module>ca.ubc.cs.ferret.jung</module>
+    <module>ca.ubc.cs.ferret.config.jdtpde</module>
 <!--
   Kenyon is no longer with us
     <module>ca.ubc.cs.ferret.kenyon</module>
