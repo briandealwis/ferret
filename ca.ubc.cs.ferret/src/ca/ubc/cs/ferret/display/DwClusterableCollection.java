@@ -1,17 +1,5 @@
 package ca.ubc.cs.ferret.display;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map.Entry;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
-
 import ca.ubc.cs.clustering.Cluster;
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.clustering.ClusteringPlugin;
@@ -20,6 +8,14 @@ import ca.ubc.cs.clustering.IClusteringsProvider;
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.util.AbstractJob;
 import ca.ubc.cs.ferret.util.IJob;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 
 public abstract class DwClusterableCollection<T> extends DwBaseObject 
 		implements IClusteringsContainer<T> {
@@ -133,13 +129,8 @@ public abstract class DwClusterableCollection<T> extends DwBaseObject
     }
 
     public int getNumberClusterings() {
-    	Multimap<IClusteringsProvider<T>,Clustering<T>> clusterings =
-    		getAllClusterings();
-    	int count = 0;
-    	for(Entry<IClusteringsProvider<T>, Clustering<T>> f : clusterings.entries()) {
-    		count += f.getValue().size();
-    	}
-		return count;
+		// Multimap.size() based on number of flattened (K,V) pairs
+		return clusterings.size();
 	}
 
 	public int getNumberElements() {
