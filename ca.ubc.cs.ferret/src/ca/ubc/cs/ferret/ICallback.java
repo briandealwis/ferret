@@ -10,6 +10,7 @@ package ca.ubc.cs.ferret;
  * @author bsd
  * @see java.lang.Runnable
  */
+@FunctionalInterface
 public interface ICallback<T> {
     /**
      * Run this runnable with the given argument.  The content of the argument
