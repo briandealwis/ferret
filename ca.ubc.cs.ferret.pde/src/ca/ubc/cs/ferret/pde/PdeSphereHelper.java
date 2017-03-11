@@ -1,30 +1,20 @@
-/*
- * Copyright 2005 by X.
- * @author bsd
- */
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.pde;
 
-import ca.ubc.cs.ferret.FerretConfigurationException;
-import ca.ubc.cs.ferret.model.AbstractSphereFactory;
-import ca.ubc.cs.ferret.model.ISphere;
 import ca.ubc.cs.ferret.model.ISphereFactory;
-import ca.ubc.cs.ferret.model.ObjectOrientedRelations;
-import ca.ubc.cs.ferret.model.Sphere;
 import ca.ubc.cs.ferret.model.SphereHelper;
-import ca.ubc.cs.ferret.pde.relations.AdaptableFromRelation;
-import ca.ubc.cs.ferret.pde.relations.AdaptableToRelation;
-import ca.ubc.cs.ferret.pde.relations.PdeExtensionPointExtensions;
-import ca.ubc.cs.ferret.pde.relations.PdeExtensionsExtensionPoint;
-import ca.ubc.cs.ferret.pde.relations.PdeIdentifierReferencedRelation;
-import ca.ubc.cs.ferret.pde.relations.PdePluginDeclaredExtensionPoints;
-import ca.ubc.cs.ferret.pde.relations.PdePluginDeclaredExtensions;
-import ca.ubc.cs.ferret.pde.relations.PdeTypesReferencedRelation;
 import ca.ubc.cs.ferret.views.ImageImageDescriptor;
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -176,52 +166,7 @@ public class PdeSphereHelper extends SphereHelper {
 	}
 
 	public ISphereFactory[] getSphereFactories() {
-		return new ISphereFactory[] { new AbstractSphereFactory() {
-
-			public String getId() {
-				return getClass().getName();
-			}
-
-			public String getDescription() {
-				return "Eclipse plugin-related queries (PDE)";
-			}
-
-			public IStatus canCreate() {
-				return Status.OK_STATUS;
-			}
-
-			public ISphere createSphere(IProgressMonitor monitor)
-					throws FerretConfigurationException {
-				Sphere tb = new Sphere("Eclipse PDE target image information");
-				tb.register(ObjectOrientedRelations.OP_TYPES_REFERENCED,
-						new PdeTypesReferencedRelation());
-				tb.register(OP_DECLARED_EXTENSION_POINTS,
-						new PdePluginDeclaredExtensionPoints(),
-						new PdeExtensionsExtensionPoint());
-				tb.register(OP_DECLARED_EXTENSIONS, new PdePluginDeclaredExtensions(),
-						new PdeExtensionPointExtensions());
-				tb.register(OP_IDENTIFIER_REFERENCED,
-						new PdeIdentifierReferencedRelation());
-				tb.register(OP_EXTENDED_BY, new PdeExtensionPointExtensions());
-				tb.register(OP_EXTENDS, new PdeExtensionsExtensionPoint());
-				tb.register(OP_ADAPTABLE_FROM, new AdaptableFromRelation());
-				tb.register(OP_ADAPTABLE_TO, new AdaptableToRelation());
-				return tb;
-			}
-
-			@SuppressWarnings("unchecked")
-			public <T> T getAdapter(Class<T> adapter) {
-				return null;
-			}
-
-			public ImageDescriptor getImageDescriptor() {
-				return FerretPdePlugin.getImageDescriptor("icons/pde-tb.gif");
-			}
-
-			public String getHelpContextId() {
-				return HCI_PDE_TB;
-			}
-		} };
+		return new ISphereFactory[] { new PdeSphereFactory() };
 
 	}
 

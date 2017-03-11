@@ -1,8 +1,15 @@
 package ca.ubc.cs.ferret.sphereconfig;
 
+import ca.ubc.cs.ferret.FerretConfigurationException;
+import ca.ubc.cs.ferret.FerretErrorConstants;
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.model.AbstractSphereFactory;
+import ca.ubc.cs.ferret.model.ISphere;
+import ca.ubc.cs.ferret.model.ISphereCompositor;
+import ca.ubc.cs.ferret.model.ISphereCompositorFactory;
+import ca.ubc.cs.ferret.model.ISphereFactory;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -12,16 +19,6 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-
-import ca.ubc.cs.ferret.FerretConfigurationException;
-import ca.ubc.cs.ferret.FerretErrorConstants;
-import ca.ubc.cs.ferret.FerretFatalError;
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.model.AbstractSphereFactory;
-import ca.ubc.cs.ferret.model.ISphere;
-import ca.ubc.cs.ferret.model.ISphereCompositor;
-import ca.ubc.cs.ferret.model.ISphereCompositorFactory;
-import ca.ubc.cs.ferret.model.ISphereFactory;
 
 public abstract class AbstractSphereCompositorFactory 
 		extends AbstractSphereFactory
@@ -77,10 +74,6 @@ public abstract class AbstractSphereCompositorFactory
 	}
 	
 	public abstract IStatus canCreateCompositor();
-
-	public <T> T getAdapter(Class<T> adapter) {
-		return null;
-	}
 
 	public String getId() {
 		return getClass().getName();

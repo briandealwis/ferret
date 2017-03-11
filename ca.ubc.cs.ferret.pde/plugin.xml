@@ -253,6 +253,15 @@
            objectType="org.eclipse.jdt.core.IMember" />
   </extension>
 
+   <extension
+         point="ca.ubc.cs.ferret.sphereConfigurations">
+      <factory
+            class="ca.ubc.cs.ferret.pde.ui.JdtPdeSphereFactory"
+            description="JDT+PDE"
+            id="jdt+pde">
+      </factory>
+   </extension>
+
     <extension point="org.eclipse.help.contexts">
         <contexts file="helpContexts.xml"  />
     </extension>

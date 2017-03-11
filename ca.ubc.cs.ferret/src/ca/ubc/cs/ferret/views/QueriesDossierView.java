@@ -8,6 +8,7 @@ import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.clustering.IClusteringsContainer;
 import ca.ubc.cs.clustering.IClusteringsProvider;
 import ca.ubc.cs.ferret.Consultancy;
+import ca.ubc.cs.ferret.FerretConfigurationException;
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.ICallback;
 import ca.ubc.cs.ferret.IConsultancyClient;
@@ -15,6 +16,7 @@ import ca.ubc.cs.ferret.display.DwBaseObject;
 import ca.ubc.cs.ferret.display.DwConceptualQuery;
 import ca.ubc.cs.ferret.display.IDisplayObject;
 import ca.ubc.cs.ferret.model.Consultation;
+import ca.ubc.cs.ferret.model.ExtensionSphereFactory;
 import ca.ubc.cs.ferret.model.IConceptualQuery;
 import ca.ubc.cs.ferret.model.ISphere;
 import ca.ubc.cs.ferret.model.ISphereFactory;
@@ -26,6 +28,7 @@ import ca.ubc.cs.ferret.sphereconfig.SphereConfigurationWizard;
 import ca.ubc.cs.ferret.types.FerretObject;
 import ca.ubc.cs.ferret.types.TypesConversionManager;
 import ca.ubc.cs.ferret.ui.WorkbenchAdapterLabelProvider;
+import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -44,6 +48,7 @@ import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -186,6 +191,7 @@ public class QueriesDossierView extends ViewPart
     protected boolean selectionServiceRegistered = false;
     protected IPropertyChangeListener preferencesChangeListener;
 	protected ISphereFactory sphereFactory;
+
 	class NameComparator extends ViewerComparator {
 
         @Override
@@ -605,7 +611,9 @@ public class QueriesDossierView extends ViewPart
         manager.add(expandCQsAction);
         manager.add(collapseAllAction);
         manager.add(new Separator());
-        manager.add(launchConfigWizardAction);
+		addSphereConfigurationSection(manager);
+
+		manager.add(new Separator());
         manager.add(openPreferencesAction);
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
         if(FerretPlugin.getDefault().isDebugging()) {
@@ -614,9 +622,58 @@ public class QueriesDossierView extends ViewPart
         }
 	}
 
+	/**
+	 * @param manager
+	 */
+	private void addSphereConfigurationSection(IMenuManager manager) {
+		IMenuManager sphereDefinitionMenu = new MenuManager("Predefined Spheres");
+		sphereDefinitionMenu.setRemoveAllWhenShown(true);
+		sphereDefinitionMenu.addMenuListener(m -> {
+			for (ISphereFactory factory : getConfiguredSphereFactories()) {
+				Action action = new Action(factory.getDescription()) {
+					@Override
+					public void run() {
+						try {
+							setSphere(factory);
+						} catch (FerretConfigurationException ex) {
+							FerretPlugin.log(ex);
+						}
+					}
+				};
+				action.setChecked(Objects.equals(sphereFactory, factory));
+				m.add(action);
+			}
+		});
+		manager.add(sphereDefinitionMenu);
+		manager.add(launchConfigWizardAction);
+	}
+
+	protected void setSphere(ISphereFactory factory) throws FerretConfigurationException {
+		this.sphereFactory = factory;
+		this.sphere = factory.createSphere(new NullProgressMonitor());
+		consultancyReset();
+	}
+
+	private Collection<ISphereFactory> getConfiguredSphereFactories() {
+		IExtensionRegistry registry = getExtensionRegistry();
+		List<ISphereFactory> factories = new ArrayList<>();
+		for (IConfigurationElement ce : registry.getConfigurationElementsFor("ca.ubc.cs.ferret.sphereConfigurations")) {
+			if ("factory".equals(ce.getName())) {
+				factories.add(new ExtensionSphereFactory(ce));
+			}
+		}
+		return factories;
+	}
+
+	private IExtensionRegistry getExtensionRegistry() {
+		return getSite().getService(IExtensionRegistry.class);
+	}
+
 	protected <T> void addClusteringActions(final IClusteringsContainer<T> container,
 			String title, IContributionManager manager) {
-        if(container.getAllClusterings() == null || container.getAllClusterings().isEmpty()) { return; }
+		if (container.getAllClusterings() == null || container.getAllClusterings().isEmpty()) {
+			return;
+		}
         SelectOneOfManyAction<Clustering<T>> clusteringAction = 
         	new SelectOneOfManyAction<Clustering<T>>(title);
         clusteringAction.addSelectionCallback(new ICallback<Clustering<T>>() {
@@ -860,7 +917,10 @@ public class QueriesDossierView extends ViewPart
 
 	protected void configureSpheres() {
 	      SphereConfigurationWizard wizard = new SphereConfigurationWizard();
-	      if(sphereFactory != null) { wizard.setSphereFactoryRoot(sphereFactory); }
+		if (sphereFactory != null) {
+			// .getAdapter(ISphereFactory) will unwrap ExtensionSphereFactory
+			wizard.setSphereFactoryRoot(sphereFactory.getAdapter(ISphereFactory.class));
+		}
 
 	      WizardDialog dialog = new WizardDialog(getShell(), wizard);
 	      int result = dialog.open();
@@ -868,8 +928,8 @@ public class QueriesDossierView extends ViewPart
 	      sphereFactory = wizard.getSphereFactoryRoot();
 	      for(Object o : queryListeners.getListeners()) {
 	    	  ((IQueryListener)o).reconfigured();
-	      }	      
-	      if((sphere = wizard.getSphere()) == null && result == WizardDialog.OK) {
+		}
+		if ((sphere == wizard.getSphere()) && result == WizardDialog.OK) {
 	    	  ErrorDialog.openError(getShell(), "Error", "Unable to create sphere", 
 	    			  new Status(IStatus.ERROR, FerretPlugin.pluginID, -1,
 	    					  wizard.getClass().getName() + ".getSphere() == null", null));
@@ -1203,6 +1263,17 @@ public class QueriesDossierView extends ViewPart
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 		viewStateMemento = memento;
+		try {
+			String sphereFactoryId = memento == null ? null : memento.getString("sphereFactory");
+			for (ISphereFactory factory : getConfiguredSphereFactories()) {
+				if (sphereFactoryId == null || sphereFactoryId.equals(factory.getId())) {
+					setSphere(factory);
+					break;
+				}
+			}
+		} catch (FerretConfigurationException ex) {
+			FerretPlugin.log(ex);
+		}
 	}
 	
 	public void saveState(IMemento memento) {
@@ -1210,6 +1281,9 @@ public class QueriesDossierView extends ViewPart
 		for(int i = 0; i < columns.length; i++) {
 			IMemento m = columnMemento.createChild("column" + i);
 			m.putInteger(MEMENTO_COLUMN_WIDTH, columnWidths[i]);
+		}
+		if (sphereFactory != null && !Strings.isNullOrEmpty(sphereFactory.getId())) {
+			memento.putString("sphereFactory", sphereFactory.getId());
 		}
 	}
 	

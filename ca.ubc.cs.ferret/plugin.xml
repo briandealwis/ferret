@@ -7,6 +7,7 @@
    <extension-point id="query_stimulants" name="Stimulants prompting queries" schema="schema/query_stimulants.exsd"/>
    <extension-point id="typeConverters" name="Ferret Type Converters" schema="schema/typeConverters.exsd"/>
    <extension-point id="scfs" name="Sphere Composition Functions" schema="schema/scfs.exsd"/>
+   <extension-point id="sphereConfigurations" name="Preconfigure Sphere Configurations" schema="schema/sphereConfigurations.exsd"/>
 
    <extension point="org.eclipse.ui.views">
       <category
