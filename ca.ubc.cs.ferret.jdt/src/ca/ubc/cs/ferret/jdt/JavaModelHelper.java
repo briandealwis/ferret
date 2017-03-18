@@ -4,6 +4,17 @@
  */
 package ca.ubc.cs.ferret.jdt;
 
+import ca.ubc.cs.ferret.EclipseFuture;
+import ca.ubc.cs.ferret.FerretErrorConstants;
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.model.ExtendibleSourceRange;
+import ca.ubc.cs.ferret.model.IExtendibleSourceRange;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,7 +29,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -59,19 +69,6 @@ import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.core.search.TypeReferenceMatch;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
-
-import ca.ubc.cs.ferret.EclipseFuture;
-import ca.ubc.cs.ferret.FerretErrorConstants;
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.model.ExtendibleSourceRange;
-import ca.ubc.cs.ferret.model.IExtendibleSourceRange;
 
 /**
  * Provide helper functions for reasoning using the java model. 
@@ -1308,10 +1305,12 @@ public class JavaModelHelper implements IElementChangedListener {
         if(type.getFullyQualifiedName().equals("java.lang.Throwable")) {
             return true;
         }
-        IType sups[] = getSupertypes(type, monitor);
+		IType sups[] = getAllSuperclasses(type, monitor);
         if(monitor.isCanceled()) { throw new OperationCanceledException(); }
         for(IType supertype : sups) {
-            if(supertype.getFullyQualifiedName().equals("java.lang.Throwable")) {
+			String supertypeFQN = supertype.getFullyQualifiedName();
+			if (supertypeFQN.equals("java.lang.Throwable") || supertypeFQN.equals("java.lang.Exception")
+					|| supertypeFQN.equals("java.lang.RuntimeException") || supertypeFQN.equals("java.lang.Error")) {
                 return true;
             }
         }
