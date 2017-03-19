@@ -1,5 +1,3 @@
-package ca.ubc.cs.ferret.cg;
-
 /*
  * Copyright (c) 2005, the JUNG Project and the Regents of the University of
  * California All rights reserved.
@@ -10,7 +8,16 @@ package ca.ubc.cs.ferret.cg;
  * Created on Aug 23, 2005
  */
 /* package edu.uci.ics.jung.visualization.renderers; */
+package ca.ubc.cs.ferret.cg;
 
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Context;
+import edu.uci.ics.jung.visualization.Layer;
+import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.renderers.VertexLabelRenderer;
+import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -18,17 +25,7 @@ import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.collections15.Transformer;
-
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.algorithms.util.Context;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.visualization.Layer;
-import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.VertexLabelRenderer;
-import edu.uci.ics.jung.visualization.renderers.Renderer;
-import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
+import java.util.function.Function;
 
 /**
  * Renders Vertex Labels, but can also supply Shapes for vertices.
@@ -42,7 +39,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
  * @param <E>
  */
 public class VertexLabelAsShapeRenderer<V,E> 
-	implements Renderer.VertexLabel<V,E>, Transformer<V,Shape> {
+		implements Renderer.VertexLabel<V, E>, Function<V, Shape> {
 
 	protected Map<V,Shape> shapes = new HashMap<V,Shape>();
 	protected RenderContext<V,E> rc;
@@ -54,7 +51,7 @@ public class VertexLabelAsShapeRenderer<V,E>
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getVertexFontTransformer().transform(vertex), isSelected, vertex);
+				rc.getVertexFontTransformer().apply(vertex), isSelected, vertex);
 	}
 
 	/**
@@ -67,7 +64,7 @@ public class VertexLabelAsShapeRenderer<V,E>
      */
     public void labelVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v, String label) {
     	Graph<V,E> graph = layout.getGraph();
-        if (rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v)) == false) {
+		if (rc.getVertexIncludePredicate().apply(Context.<Graph<V, E>, V>getInstance(graph, v)) == false) {
         	return;
         }
         GraphicsDecorator g = rc.getGraphicsContext();
@@ -78,7 +75,7 @@ public class VertexLabelAsShapeRenderer<V,E>
         int h_offset = -d.width / 2;
         int v_offset = -d.height / 2;
         
-        Point2D p = layout.transform(v);
+		Point2D p = layout.apply(v);
         p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
 
         int x = (int)p.getX();
@@ -91,8 +88,8 @@ public class VertexLabelAsShapeRenderer<V,E>
         shapes.put(v, bounds);
     }
 
-	public Shape transform(V v) {
-		Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), rc.getVertexLabelTransformer().transform(v),
+	public Shape apply(V v) {
+		Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), rc.getVertexLabelTransformer().apply(v),
 				rc.getPickedVertexState().isPicked(v), v);
         Dimension size = component.getPreferredSize();
         Rectangle bounds = new Rectangle(-size.width/2 -2, -size.height/2 -4, size.width+4, size.height + 6);

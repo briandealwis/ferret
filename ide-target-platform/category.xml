@@ -7,10 +7,16 @@
    <feature id="org.eclipse.m2e.wtp.sdk.feature" version="0.0.0"/>
    <feature id="org.eclipse.mylyn.commons" version="0.0.0"/>
    <feature id="org.eclipse.swtbot.eclipse" version="0.0.0"/>
+
    <bundle id="org.hamcrest" version="1.1.0.v20090501071000"/>
    <bundle id="com.google.guava" version="21.0.0"/>
    <bundle id="com.google.gson" version="2.7.0"/>
    <bundle id="jackson-core-asl" version="1.9.13"/>
    <bundle id="ch.qos.logback.slf4j" version="0.0.0"/>
    <bundle id="org.slf4j.log4j" version="0.0.0"/>
+
+   <bundle id="org.apache.batik.svggen" version="0.0.0"/>
+   <bundle id="org.apache.batik.dom" version="0.0.0"/>
+   <bundle id="org.apache.batik.dom.svg" version="0.0.0"/>
+   <bundle id="org.apache.batik.ext.awt" version="0.0.0"/>
 </site>
