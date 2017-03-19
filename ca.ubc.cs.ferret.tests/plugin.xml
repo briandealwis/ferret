@@ -20,20 +20,4 @@
         </parameter>
      </conceptualQuery>
  	</extension>
-   <extension
-         point="org.eclipse.ui.viewActions">
-      <viewContribution
-            id="qdv.show.conversion.graph"
-            targetID="ca.ubc.cs.ferret.views.QueriesDossier">
-         <action
-               class="ca.ubc.cs.ferret.cg.ShowConversionGraphAction"
-               id="qdv.scg.action"
-               label="Show Conversion &amp;Graph"
-               menubarPath="additions"
-               style="push">
-         </action>
-      </viewContribution>
-   </extension>
- 	
-
 </plugin>
