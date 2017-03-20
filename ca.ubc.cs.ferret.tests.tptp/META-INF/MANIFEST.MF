@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ferret TPTP/JDT tests
-Bundle-SymbolicName: ca.ubc.cs.ferret.tests.tptp
+Bundle-SymbolicName: ca.ubc.cs.ferret.tptp.tests
 Bundle-Version: 0.4.0.qualifier
 Bundle-Vendor: UBC Computer Science
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

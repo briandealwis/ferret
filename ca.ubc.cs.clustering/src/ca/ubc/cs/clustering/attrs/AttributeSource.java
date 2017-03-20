@@ -68,7 +68,9 @@ public class AttributeSource implements IAttributeSource {
 
 	public String describe(String attrName) {
     	IClassifier source = map.get(attrName);
-    	if(source == null) { return "(unknown)"; }		
+    	if(source == null) {
+    		return "(unknown)";
+		}		
 		return descriptions.get(attrName);
 	}
 
