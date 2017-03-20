@@ -2,7 +2,7 @@
 <feature
       id="ca.ubc.cs.ferret.feature"
       label="Ferret Program Explorer Base + JDT + PDE"
-      version="0.4.0.qualifier"
+      version="0.5.0.qualifier"
       provider-name="University of British Columbia">
    <install-handler/>
 
