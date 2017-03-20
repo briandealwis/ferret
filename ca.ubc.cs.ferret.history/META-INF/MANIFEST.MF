@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ferret Navigation History Plug-in
 Bundle-SymbolicName: ca.ubc.cs.ferret.history;singleton:=true
-Bundle-Version: 0.4.0.qualifier
+Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: ca.ubc.cs.ferret.history.FerretHistoryPlugin
 Bundle-Vendor: University of British Columbia
 Require-Bundle: ca.ubc.cs.ferret,

@@ -1,6 +1,6 @@
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ca.ubc.cs.ferret.tests;singleton:=true
-Bundle-Version: 0.4.0.qualifier
+Bundle-Version: 0.5.0.qualifier
 Bundle-Name: Ferret JUnit Tests Plug-in
 Bundle-Vendor: University of British Columbia
 Bundle-Activator: ca.ubc.cs.ferret.tests.FerretTestsPlugin
