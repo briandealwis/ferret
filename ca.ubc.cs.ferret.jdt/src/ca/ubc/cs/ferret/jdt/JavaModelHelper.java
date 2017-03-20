@@ -1025,12 +1025,9 @@ public class JavaModelHelper implements IElementChangedListener {
         ResultKey key = new ResultKey(KEY_CONSTRUCTOR_REFERENCES, type);
         return resolveCache(key, new Callable<Set<IMember>>() {
 			public Set<IMember> call() throws Exception {
-		        SearchPattern constructorPatterns =
-		            SearchPattern.createPattern(type.getFullyQualifiedName(), // + "(*)",
-		                IJavaSearchConstants.CONSTRUCTOR, IJavaSearchConstants.REFERENCES,
-		                SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
-		//            SearchPattern.createPattern(type, IJavaSearchConstants.REFERENCES,
-		//                SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
+				SearchPattern constructorPatterns = SearchPattern.createPattern(type.getFullyQualifiedName(),
+						IJavaSearchConstants.CONSTRUCTOR, IJavaSearchConstants.REFERENCES,
+						SearchPattern.R_EQUIVALENT_MATCH | SearchPattern.R_CASE_SENSITIVE);
 		        
 		        CollectingSearchRequestor requestor =  new CollectingSearchRequestor() {
 		            protected Object filterSearchMatch(SearchMatch match) throws CoreException {
