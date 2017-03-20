@@ -672,9 +672,7 @@ public class JavaModelHelper implements IElementChangedListener {
 		    			IJavaSearchConstants.TYPE,
 		    			IJavaSearchConstants.DECLARATIONS,
 		    			SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
-		    	// We tried using a JavaElement search scope, but it doesn't work
-		    	// often resolve the types
-		    	IJavaSearchScope scope = SearchEngine.createWorkspaceScope(); 
+				IJavaSearchScope scope = createSearchScope(referencingMember);
 		    	performSearch(pattern, scope, requestor, new NullProgressMonitor());
 		    	List<Object> results = new ArrayList<Object>(requestor.getValues());
 		    	if(results.size() > 1) {
@@ -686,13 +684,28 @@ public class JavaModelHelper implements IElementChangedListener {
     }
 
     /**
-     * Resolve the child type defined within the provided type.  Assumes <code>remainder</code>
-     * has no further $.
-     * @param parent the parent type
-     * @param fqParentName the parent's fully-qualified name
-     * @param simpleName the type name within the parent
-     * @return the resolved type, or null if not found
-     */
+	 * @param referencingMember
+	 * @return
+	 */
+	protected IJavaSearchScope createSearchScope(IJavaElement referencingMember) {
+		if (referencingMember == null) {
+			return SearchEngine.createWorkspaceScope();
+		}
+		return SearchEngine.createJavaSearchScope(new IJavaElement[] { referencingMember.getJavaProject() });
+	}
+
+	/**
+	 * Resolve the child type defined within the provided type. Assumes
+	 * <code>remainder</code> has no further $.
+	 * 
+	 * @param parent
+	 *            the parent type
+	 * @param fqParentName
+	 *            the parent's fully-qualified name
+	 * @param simpleName
+	 *            the type name within the parent
+	 * @return the resolved type, or null if not found
+	 */
     protected IType resolveEnclosedType(final IType parent, final String fqParentName, 
     		final String simpleName) {
     	if(parent == null) { return null; }
