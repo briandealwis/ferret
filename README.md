@@ -2,7 +2,7 @@
 
 ![A little ferret](site/src/main/resources/XenoFerret.jpg)
 
-Ferret is a software exploration tool.  Boild down to its essence,
+Ferret is a software exploration tool.  Boiled down to its essence,
 Ferrit is Eclipse Search on steroids.
 
 ![Ferret in action](site/src/main/resources/doc/ferret-demo.png)
