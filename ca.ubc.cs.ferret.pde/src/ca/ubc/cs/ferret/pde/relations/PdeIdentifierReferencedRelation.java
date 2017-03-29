@@ -1,5 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.pde.relations;
 
+import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
+import ca.ubc.cs.ferret.pde.PdeIdentifier;
+import ca.ubc.cs.ferret.pde.PdeModelHelper;
+import ca.ubc.cs.ferret.pde.PdeObject;
+import com.google.common.collect.Multimap;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,20 +25,12 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 import org.eclipse.pde.core.plugin.IPluginAttribute;
 import org.eclipse.pde.core.plugin.IPluginElement;
 import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.IPluginParent;
-
-import com.google.common.collect.Multimap;
-
-import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
-import ca.ubc.cs.ferret.pde.PdeIdentifier;
-import ca.ubc.cs.ferret.pde.PdeModelHelper;
-import ca.ubc.cs.ferret.pde.PdeObject;
 
 public class PdeIdentifierReferencedRelation extends
 		AbstractCollectionBasedRelation<PdeIdentifier> {

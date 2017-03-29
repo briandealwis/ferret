@@ -11,6 +11,7 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.tests.support;
 
+import ca.ubc.cs.ferret.FerretPlugin;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -27,8 +28,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.core.natures.PluginProject;
-
-import ca.ubc.cs.ferret.FerretPlugin;
 
 
 /**

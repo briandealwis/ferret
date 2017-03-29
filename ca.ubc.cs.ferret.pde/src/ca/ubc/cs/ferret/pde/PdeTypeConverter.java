@@ -1,5 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.pde;
 
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.model.ISphere;
+import ca.ubc.cs.ferret.types.AbstractTypeConverter;
+import ca.ubc.cs.ferret.types.ConversionException;
+import ca.ubc.cs.ferret.types.ConversionResult;
+import ca.ubc.cs.ferret.types.ConversionSpecification;
+import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -18,14 +35,6 @@ import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.core.plugin.ImportObject;
 import org.eclipse.pde.internal.core.text.bundle.PackageObject;
-
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.model.ISphere;
-import ca.ubc.cs.ferret.types.AbstractTypeConverter;
-import ca.ubc.cs.ferret.types.ConversionException;
-import ca.ubc.cs.ferret.types.ConversionResult;
-import ca.ubc.cs.ferret.types.ConversionSpecification;
-import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
 
 public class PdeTypeConverter extends AbstractTypeConverter {
 

@@ -1,18 +1,23 @@
-/*
- * Copyright 2004  X
- * @author bsd
- */
+/*******************************************************************************
+ * Copyright (c) 2004 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.jdt;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.Flags;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.JavaModelException;
 
 import ca.ubc.cs.ferret.model.IRelation;
 import ca.ubc.cs.ferret.model.ObjectOrientedRelations;
 import ca.ubc.cs.ferret.model.SimpleSolution;
 import ca.ubc.cs.ferret.types.FerretObject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * @author bsd
@@ -30,11 +35,6 @@ public class InterfaceMethodsSpecifyingClassMethod extends JavaRelatedConceptual
         }
     }
 
-    /* (non-Javadoc)
-     * @see ca.ubc.cs.queryguru.IConceptualQuery#run(org.eclipse.core.runtime.IProgressMonitor)
-     * @author bsd
-     * @since X
-     */
     protected void internalRun(IProgressMonitor monitor) {
         monitor.beginTask(getDescription(), 10);
         IRelation specifications = getSphere().resolve(monitor,
@@ -53,13 +53,6 @@ public class InterfaceMethodsSpecifyingClassMethod extends JavaRelatedConceptual
         monitor.done();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ca.ubc.cs.queryguru.IConceptualQuery#getDescription()
-     * @author bsd
-     * @since X
-     */
     public String getDescription() {
         return "interfaces specifying method"; 
     }

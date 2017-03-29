@@ -1,22 +1,27 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.jdt.ops;
 
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.jdt.JavaModelHelper;
+import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.debug.core.IJavaVariable;
-
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.jdt.JavaModelHelper;
-import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
 
 public class ShadowedFieldsRelation extends
 		AbstractCollectionBasedRelation<IJavaElement> {

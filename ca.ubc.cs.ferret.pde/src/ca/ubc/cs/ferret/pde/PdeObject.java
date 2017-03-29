@@ -1,5 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.pde;
 
+import ca.ubc.cs.ferret.FerretFatalError;
 import org.eclipse.pde.core.plugin.IPluginAttribute;
 import org.eclipse.pde.core.plugin.IPluginBase;
 import org.eclipse.pde.core.plugin.IPluginExtension;
@@ -8,8 +19,6 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.ISharedPluginModel;
 import org.eclipse.pde.internal.core.ibundle.IBundlePluginModelProvider;
-
-import ca.ubc.cs.ferret.FerretFatalError;
 
 /**
  * A wrapper around PDE Plugin Objects.  Sadly necessary as PDE

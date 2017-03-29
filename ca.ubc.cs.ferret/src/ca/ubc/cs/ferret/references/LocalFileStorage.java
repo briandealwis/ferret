@@ -10,11 +10,12 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.references;
 
+import ca.ubc.cs.ferret.FerretErrorConstants;
+import ca.ubc.cs.ferret.FerretPlugin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -22,9 +23,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.Status;
-
-import ca.ubc.cs.ferret.FerretErrorConstants;
-import ca.ubc.cs.ferret.FerretPlugin;
 
 /**
  * Implementation of storage for a local file (<code>java.io.File</code>).

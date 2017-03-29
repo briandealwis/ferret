@@ -21,8 +21,7 @@ Require-Bundle: ca.ubc.cs.ferret,
 Import-Package: com.google.common.cache;version="[21.0.0,22.0.0)",
  com.google.common.collect;version="[21.0.0,22.0.0)"
 Bundle-ActivationPolicy: lazy
-Export-Package: ca.ubc.cs.ferret.jdt,
- ca.ubc.cs.ferret.jdt.attributes,
- ca.ubc.cs.ferret.jdt.ops
-Bundle-ClassPath: .
+Export-Package: ca.ubc.cs.ferret.jdt;version="0.5.0",
+ ca.ubc.cs.ferret.jdt.attributes;version="0.5.0",
+ ca.ubc.cs.ferret.jdt.ops;version="0.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

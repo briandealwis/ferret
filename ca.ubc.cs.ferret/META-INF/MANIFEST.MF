@@ -25,15 +25,15 @@ Import-Package: ca.ubc.cs.objhdl,
  org.eclipse.core.runtime.content,
  org.eclipse.search.ui,
  org.osgi.framework;version="1.8.0"
-Export-Package: ca.ubc.cs.ferret,
- ca.ubc.cs.ferret.display,
- ca.ubc.cs.ferret.model,
- ca.ubc.cs.ferret.preferences,
- ca.ubc.cs.ferret.references,
- ca.ubc.cs.ferret.sphereconfig,
- ca.ubc.cs.ferret.types,
- ca.ubc.cs.ferret.util,
- ca.ubc.cs.ferret.views
+Export-Package: ca.ubc.cs.ferret;version="0.5.0",
+ ca.ubc.cs.ferret.display;version="0.5.0",
+ ca.ubc.cs.ferret.model;version="0.5.0",
+ ca.ubc.cs.ferret.preferences;version="0.5.0",
+ ca.ubc.cs.ferret.references;version="0.5.0",
+ ca.ubc.cs.ferret.sphereconfig;version="0.5.0",
+ ca.ubc.cs.ferret.types;version="0.5.0",
+ ca.ubc.cs.ferret.util;version="0.5.0",
+ ca.ubc.cs.ferret.views;version="0.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ManifestVersion: 2
 Bundle-ActivationPolicy: lazy

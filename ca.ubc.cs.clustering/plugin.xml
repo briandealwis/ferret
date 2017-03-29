@@ -17,7 +17,7 @@
     	      precedence="100"
     	      class="ca.ubc.cs.clustering.SqueezerClusteringFactory"
 	          synopsis="Squeezer Algorithm"
-	          description="Group related objects usingthe Squeezer single-level clustering algorithm" />
+	          description="Group related objects using the Squeezer single-level clustering algorithm" />
 -->
 	 </extension>
 

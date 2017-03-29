@@ -1,15 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.jdt;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.resource.ImageDescriptor;
-
 import ca.ubc.cs.ferret.FerretConfigurationException;
-import ca.ubc.cs.ferret.jdt.ops.AllSubclassesRelation;
 import ca.ubc.cs.ferret.jdt.ops.AllSubtypesRelation;
-import ca.ubc.cs.ferret.jdt.ops.AllSuperclassesRelation;
-import ca.ubc.cs.ferret.jdt.ops.AllSuperinterfacesRelation;
 import ca.ubc.cs.ferret.jdt.ops.AllSupertypesRelation;
 import ca.ubc.cs.ferret.jdt.ops.CastsToTypeRelation;
 import ca.ubc.cs.ferret.jdt.ops.CatchesExceptionRelation;
@@ -22,9 +24,8 @@ import ca.ubc.cs.ferret.jdt.ops.DeclaringTypeRelation;
 import ca.ubc.cs.ferret.jdt.ops.FieldGettersRelation;
 import ca.ubc.cs.ferret.jdt.ops.FieldSettersRelation;
 import ca.ubc.cs.ferret.jdt.ops.FieldsDeclaredRelation;
+import ca.ubc.cs.ferret.jdt.ops.FieldsOfTypeRelation;
 import ca.ubc.cs.ferret.jdt.ops.FieldsUsedRelation;
-import ca.ubc.cs.ferret.jdt.ops.ImmediateSubclassesRelation;
-import ca.ubc.cs.ferret.jdt.ops.ImmediateSubinterfacesRelation;
 import ca.ubc.cs.ferret.jdt.ops.ImmediateSubtypesRelation;
 import ca.ubc.cs.ferret.jdt.ops.ImmediateSupertypesRelation;
 import ca.ubc.cs.ferret.jdt.ops.InstanceofRelation;
@@ -37,7 +38,6 @@ import ca.ubc.cs.ferret.jdt.ops.JdtIsInterfaceRelation;
 import ca.ubc.cs.ferret.jdt.ops.JdtIsMethodRelation;
 import ca.ubc.cs.ferret.jdt.ops.JdtMethodSignatureRelation;
 import ca.ubc.cs.ferret.jdt.ops.MethodArgumentsWithTypeRelation;
-import ca.ubc.cs.ferret.jdt.ops.FieldsOfTypeRelation;
 import ca.ubc.cs.ferret.jdt.ops.MethodReferencesRelation;
 import ca.ubc.cs.ferret.jdt.ops.MethodsCalledRelation;
 import ca.ubc.cs.ferret.jdt.ops.MethodsReturningTypeRelation;
@@ -45,7 +45,6 @@ import ca.ubc.cs.ferret.jdt.ops.ProvidedTypesRelation;
 import ca.ubc.cs.ferret.jdt.ops.ReferencesTypeRelation;
 import ca.ubc.cs.ferret.jdt.ops.ShadowedFieldsRelation;
 import ca.ubc.cs.ferret.jdt.ops.SiblingsRelation;
-import ca.ubc.cs.ferret.jdt.ops.SuperclassRelation;
 import ca.ubc.cs.ferret.jdt.ops.ThrowsExceptionRelation;
 import ca.ubc.cs.ferret.jdt.ops.TypesReferencedRelation;
 import ca.ubc.cs.ferret.model.AbstractSphereFactory;
@@ -53,6 +52,10 @@ import ca.ubc.cs.ferret.model.ISphere;
 import ca.ubc.cs.ferret.model.NamedJoinRelation;
 import ca.ubc.cs.ferret.model.ObjectOrientedRelations;
 import ca.ubc.cs.ferret.model.Sphere;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 public class JdtSphereFactory extends AbstractSphereFactory {
 	public static final String ID = JdtSphereFactory.class.getName();

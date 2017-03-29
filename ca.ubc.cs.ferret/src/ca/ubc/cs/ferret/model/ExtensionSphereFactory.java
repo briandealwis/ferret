@@ -8,7 +8,6 @@
  * Contributors:
  *     Manumitting Technologies Inc - initial API and implementation
  *******************************************************************************/
-
 package ca.ubc.cs.ferret.model;
 
 import ca.ubc.cs.ferret.FerretConfigurationException;

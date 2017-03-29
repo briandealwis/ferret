@@ -1,5 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.model;
 
+import ca.ubc.cs.ferret.types.FerretObject;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,11 +20,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Sets;
-
-import ca.ubc.cs.ferret.types.FerretObject;
 
 /**
  * Reports the elements of that are reported by only a single of the

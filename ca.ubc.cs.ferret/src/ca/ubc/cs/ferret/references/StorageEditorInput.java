@@ -10,6 +10,7 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.references;
  
+import ca.ubc.cs.ferret.FerretPlugin;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -17,8 +18,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IStorageEditorInput;
-
-import ca.ubc.cs.ferret.FerretPlugin;
 
 /* Stolen from org.eclipse.jdt.internal.debug.ui.StorageEditorInput */
 public abstract class StorageEditorInput extends PlatformObject implements IStorageEditorInput {

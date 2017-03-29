@@ -1,18 +1,14 @@
-/*
- * Copyright Sep 23, 2004 X @author 2004
- */
+/*******************************************************************************
+ * Copyright (c) 2004 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.views;
-
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.resource.LocalResourceManager;
-import org.eclipse.jface.resource.ResourceManager;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.model.IWorkbenchAdapter;
 
 import ca.ubc.cs.clustering.Cluster;
 import ca.ubc.cs.clustering.IClusteringsContainer;
@@ -23,6 +19,16 @@ import ca.ubc.cs.ferret.display.IDisplayObject;
 import ca.ubc.cs.ferret.model.IConceptualQuery;
 import ca.ubc.cs.ferret.model.SphereHelper;
 import ca.ubc.cs.ferret.types.FerretObject;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.model.IWorkbenchAdapter;
 
 
 public class DossierLabelProvider implements ITableLabelProvider, ILabelProvider {

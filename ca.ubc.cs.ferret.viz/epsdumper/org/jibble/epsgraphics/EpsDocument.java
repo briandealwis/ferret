@@ -16,8 +16,13 @@ $Id: EpsDocument.java,v 1.1 2007/09/20 19:11:12 bsd Exp $
 
 package org.jibble.epsgraphics;
 
-import java.util.*;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Date;
 
 
 /**
