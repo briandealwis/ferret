@@ -21,6 +21,6 @@ Require-Bundle: ca.ubc.cs.ferret.jdt,
  org.eclipse.pde.runtime,
  ca.ubc.cs.clustering,
  org.eclipse.core.runtime
-Import-Package: com.google.common.collect;version="15.0.0"
-Export-Package: ca.ubc.cs.ferret.pde
+Import-Package: com.google.common.collect;version="[21,22)"
+Export-Package: ca.ubc.cs.ferret.pde;version="0.5.0"
 Bundle-ActivationPolicy: lazy

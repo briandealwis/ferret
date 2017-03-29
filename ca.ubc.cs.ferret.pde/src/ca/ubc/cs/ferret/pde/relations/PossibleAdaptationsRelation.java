@@ -1,10 +1,23 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.pde.relations;
 
+import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
+import ca.ubc.cs.ferret.pde.AdaptationSpecification;
+import ca.ubc.cs.ferret.pde.PdeModelHelper;
+import com.google.common.collect.Multimap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.pde.core.plugin.IPluginAttribute;
@@ -13,12 +26,6 @@ import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginExtensionPoint;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
-
-import com.google.common.collect.Multimap;
-
-import ca.ubc.cs.ferret.model.AbstractCollectionBasedRelation;
-import ca.ubc.cs.ferret.pde.AdaptationSpecification;
-import ca.ubc.cs.ferret.pde.PdeModelHelper;
 
 public abstract class PossibleAdaptationsRelation extends
 		AbstractCollectionBasedRelation<IType> {

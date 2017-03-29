@@ -1,24 +1,27 @@
-/*
- * Copyright 2004  University of British Columbia
- * @author bsd
- */
+/*******************************************************************************
+ * Copyright (c) 2004 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.jdt;
-
-import java.util.Collection;
-import java.util.HashSet;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.jdt.core.IType;
-
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.ferret.model.IRelation;
 import ca.ubc.cs.ferret.model.ObjectOrientedRelations;
 import ca.ubc.cs.ferret.model.SimpleSolution;
 import ca.ubc.cs.ferret.types.FerretObject;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+import java.util.Collection;
+import java.util.HashSet;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jdt.core.IType;
 
 /**
  * Find Java methods that instantiate a particular type.

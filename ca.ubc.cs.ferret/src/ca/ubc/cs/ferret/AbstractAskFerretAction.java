@@ -1,25 +1,26 @@
-/*
- * Copyright 2004 University of British Columbia
- * @author bsd
- * This class implements the menu actions to consult the QueryGuru.
- */
+/*******************************************************************************
+ * Copyright (c) 2004 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret;
 
+import ca.ubc.cs.ferret.views.QueriesDossierView;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 
-import ca.ubc.cs.ferret.views.QueriesDossierView;
-
-
 /**
+ * This class implements the menu actions to consult Ferret.
+ * 
  * @author bsd
  */
-public abstract class AbstractAskFerretAction{
-	
-	public AbstractAskFerretAction() {
-    }
-
+public abstract class AbstractAskFerretAction {
     protected IWorkbenchPage getActivePage() {
         return FerretPlugin.getDefault().getWorkbench()
         .getActiveWorkbenchWindow().getActivePage();

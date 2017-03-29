@@ -1,12 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.clustering;
 
+import ca.ubc.cs.clustering.attrs.ClusterableCollection;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.eclipse.core.runtime.Preferences;
-
-import ca.ubc.cs.clustering.attrs.ClusterableCollection;
 
 public class SqueezerClusteringFactory<T> implements IClusteringsFactory<T> {
 	public static final String SQUEEZER_THRESHOLD = "SQUEEZER_CLUSTERING_THRESHOLD";

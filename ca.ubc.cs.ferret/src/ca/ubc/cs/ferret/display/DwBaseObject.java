@@ -1,21 +1,25 @@
-/*
- * Copyright 2005 by X.
- * @author bsd
- */
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.display;
 
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.ICallback;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.ICallback;
 
 public abstract class DwBaseObject implements IDisplayObject {
 	protected IDisplayObject parent;

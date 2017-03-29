@@ -1,7 +1,13 @@
-/*
- * Copyright 2005 by X.
- * @author bsd
- */
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.jdt.tests;
 
 import static org.junit.Assert.assertEquals;
@@ -11,11 +17,21 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import ca.ubc.cs.ferret.FerretPlugin;
+import ca.ubc.cs.ferret.jdt.JavaModelHelper;
+import ca.ubc.cs.ferret.jdt.ThrowsStatementFinder;
+import ca.ubc.cs.ferret.jdt.ops.JdtIsClassRelation;
+import ca.ubc.cs.ferret.jdt.ops.JdtIsFieldRelation;
+import ca.ubc.cs.ferret.jdt.ops.JdtIsInterfaceRelation;
+import ca.ubc.cs.ferret.model.IRelation;
+import ca.ubc.cs.ferret.model.IRelationFactory;
+import ca.ubc.cs.ferret.model.ISphere;
+import ca.ubc.cs.ferret.model.Sphere;
+import ca.ubc.cs.ferret.tests.support.TestProject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IField;
@@ -30,18 +46,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import ca.ubc.cs.ferret.FerretPlugin;
-import ca.ubc.cs.ferret.jdt.JavaModelHelper;
-import ca.ubc.cs.ferret.jdt.ThrowsStatementFinder;
-import ca.ubc.cs.ferret.jdt.ops.JdtIsClassRelation;
-import ca.ubc.cs.ferret.jdt.ops.JdtIsFieldRelation;
-import ca.ubc.cs.ferret.jdt.ops.JdtIsInterfaceRelation;
-import ca.ubc.cs.ferret.model.IRelation;
-import ca.ubc.cs.ferret.model.IRelationFactory;
-import ca.ubc.cs.ferret.model.ISphere;
-import ca.ubc.cs.ferret.model.Sphere;
-import ca.ubc.cs.ferret.tests.support.TestProject;
 
 public class JdtTests {
     protected static TestProject testProject;

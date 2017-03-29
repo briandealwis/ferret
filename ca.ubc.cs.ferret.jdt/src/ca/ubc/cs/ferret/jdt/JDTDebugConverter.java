@@ -1,12 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.jdt;
-
-import org.eclipse.debug.core.DebugException;
-import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.debug.core.IJavaFieldVariable;
-import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.ISphere;
@@ -16,6 +18,13 @@ import ca.ubc.cs.ferret.types.ConversionResult;
 import ca.ubc.cs.ferret.types.ConversionSpecification;
 import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
 import ca.ubc.cs.ferret.types.ITypeConverter;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.Signature;
+import org.eclipse.jdt.debug.core.IJavaFieldVariable;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 public class JDTDebugConverter extends AbstractTypeConverter implements
 		ITypeConverter {

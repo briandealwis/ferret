@@ -1,19 +1,14 @@
-/*
- * Copyright 2005 by X.
- * @author bsd
- */
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.display;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-
-import com.google.common.collect.Multimap;
 
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.clustering.IClusteringsProvider;
@@ -23,6 +18,14 @@ import ca.ubc.cs.ferret.model.IConceptualQuery;
 import ca.ubc.cs.ferret.model.ISolution;
 import ca.ubc.cs.ferret.preferences.IFerretPreferenceConstants;
 import ca.ubc.cs.ferret.views.DossierConstants;
+import com.google.common.collect.Multimap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
 public class DwConceptualQuery extends DwClusterableCollection<Object> {
     protected IConceptualQuery icq;

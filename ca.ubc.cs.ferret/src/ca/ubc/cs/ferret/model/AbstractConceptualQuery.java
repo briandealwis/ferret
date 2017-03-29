@@ -1,19 +1,22 @@
-/*
- * Copyright Sep 28, 2004  X
- * @author 2004
- */
+/*******************************************************************************
+ * Copyright (c) 2004 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.model;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
-
-import com.google.common.base.Stopwatch;
 
 import ca.ubc.cs.clustering.Clustering;
 import ca.ubc.cs.ferret.FerretPlugin;
+import com.google.common.base.Stopwatch;
+import java.util.HashSet;
+import java.util.Set;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 
 /**
  * @author bsd

@@ -1,16 +1,28 @@
-/*
- * Copyright 2005  X
- * @author bsd
- */
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.pde.queries;
 
+import ca.ubc.cs.ferret.FerretFatalError;
+import ca.ubc.cs.ferret.model.AbstractSingleParmConceptualQuery;
+import ca.ubc.cs.ferret.pde.PdeModelHelper;
+import ca.ubc.cs.ferret.references.AbstractReference;
+import ca.ubc.cs.ferret.references.FileReference;
+import ca.ubc.cs.ferret.references.URLReference;
+import ca.ubc.cs.ferret.references.ZipEntryReference;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,14 +36,6 @@ import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginObject;
 import org.osgi.framework.Bundle;
-
-import ca.ubc.cs.ferret.FerretFatalError;
-import ca.ubc.cs.ferret.model.AbstractSingleParmConceptualQuery;
-import ca.ubc.cs.ferret.pde.PdeModelHelper;
-import ca.ubc.cs.ferret.references.AbstractReference;
-import ca.ubc.cs.ferret.references.FileReference;
-import ca.ubc.cs.ferret.references.URLReference;
-import ca.ubc.cs.ferret.references.ZipEntryReference;
 
 public abstract class PdeSingleParmConceptualQuery<T> 
 		extends AbstractSingleParmConceptualQuery<T> {

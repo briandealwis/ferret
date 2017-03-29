@@ -11,12 +11,15 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.util;
 
-import java.io.PrintStream;
-
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.jobs.Job;
-
 import ca.ubc.cs.ferret.FerretPlugin;
+import java.io.PrintStream;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 
 public class JobManager implements Runnable {
 	/* queue of jobs to execute */

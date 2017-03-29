@@ -1,24 +1,23 @@
-/*
- * Created on Jul 29, 2005
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.ferret.model;
 
+import ca.ubc.cs.clustering.IRelation;
+import ca.ubc.cs.clustering.attrs.DelegatingAttributeSource;
+import ca.ubc.cs.clustering.attrs.IAttributeSource;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.eclipse.core.runtime.IAdaptable;
-
-import ca.ubc.cs.clustering.ClusteringPlugin;
-import ca.ubc.cs.clustering.IRelation;
-import ca.ubc.cs.clustering.attrs.AttributeSource;
-import ca.ubc.cs.clustering.attrs.AttributeSourceManager;
-import ca.ubc.cs.clustering.attrs.DelegatingAttributeSource;
-import ca.ubc.cs.clustering.attrs.IAttributeSource;
 
 public abstract class AbstractSolution implements ISolution, IAdaptable {
 	protected IConceptualQuery query;

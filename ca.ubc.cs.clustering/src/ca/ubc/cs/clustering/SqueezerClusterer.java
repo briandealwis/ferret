@@ -1,12 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Brian de Alwis, UBC, and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Brian de Alwis - initial API and implementation
+ *******************************************************************************/
 package ca.ubc.cs.clustering;
 
 import ca.ubc.cs.clustering.attrs.ClusterableCollection;
+import com.google.common.base.Preconditions;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.eclipse.core.runtime.Assert;
 
 /**
  * Algorithm taken from
@@ -56,7 +66,7 @@ public class SqueezerClusterer<T> {
 						maxSimilarity = similarity;
 					}
 				}
-				Assert.isNotNull(maxCluster);
+				Preconditions.checkNotNull(maxCluster);
 				if(maxSimilarity >= threshold) {
 					maxCluster.add(tuple);
 				} else {
