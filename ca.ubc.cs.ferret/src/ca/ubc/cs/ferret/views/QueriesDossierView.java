@@ -38,6 +38,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -198,6 +199,9 @@ public class QueriesDossierView extends ViewPart
     protected IPropertyChangeListener preferencesChangeListener;
 	protected ISphereFactory sphereFactory;
 
+	/* Safe to use even if the viewer is not yet set */
+	private NameComparator queryComparator;
+
 	class NameComparator extends ViewerComparator {
 
         @Override
@@ -235,7 +239,7 @@ public class QueriesDossierView extends ViewPart
 	    viewer.getTree().setLinesVisible(true);
 		viewer.setContentProvider(contentProvider = new DossierContentProvider());
 		viewer.setLabelProvider(labelProvider = new DossierLabelProvider());
-		viewer.setComparator(new NameComparator());
+		viewer.setComparator(queryComparator);
 		viewer.setInput(null);
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 //				new GridData(GridData.FILL_HORIZONTAL));
@@ -1268,6 +1272,8 @@ public class QueriesDossierView extends ViewPart
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
+		queryComparator = new NameComparator();
+
 		viewStateMemento = memento;
 		try {
 			String sphereFactoryId = memento == null ? null : memento.getString("sphereFactory");
@@ -1504,7 +1510,7 @@ public class QueriesDossierView extends ViewPart
         Consultation c = getConsultancy().createConsultation(objects, getSphere());
         c.buildConceptualQueries(new NullProgressMonitor());
         IConceptualQuery cqs[] = c.getConceptualQueries();
-        viewer.getSorter().sort(viewer, cqs);
+        Arrays.sort(cqs, (a, b) -> queryComparator.compare(viewer, a, b));
 
         ILabelProvider lp = new WorkbenchAdapterLabelProvider() {
 			@Override
