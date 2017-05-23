@@ -10,7 +10,6 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.pde;
 
-import ca.ubc.cs.ferret.FerretPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -42,8 +41,7 @@ public class FerretPdePlugin extends AbstractUIPlugin {
 	 * This method is called when the plug-in is stopped
 	 */
 	public void stop(BundleContext context) throws Exception {
-        FerretPlugin.getDefault().dropSphereHelper(PdeSphereHelper.getDefault());
-		PdeSphereHelper.getDefault().stop();
+		PdeSphereHelper.shutdown();
 		super.stop(context);
 		plugin = null;
 	}

@@ -10,6 +10,7 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.pde;
 
+import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.ISphereFactory;
 import ca.ubc.cs.ferret.model.SphereHelper;
 import ca.ubc.cs.ferret.views.ImageImageDescriptor;
@@ -54,6 +55,14 @@ public class PdeSphereHelper extends SphereHelper {
 			singleton.start();
 		}
 		return singleton;
+	}
+
+	public static void shutdown() {
+		if (singleton != null) {
+			FerretPlugin.getDefault().dropSphereHelper(singleton);
+			singleton.stop();
+			singleton = null;
+		}
 	}
 
 	public void start() {}
@@ -169,5 +178,4 @@ public class PdeSphereHelper extends SphereHelper {
 		return new ISphereFactory[] { new PdeSphereFactory() };
 
 	}
-
 }
