@@ -29,7 +29,6 @@ import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.jdt.internal.ui.actions.SelectionConverter;
 import org.eclipse.jdt.internal.ui.javaeditor.JavaEditor;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
@@ -44,6 +43,7 @@ public class JdtSphereHelper extends SphereHelper {
     protected static JdtSphereHelper singleton;
     protected JavaElementLabelProvider javaMinimalLabelProvider;
     protected JavaElementLabelProvider javaLabelProvider;
+	protected JavaElementLabelProvider javaPostQualifiedLabelProvider;
     
     protected JdtSphereHelper() {}
     
@@ -79,6 +79,15 @@ public class JdtSphereHelper extends SphereHelper {
 	        javaLabelProvider.turnOff(JavaElementLabelProvider.SHOW_SMALL_ICONS);
 	//        javaLabelProvider.turnOn(JavaElementLabelProvider.SHOW_QUALIFIED);
     	}
+		if (javaPostQualifiedLabelProvider == null) {
+			javaPostQualifiedLabelProvider = new JavaElementLabelProvider();
+			// javaPostQualifiedLabelProvider.turnOff(JavaElementLabelProvider.SHOW_OVERLAY_ICONS);
+			javaPostQualifiedLabelProvider.turnOn(JavaElementLabelProvider.SHOW_TYPE);
+			javaPostQualifiedLabelProvider.turnOff(JavaElementLabelProvider.SHOW_PARAMETERS);
+			javaPostQualifiedLabelProvider.turnOff(JavaElementLabelProvider.SHOW_SMALL_ICONS);
+			javaPostQualifiedLabelProvider.turnOn(JavaElementLabelProvider.SHOW_QUALIFIED);
+			javaPostQualifiedLabelProvider.turnOn(JavaElementLabelProvider.SHOW_POST_QUALIFIED);
+		}
     }
     
     public void reset() {
@@ -172,10 +181,14 @@ public class JdtSphereHelper extends SphereHelper {
             IField f = (IField)object;
             return javaMinimalLabelProvider.getText(f.getDeclaringType())+ "." 
                 + javaMinimalLabelProvider.getText(f);
-        } else if(object instanceof IPackageFragmentRoot
-        		&& !(object instanceof JarPackageFragmentRoot)) {
-        	IPackageFragmentRoot pfr = (IPackageFragmentRoot)object;
-        	return pfr.getParent().getElementName() + "/" + pfr.getElementName();  
+		} else if (object instanceof IPackageFragmentRoot) {
+			IPackageFragmentRoot pfr = (IPackageFragmentRoot) object;
+			if(pfr.isExternal()) {
+				return pfr.getElementName() + " - " + javaPostQualifiedLabelProvider.getText(pfr);
+			} else {
+				// qualified doesn't show relative path
+				return pfr.getPath().makeRelative().toOSString();
+			}
 		} else if (object instanceof IType) {
 			try {
 				IType type = (IType) object;
