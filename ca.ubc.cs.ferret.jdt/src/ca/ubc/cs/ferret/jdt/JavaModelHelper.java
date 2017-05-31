@@ -325,27 +325,30 @@ public class JavaModelHelper implements IElementChangedListener {
     }
 
     /* On JDT change, we wipe out our caches */
-    public void elementChanged(ElementChangedEvent event) {
-    	// System.out.println("JDT elementChanged: " + event);
-    	if(contentChanged(event.getDelta())) {
-    		if(FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
-    			System.out.println("JDT Element Changed: Resetting JDT cache");
-    		}
-    		reset();
-    		javaModelCounter++;
-    	}
-    }
+	public void elementChanged(ElementChangedEvent event) {
+		if (contentChanged(event.getDelta())) {
+			if (FerretPlugin.hasDebugOption("debug/cacheMaintenance")) {
+				System.out.println("JDT Element Changed: Resetting JDT cache");
+			}
+			reset();
+			javaModelCounter++;
+		}
+	}
 
-    protected boolean contentChanged(IJavaElementDelta delta) {   
-    	if((delta.getFlags() & (IJavaElementDelta.F_REORDER | IJavaElementDelta.F_SOURCEATTACHED 
-    			| IJavaElementDelta.F_SOURCEDETACHED)) == 0) {
-    		return true;
-    	}
-    	for(IJavaElementDelta child : delta.getAffectedChildren()) {
-    		if(contentChanged(child)) { return true; }
-    	}
-    	return false;
-    }
+	protected boolean contentChanged(IJavaElementDelta delta) {
+		int ignoredChangeTypes = IJavaElementDelta.F_PRIMARY_WORKING_COPY | IJavaElementDelta.F_AST_AFFECTED
+				| IJavaElementDelta.F_CATEGORIES | IJavaElementDelta.F_SOURCEATTACHED
+				| IJavaElementDelta.F_SOURCEDETACHED | IJavaElementDelta.F_CHILDREN;
+		if ((delta.getFlags() & ~ignoredChangeTypes) != 0) {
+			return true;
+		}
+		for (IJavaElementDelta child : delta.getAffectedChildren()) {
+			if (contentChanged(child)) {
+				return true;
+			}
+		}
+		return false;
+	}
     
     protected ASTParser parser = ASTParser.newParser(AST.JLS3);
     
