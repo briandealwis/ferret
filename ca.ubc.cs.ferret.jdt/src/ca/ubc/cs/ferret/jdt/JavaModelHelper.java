@@ -782,7 +782,10 @@ public class JavaModelHelper implements IElementChangedListener {
     
 	public IType resolveSignature(String sig, IMember container) {
 		switch(Signature.getTypeSignatureKind(sig)) {
-		case Signature.ARRAY_TYPE_SIGNATURE: 
+		case Signature.ARRAY_TYPE_SIGNATURE:
+			int arrayCount = Signature.getArrayCount(sig);
+			sig = sig.substring(arrayCount);
+			/* FALLTHROUGH */
 		case Signature.CLASS_TYPE_SIGNATURE:
 		case Signature.WILDCARD_TYPE_SIGNATURE:
 			String fqParm;
