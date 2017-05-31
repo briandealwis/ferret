@@ -9,7 +9,6 @@
  *     Brian de Alwis - initial API and implementation
  *******************************************************************************/
 package ca.ubc.cs.ferret.history;
-import ca.ubc.cs.ferret.FerretPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -40,8 +39,7 @@ public class FerretHistoryPlugin extends AbstractUIPlugin {
 	 * This method is called when the plug-in is stopped
 	 */
 	public void stop(BundleContext context) throws Exception {
-        FerretPlugin.getDefault().dropSphereHelper(HistorySphereHelper.getDefault());
-		HistorySphereHelper.getDefault().stop();
+		HistorySphereHelper.shutdown();
 		super.stop(context);
 		plugin = null;
 	}

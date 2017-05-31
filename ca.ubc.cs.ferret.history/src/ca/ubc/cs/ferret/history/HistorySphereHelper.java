@@ -10,6 +10,7 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.history;
 
+import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.SphereHelper;
 
 public class HistorySphereHelper extends SphereHelper {
@@ -23,6 +24,14 @@ public class HistorySphereHelper extends SphereHelper {
 		return singleton;
 	}
 	
+	public static void shutdown() {
+		if (singleton != null) {
+			FerretPlugin.getDefault().dropSphereHelper(singleton);
+			singleton.stop();
+			singleton = null;
+		}
+	}
+
 	protected HistoryMonitor historyMonitor;
 	
 	protected HistorySphereHelper() {}
