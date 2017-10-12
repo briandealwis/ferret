@@ -40,8 +40,6 @@ public class AttributeSourceManager implements IAttributeSourceManager,
 	/**
 	 * Return an IAttributeSource for the provided element consisting of all of
 	 * its possible attribute sources.
-	 * @param element
-	 * @return
 	 */
 	public synchronized IAttributeSource getAttributeSource(Object element) {
 		IAttributeSource result;

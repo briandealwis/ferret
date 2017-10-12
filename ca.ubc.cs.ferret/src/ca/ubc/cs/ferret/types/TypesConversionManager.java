@@ -131,7 +131,9 @@ public class TypesConversionManager implements IRegistryChangeListener {
 	protected List<ConversionPipeline> basicFindConversion(Class<?> objectClass,
 			String desiredType, Fidelity desiredFidelity) {
 		Graph<String,ConversionSpecification> graph = getConversionGraph();
-		if(!hasVertex(graph, desiredType)) { return Collections.EMPTY_LIST; }
+		if (!hasVertex(graph, desiredType)) {
+			return Collections.emptyList();
+		}
 		ArrayList<ConversionPipeline> conversions = new ArrayList<ConversionPipeline>(1);
 		for(String sourceType : getClassLookupOrder(objectClass)) {
 			if(!hasVertex(graph, sourceType)) { continue; }

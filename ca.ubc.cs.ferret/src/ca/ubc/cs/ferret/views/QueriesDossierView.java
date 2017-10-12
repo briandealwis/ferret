@@ -331,12 +331,6 @@ public class QueriesDossierView extends ViewPart
 			resizer.addColumnData(cld);
 		}
 		parent.addControlListener(resizer);
-
-//        getViewSite().getActionBars().setGlobalActionHandler(
-//                IWorkbenchActionConstants.PROPERTIES,
-//                propertiesAction);
-//		treeSelectionChangedListener = new AutoTreeViewerExpandingSelector();
-//		getSelectionProvider().addSelectionChangedListener(treeSelectionChangedListener);
 	}
 
 	protected void setupColumns() {

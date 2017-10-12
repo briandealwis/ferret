@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchRequestor;
 
 /**
- * @author bsd
+ * A search requestor that simply collects all results.
  */
 public class CollectingSearchRequestor extends SearchRequestor {
 	protected Map<Object,Set<SearchMatch>> results;
@@ -37,11 +37,6 @@ public class CollectingSearchRequestor extends SearchRequestor {
 		 results = new HashMap<Object,Set<SearchMatch>>();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jdt.core.search.SearchRequestor#acceptSearchMatch(org.eclipse.jdt.core.search.SearchMatch)
-	 * @author bsd
-	 * @since X
-	 */
 	public void acceptSearchMatch(SearchMatch match) throws CoreException {
 		Object category;
 		Set<SearchMatch> set;
@@ -58,7 +53,6 @@ public class CollectingSearchRequestor extends SearchRequestor {
 	 * answer null if the match is not to be kept, or some category object.
 	 * @param match
 	 * @return the category object
-	 * @author bsd
 	 */
 	protected Object filterSearchMatch(SearchMatch match) throws CoreException {
         if(match.getAccuracy() != SearchMatch.A_ACCURATE) { return null; }

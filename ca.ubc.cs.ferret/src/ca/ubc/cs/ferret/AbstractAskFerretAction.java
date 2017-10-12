@@ -17,8 +17,6 @@ import org.eclipse.ui.PartInitException;
 
 /**
  * This class implements the menu actions to consult Ferret.
- * 
- * @author bsd
  */
 public abstract class AbstractAskFerretAction {
     protected IWorkbenchPage getActivePage() {
@@ -41,8 +39,6 @@ public abstract class AbstractAskFerretAction {
 	
 	/**
 	 * @param objects the objects to query on
-	 * @author bsd
-	 * @since X
 	 */
 	protected void performQuery(Object objects[]) {
         if(objects.length == 0) { return; }

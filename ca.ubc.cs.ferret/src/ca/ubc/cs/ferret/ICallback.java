@@ -13,7 +13,6 @@ package ca.ubc.cs.ferret;
 /**
  * A complement to the Runnable interface that takes a single argument.
  *  Clients are expected to implement this interface.
- * @author bsd
  * @see java.lang.Runnable
  */
 @FunctionalInterface

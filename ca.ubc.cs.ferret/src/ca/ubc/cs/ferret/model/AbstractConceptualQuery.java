@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 /**
- * @author bsd
+ * A base class for CQs.
  */
 public abstract class AbstractConceptualQuery
 		implements IConceptualQuery {

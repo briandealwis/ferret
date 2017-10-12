@@ -16,7 +16,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * @author bsd
+ * The base contract for a CQ.  A CQs may provide a custom clustering.
  */
 public interface IConceptualQuery extends IClusteringsProvider<Object> {
 

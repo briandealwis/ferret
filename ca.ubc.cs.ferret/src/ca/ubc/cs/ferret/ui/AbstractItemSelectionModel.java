@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.ListenerList;
 /**
  * This is a model of a list of items, bifurcated into those that have been selected,
  * and those that are not.
- * @author bsd
  * @param <T> the type of items
  * @param <L> the type of listeners
  */

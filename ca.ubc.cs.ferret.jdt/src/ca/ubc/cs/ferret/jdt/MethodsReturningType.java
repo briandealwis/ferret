@@ -19,7 +19,7 @@ import org.eclipse.jdt.core.IType;
 
 
 /**
- * @author bsd
+ * Find methods that have the specified return type.
  */
 public class MethodsReturningType extends JavaRelatedConceptualQuery<IType> {
     public MethodsReturningType() {

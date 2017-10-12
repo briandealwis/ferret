@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IMethod;
 
 /**
- * @author bsd
+ * Find methods that implement the provided interface method.
  */
 public class ClassesImplementingInterfaceMethod extends
         JavaRelatedConceptualQuery<IMethod> {

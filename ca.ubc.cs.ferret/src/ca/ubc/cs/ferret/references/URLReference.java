@@ -22,7 +22,6 @@ import org.eclipse.ui.IPersistableElement;
  * A reference within some resource described by a URL.
  * URL content may be fetched multiple times; this class may be
  * inappropriate if this URL is not meant for multiple fetches.
- * @author bsd
  */
 public class URLReference extends AbstractReference {
     protected URL url;

@@ -19,7 +19,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 
 /**
- * @author bsd
+ * Find methods that override the provided method.
  */
 public class ClassMethodOverriders extends JavaRelatedConceptualQuery<IMethod> {
     
