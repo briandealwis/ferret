@@ -2,14 +2,14 @@
 
 ![A little ferret](site/src/main/resources/XenoFerret.jpg)
 
-Ferret is a software exploration tool.  Boiled down to its essence,
-Ferrit is Eclipse Search on steroids.
-
-![Ferret in action](site/src/main/resources/doc/ferret-demo.png)
+Ferret is a software exploration tool.  Ferret has sometimes been
+describes as Eclipse Search on steroids.
 
 Ferret is an Eclipse view that provides a structured display of
 information describing how one or more program elements are situated
 in the context of the system.
+
+![Ferret in action](site/src/main/resources/doc/ferret-demo.png)
 
 This context is computed automatically as the program elements are
 selected in the IDE, and is structured as answers to a set of
@@ -60,11 +60,12 @@ below.
 ## Notes
 
 Kenyon was a research project to index Subversion repositories.  It died
-a long time ago and the Kenyon binding has long been disabled.  It's
+a long time ago and the Kenyon binding has since been disabled.  It's
 entirely possible that we could rewrite some of its support for JGit.
 
 The Eclipse Testing and Profiling tools project (TPTP) was archived in
-May 2016 and the TPTP binding has long been disabled.
+May 2016 and the TPTP binding has since been disabled.  Suggestions for
+tracing libraries with a nice API are appreciated!
 
 ## Installation
 
