@@ -400,6 +400,12 @@
           description="field type"
           id="ca.ubc.cs.ferret.jdt.attributes.FieldTypeProvider"
           objectType="org.eclipse.jdt.core.IField" />
+    <classifier
+          class="ca.ubc.cs.ferret.jdt.attributes.MemberClassVsInterfaceProvider"
+          description="class/interface"
+          id="ca.ubc.cs.ferret.jdt.attributes.ClassVsInterface"
+          objectType="org.eclipse.jdt.core.IMember">
+    </classifier>
 	 </extension>
  
  	<extension point="org.eclipse.core.runtime.adapters">

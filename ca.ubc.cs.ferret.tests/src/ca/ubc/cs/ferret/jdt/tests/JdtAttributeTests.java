@@ -10,6 +10,7 @@
  *******************************************************************************/
 package ca.ubc.cs.ferret.jdt.tests;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -20,6 +21,7 @@ import ca.ubc.cs.clustering.ClusteringPlugin;
 import ca.ubc.cs.clustering.attrs.IAttributeSource;
 import ca.ubc.cs.clustering.attrs.IClassifier;
 import ca.ubc.cs.ferret.jdt.JavaModelHelper;
+import ca.ubc.cs.ferret.jdt.attributes.MemberClassVsInterfaceProvider;
 import ca.ubc.cs.ferret.jdt.attributes.MethodThrowsProvider;
 import java.util.Collection;
 import org.eclipse.jdt.core.IMethod;
@@ -34,6 +36,9 @@ import org.junit.Test;
 public class JdtAttributeTests {
 
     IType javaLangString;
+    IType javaUtilCollection;
+	private IType javaLangDeprecated;
+	private IType javaLangManagementMemoryType;
 
     @BeforeClass
     public static void createWorkspace() throws Exception {
@@ -43,6 +48,9 @@ public class JdtAttributeTests {
     @Before
     public void setUp() {
     	javaLangString = JavaModelHelper.getDefault().resolveType("java.lang.String"); 
+    	javaUtilCollection = JavaModelHelper.getDefault().resolveType("java.util.Collection");
+    	javaLangDeprecated = JavaModelHelper.getDefault().resolveType("java.lang.Deprecated");	// annotation
+    	javaLangManagementMemoryType = JavaModelHelper.getDefault().resolveType("java.lang.management.MemoryType"); // enum
     	assertNotNull(javaLangString);
     }
 
@@ -124,6 +132,17 @@ public class JdtAttributeTests {
     	} catch(JavaModelException e) {
     		fail("JavaModelException: " + e);
     	}
+    }
+
+    @Test
+    public void testClassVsInterface() throws JavaModelException {
+    		MemberClassVsInterfaceProvider provider = new MemberClassVsInterfaceProvider();
+    		assertArrayEquals(new String[] { "class", "interface", "enum", "annotation", "lambda" }, provider.getCategories());
+    		assertEquals("class", provider.getCategory(javaLangString));
+    		assertEquals("class", provider.getCategory(javaLangString.getMethods()[0]));
+		assertEquals("interface", provider.getCategory(javaUtilCollection));
+		assertEquals("enum", provider.getCategory(javaLangManagementMemoryType));
+		assertEquals("annotation", provider.getCategory(javaLangDeprecated));
     }
 
     @After
