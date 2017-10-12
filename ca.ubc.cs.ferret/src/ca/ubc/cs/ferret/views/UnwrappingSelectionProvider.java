@@ -76,10 +76,9 @@ public class UnwrappingSelectionProvider implements ISelectionProvider,
     }
 
     protected void notifySelectionChanged() {
-        Object listeners[] = selectionChangedList.getListeners();
         SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
-        for(int i = 0; i < listeners.length; i++) {
-            ((ISelectionChangedListener)listeners[i]).selectionChanged(event);
+		for (ISelectionChangedListener listener : selectionChangedList) {
+			listener.selectionChanged(event);
         }
     }
 }

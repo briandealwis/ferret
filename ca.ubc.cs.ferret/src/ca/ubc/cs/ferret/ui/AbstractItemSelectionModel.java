@@ -133,8 +133,8 @@ public abstract class AbstractItemSelectionModel<T,L> {
 	}
 	
 	protected void notifyListeners() {
-		for(Object listener : listeners.getListeners()) {
-			notifyListener((L)listener);
+		for (L listener : listeners) {
+			notifyListener(listener);
 		}
 	}
 }

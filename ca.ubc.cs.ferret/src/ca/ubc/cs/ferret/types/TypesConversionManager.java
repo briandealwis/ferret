@@ -244,7 +244,6 @@ public class TypesConversionManager implements IRegistryChangeListener {
 		return adapterManager;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T getAdapter(Object e, Class<T> clazz, Fidelity fidelity) {
 		ConversionResult cr = getDefault().convert(e, clazz.getName(), fidelity, null);
 		if(cr != null && cr.hasSingleResult()) {
