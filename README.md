@@ -3,7 +3,7 @@
 ![A little ferret](site/src/main/resources/XenoFerret.jpg)
 
 Ferret is a software exploration tool.  Ferret has sometimes been
-describes as Eclipse Search on steroids.
+described as "Eclipse Search on steroids."
 
 Ferret is an Eclipse view that provides a structured display of
 information describing how one or more program elements are situated
@@ -12,7 +12,7 @@ in the context of the system.
 ![Ferret in action](site/src/main/resources/doc/ferret-demo.png)
 
 This context is computed automatically as the program elements are
-selected in the IDE, and is structured as answers to a set of
+selected in the IDE (label 1), and is structured as answers to a set of
 _conceptual queries_ about those elements.  These conceptual
 queries are intended to closely match the types of questions
 developers actually want to answer.
@@ -29,6 +29,20 @@ These conceptual queries include queries such as:
   - What are the other alternative implementations of this method in
     the hierarchy?
 
+The conceptual queries are categorized by whether they involve
+_declarations_, are about _inter-class_ or _intra-class_
+relations, or are _hierarchical_ in nature.
+
+The results of queries may be clustered by their different
+attributes (labels 2), as selected by the programmer.  For
+example: the instantiators of a type (a class or the classes
+implementing an interface), which are typically methods, may be clustered
+into different groups identified by attributes such as their
+their containing type,
+their containing type's package (as shown above),
+their access protection (public, private, package, or default),
+or boolean attributes such as static vs non-static.
+
 More notable is that Ferret's conceptual
 queries can make use of different sources of program information,
 such as the static relations embedded in the source code, the
@@ -37,19 +51,10 @@ plugin details as defined in `plugin.xml` and `MANIFEST.MF`.
 Thus dynamic runtime information can be used to replace
 some of the statically-derived relations, transforming the questions
 above to "Where are objects of this type _actually_ instantiated?"
-or "Where is this method _actually_ called?"
-
-The conceptual queries are categorized by whether they involve
-_declarations_, are about _inter-class_ or _intra-class_
-relations, or are _hierarchical_ in nature.
-
-The results of queries may be clustered by their different
-attributes, as selected by the programmer.  For example: the references
-to a method, which are generally themselves methods, may be clustered
-into different groups identified by attributes such as their access
-protection (public, private, package, or default), their containing
-type, their package, or boolean attributes such as static vs
-non-static.
+or "Where is this method _actually_ called?"  Establishing
+correspondances between elements from different sources of program
+information may not be exact, tracked as the _fidelity_ of the
+correspondance and propagated through the queries.
 
 The Ferret documentation ships with the plugin, and is also available 
 [online](http://manumitting.com/tools/eclipse/ferret/stable/doc/) too.
