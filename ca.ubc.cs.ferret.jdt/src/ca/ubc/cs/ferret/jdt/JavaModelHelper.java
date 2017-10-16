@@ -15,6 +15,7 @@ import ca.ubc.cs.ferret.FerretErrorConstants;
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.ExtendibleSourceRange;
 import ca.ubc.cs.ferret.model.IExtendibleSourceRange;
+import com.google.common.base.Verify;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.HashMultimap;
@@ -657,7 +658,16 @@ public class JavaModelHelper implements IElementChangedListener {
 	}
     
 	public IType resolveType(String typeName, IJavaElement context) {
-        // basicResolveType and resolveEnclosedType add results to type cache
+		int dollarIndex = typeName.lastIndexOf(Signature.C_DOLLAR);
+		Verify.verify(dollarIndex != 0, "invalid type name");
+		if (dollarIndex > 0) {
+			String parentName = typeName.substring(0, dollarIndex);
+			IType result;
+			if ((result = resolveType(parentName, context)) == null) {
+				return null;
+			}
+			return resolveEnclosedType(result, parentName, typeName.substring(dollarIndex + 1));
+		}
 		if (context instanceof IMember) {
 			try {
 				typeName = resolveTypeName(typeName, (IMember) context);
@@ -665,20 +675,9 @@ public class JavaModelHelper implements IElementChangedListener {
 				logJME(e);
 				return null;
 			}
-			int dollarIndex = typeName.lastIndexOf(Signature.C_DOLLAR);
-			if (dollarIndex < 0) {
-				return basicResolveType(typeName, context);
-			}
-			String parentName = typeName.substring(0, dollarIndex);
-			IType result;
-			if ((result = resolveType(parentName, context)) == null) {
-				return null;
-			}
-			return resolveEnclosedType(result, parentName, typeName.substring(dollarIndex + 1));
-		} else {
-			return basicResolveType(typeName, context);
 		}
-    }
+		return basicResolveType(typeName, context);
+	}
 
 	protected IType basicResolveType(final String typeName, final IJavaElement referencingMember) {
 		return resolveOperation(typeCache, typeName, new Callable<IType>() {
