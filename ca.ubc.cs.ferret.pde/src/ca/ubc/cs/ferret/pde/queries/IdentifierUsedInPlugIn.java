@@ -30,16 +30,13 @@ import org.eclipse.pde.core.plugin.IPluginObject;
 import org.eclipse.pde.core.plugin.IPluginParent;
 
 /**
- * @author bsd
+ * Look for the provided identifier in extensions and plugins.
  */
 public class IdentifierUsedInPlugIn extends PdeSingleParmConceptualQuery<PdeIdentifier> {
 
     protected Clustering<Object> byExtpts;
     protected Clustering<Object> byPlugins; 
 
-    /**
-     * @param details
-     */
     public IdentifierUsedInPlugIn() {
         super();
     }

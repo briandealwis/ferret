@@ -20,7 +20,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 /**
  * This is a display wrapper for a random object; it is not the same as the abstract 
  * base display object.
- * @author bsd
  */
 public class DwObject<T> extends DwConsultation {
     protected T object;

@@ -20,9 +20,6 @@ import java.util.NoSuchElementException;
  * IOperations represent the fundamental building blocks for the constituent
  * pieces of the Ferret query system.  They adhere to the Iterator interface;
  * IRelation objects only work once.
- * 
- * @author bsd
- *
  */
 public interface IRelation extends Iterable<FerretObject>, Iterator<FerretObject> {
 	

@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IMethod;
 
 /**
- * @author Brian de Alwis
+ * Callers to a method: the most important CQ ever.
  */
 public class ReferencesToMethod extends JavaIntersectionConceptualQuery<IMethod,FerretObject> {
 	protected static final String REFERRER_TAG = "referrer";

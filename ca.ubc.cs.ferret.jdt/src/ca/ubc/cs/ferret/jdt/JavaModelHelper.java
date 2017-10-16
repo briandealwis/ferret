@@ -78,7 +78,6 @@ import org.eclipse.jdt.core.search.TypeReferenceMatch;
 
 /**
  * Provide helper functions for reasoning using the java model. 
- * @author bsd
  */
 public class JavaModelHelper implements IElementChangedListener {
     
@@ -460,7 +459,6 @@ public class JavaModelHelper implements IElementChangedListener {
      * Determine the supertypes of <code>type</code>. List is in partial order.
      * Note that interfaces do not have java.lang.Object as a supertype
      * @return  supertypes of <code>type</code>
-     * @author  bsd
      */
     public IType[] getSupertypes(IType type, IProgressMonitor monitor) {
     	if(type.getFullyQualifiedName().equals("java.lang.Object")) { return new IType[0]; }
@@ -476,7 +474,6 @@ public class JavaModelHelper implements IElementChangedListener {
     /**
      * Determine the superclass of <code>type</code>. List is in partial order.
      * @return  supertypes of type
-     * @author  bsd
      */
     public IType getSuperclass(IType type, IProgressMonitor monitor) {
 		if(monitor.isCanceled()) { throw new OperationCanceledException(); }
@@ -497,7 +494,6 @@ public class JavaModelHelper implements IElementChangedListener {
     /**
      * Determine the superclasses of <code>type</code>. List is in partial order.
      * @return  supertypes of type
-     * @author  bsd
      */
     public IType[] getAllSuperclasses(IType type, IProgressMonitor monitor) {
         ITypeHierarchy typeHierarchy = getSuperTypeHierarchyFor(type, monitor);
@@ -507,7 +503,6 @@ public class JavaModelHelper implements IElementChangedListener {
     /**
      * Determine the superinterfaces of <code>type</code>. List is in partial order.
      * @return  supertypes of type, but without java.lang.Object
-     * @author  bsd
      */
     public IType[] getAllSuperinterfaces(IType type, IProgressMonitor monitor) {
         ITypeHierarchy typeHierarchy = getSuperTypeHierarchyFor(type, monitor);

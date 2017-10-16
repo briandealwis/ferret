@@ -21,7 +21,6 @@ import java.util.List;
 /**
  * Reports the elements of the first operation that are <EM>not</EM>
  * reported by any of the subsequent operations. 
- * @author Brian de Alwis
  */
 public class DifferencingOperation extends RelationalFunction {
 	protected Iterator<FerretObject> iterator;

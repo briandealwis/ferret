@@ -72,7 +72,7 @@ This class must implement a public subclass of &lt;code&gt;ca.ubc.cs.clustering.
          <attribute name="objectType" type="string" use="required">
             <annotation>
                <documentation>
-                  The object-type supported by  this classifier.
+                  The object-type supported by this classifier.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="java.lang.Object"/>

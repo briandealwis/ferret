@@ -16,7 +16,6 @@ import java.util.Set;
 
 /**
  * An answer to a conceptual query.  A query may have multiple possible solutions. 
- * @author bsd
  */
 public interface ISolution {
     public IConceptualQuery getQuery();

@@ -13,7 +13,7 @@ package ca.ubc.cs.ferret.jdt;
 import ca.ubc.cs.ferret.model.AbstractSingleParmConceptualQuery;
 
 /**
- * @author bsd
+ * An abstract class for single-element JDT-related CQs.
  */
 public abstract class JavaRelatedConceptualQuery<T> extends AbstractSingleParmConceptualQuery<T> {
 	protected int javaModelCounter = -1;

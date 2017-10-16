@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.ListenerList;
 /**
  * This is a model of a list of items, bifurcated into those that have been selected,
  * and those that are not.
- * @author bsd
  * @param <T> the type of items
  * @param <L> the type of listeners
  */
@@ -134,8 +133,8 @@ public abstract class AbstractItemSelectionModel<T,L> {
 	}
 	
 	protected void notifyListeners() {
-		for(Object listener : listeners.getListeners()) {
-			notifyListener((L)listener);
+		for (L listener : listeners) {
+			notifyListener(listener);
 		}
 	}
 }

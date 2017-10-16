@@ -45,7 +45,6 @@ import org.eclipse.core.runtime.jobs.Job;
  * A Consultancy is a single repository of the consultations made throughout the image.
  * It's responsible for automatically re-issuing new consultations, as well as managing
  * ongoing consultations.
- * @author bsd
  */
 public class Consultancy {
     public final static int HIGH = 0;

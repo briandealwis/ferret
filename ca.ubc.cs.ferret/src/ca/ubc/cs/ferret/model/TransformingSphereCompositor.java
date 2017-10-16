@@ -21,8 +21,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * subject to these transforms.  These transforms are expressed as a set of relations
  * ({@link IRelationFactory}, actually) in the order added using {@link #addTransform(IRelationFactory)}.
  * The first relation that handles the results of the wrapped relation is used.  
- * @author bsd
- *
  */
 public class TransformingSphereCompositor extends AbstractSphere {
 	protected ISphere source;

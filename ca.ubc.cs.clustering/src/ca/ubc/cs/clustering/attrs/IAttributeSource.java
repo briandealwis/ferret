@@ -16,7 +16,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 /**
  * An IAttributeSource provides access to the attributes for a particular object.
  * It acts much like Eclipse's IPropertySource interface.
- * @author bsd
  * @see org.eclipse.ui.views.properties.IPropertySource
  */
 public interface IAttributeSource {

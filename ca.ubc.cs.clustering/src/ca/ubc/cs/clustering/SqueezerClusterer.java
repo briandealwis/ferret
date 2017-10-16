@@ -22,7 +22,6 @@ import java.util.Set;
  * Algorithm taken from
  * Z He et al. (2003). Discovering cluster-based local outliers.
  * Pattern Recognition Letters 24:1641--1650. 
- * @author Brian de Alwis
  * @param <T> the type of the elements to cluster
  */
 public class SqueezerClusterer<T> {

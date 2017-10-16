@@ -18,7 +18,6 @@ import org.eclipse.jdt.core.JavaModelException;
 /**
  * Extract the is-native attribute of the provided object.  Although flags are available
  * from any object, is-native is really only applicable to methods.
- * @author bsd
  */
 public class MemberNativeProvider extends AbstractJavaAttributeValue<IMember,String> {
 

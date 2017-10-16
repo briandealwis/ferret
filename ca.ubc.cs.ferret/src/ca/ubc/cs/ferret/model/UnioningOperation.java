@@ -19,7 +19,6 @@ import java.util.NoSuchElementException;
  * <blockquote>
  * 	   results = new HashSet(op.asCollection());
  * </blockquote>
- * @author Brian de Alwis
  */
 public class UnioningOperation extends RelationalFunction {
 

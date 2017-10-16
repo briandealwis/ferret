@@ -15,7 +15,6 @@ package ca.ubc.cs.ferret.kenyon;
  * are organized in stages, with successive stages being less precise.
  * Multiple keys can be proposed within a stage, useful for elements that
  * may be described using multiple handles.  
- * @author Brian de Alwis
  */
 public interface IKHandlesSource {
 

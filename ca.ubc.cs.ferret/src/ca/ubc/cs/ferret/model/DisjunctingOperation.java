@@ -24,7 +24,6 @@ import java.util.Set;
 /**
  * Reports the elements of that are reported by only a single of the
  * constituent operations. 
- * @author Brian de Alwis
  */
 
 public class DisjunctingOperation extends RelationalFunction {

@@ -17,7 +17,6 @@ import java.util.Map;
 /**
  * A sphere compositor, a sphere that composes other spheres.  Different subclasses 
  * will provide different lookup policies.
- * @author Brian de Alwis
  *
  */
 public abstract class AbstractSphereCompositor extends AbstractSphere 

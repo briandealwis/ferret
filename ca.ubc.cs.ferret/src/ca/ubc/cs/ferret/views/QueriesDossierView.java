@@ -331,12 +331,6 @@ public class QueriesDossierView extends ViewPart
 			resizer.addColumnData(cld);
 		}
 		parent.addControlListener(resizer);
-
-//        getViewSite().getActionBars().setGlobalActionHandler(
-//                IWorkbenchActionConstants.PROPERTIES,
-//                propertiesAction);
-//		treeSelectionChangedListener = new AutoTreeViewerExpandingSelector();
-//		getSelectionProvider().addSelectionChangedListener(treeSelectionChangedListener);
 	}
 
 	protected void setupColumns() {
@@ -936,8 +930,8 @@ public class QueriesDossierView extends ViewPart
 	      int result = dialog.open();
 	      if(result == WizardDialog.CANCEL) { return; }
 	      sphereFactory = wizard.getSphereFactoryRoot();
-	      for(Object o : queryListeners.getListeners()) {
-	    	  ((IQueryListener)o).reconfigured();
+		for (IQueryListener listener : queryListeners) {
+			listener.reconfigured();
 		}
 		if ((sphere == wizard.getSphere()) && result == WizardDialog.OK) {
 	    	  ErrorDialog.openError(getShell(), "Error", "Unable to create sphere", 
@@ -1169,8 +1163,8 @@ public class QueriesDossierView extends ViewPart
 			}
 	        setContentDescription(FerretPlugin.prettyPrint(c.getOriginalElements()));
 	        setTitleToolTip(FerretPlugin.prettyPrint(c.getOriginalElements()));
-			for(Object o : queryListeners.getListeners()) {
-				((IQueryListener)o).queryInitiated(c);
+			for (IQueryListener listener : queryListeners) {
+				listener.queryInitiated(c);
 			}
 	        c.registerChangeCallback(getUpdateRunnable()); 
 	        setInput(c);
@@ -1215,8 +1209,8 @@ public class QueriesDossierView extends ViewPart
         return new ICallback<Consultation>() {
         	public void run(final Consultation result) {
 				if(result.isDone()) {
-					for(Object o : queryListeners.getListeners()) {
-						((IQueryListener)o).queryCompleted((Consultation)result);
+					for (IQueryListener listener : queryListeners) {
+						listener.queryCompleted((Consultation) result);
 					}
 				}
         		asyncExec(new Runnable() { 
@@ -1338,8 +1332,8 @@ public class QueriesDossierView extends ViewPart
 	}
 
 	public <T> void clusteringChanged(IClusteringsContainer<? extends T> object, Clustering<? extends T> selected) {
-		for(Object o : queryListeners.getListeners()) {
-			((IQueryListener)o).clusteredBy(object, selected);
+		for (IQueryListener listener : queryListeners) {
+			listener.clusteredBy(object, selected);
 		}
 		if(object instanceof IDisplayObject) {
 			IDisplayObject dobj = selected == null ? (IDisplayObject)object :

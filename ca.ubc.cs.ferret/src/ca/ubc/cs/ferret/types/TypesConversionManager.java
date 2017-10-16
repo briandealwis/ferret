@@ -44,7 +44,6 @@ import org.osgi.framework.ServiceReference;
  * FIXME: this should probably somehow use the desired-type class hierarchy to
  * 		determine the conversion.  For now converters should explicitly enumerate the types
  * 		they support
- * @author Brian de Alwis
  */
 public class TypesConversionManager implements IRegistryChangeListener {
 	public final static String conversionExtensionPoint = FerretPlugin.pluginID + ".typeConverters"; 
@@ -132,7 +131,9 @@ public class TypesConversionManager implements IRegistryChangeListener {
 	protected List<ConversionPipeline> basicFindConversion(Class<?> objectClass,
 			String desiredType, Fidelity desiredFidelity) {
 		Graph<String,ConversionSpecification> graph = getConversionGraph();
-		if(!hasVertex(graph, desiredType)) { return Collections.EMPTY_LIST; }
+		if (!hasVertex(graph, desiredType)) {
+			return Collections.emptyList();
+		}
 		ArrayList<ConversionPipeline> conversions = new ArrayList<ConversionPipeline>(1);
 		for(String sourceType : getClassLookupOrder(objectClass)) {
 			if(!hasVertex(graph, sourceType)) { continue; }
@@ -243,7 +244,6 @@ public class TypesConversionManager implements IRegistryChangeListener {
 		return adapterManager;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T getAdapter(Object e, Class<T> clazz, Fidelity fidelity) {
 		ConversionResult cr = getDefault().convert(e, clazz.getName(), fidelity, null);
 		if(cr != null && cr.hasSingleResult()) {

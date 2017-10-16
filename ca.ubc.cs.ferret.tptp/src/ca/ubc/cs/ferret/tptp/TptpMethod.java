@@ -18,7 +18,6 @@ import ca.ubc.cs.ferret.types.IEquivalenceTesting;
 
 /**
  * A wrapper for TRCMethods
- * @author Brian de Alwis
  */
 public class TptpMethod implements IEquivalenceTesting, IPrettyPrinter {
 	protected String packageName;

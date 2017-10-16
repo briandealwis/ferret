@@ -25,7 +25,6 @@ import org.eclipse.jdt.core.IType;
 
 /**
  * Find Java methods that instantiate a particular type.
- * @author bsd
  */
 public class MethodsInstantiatingType extends JavaIntersectionConceptualQuery<IType, FerretObject> {
 

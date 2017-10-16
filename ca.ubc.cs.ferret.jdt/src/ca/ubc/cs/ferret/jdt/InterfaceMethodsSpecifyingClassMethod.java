@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 
 /**
- * @author bsd
+ * Find all interface methods that the provided method implements.
  */
 public class InterfaceMethodsSpecifyingClassMethod extends JavaRelatedConceptualQuery<IMethod> {
 

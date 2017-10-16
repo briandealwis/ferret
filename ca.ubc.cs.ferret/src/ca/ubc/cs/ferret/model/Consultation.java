@@ -41,7 +41,6 @@ import org.eclipse.ui.IMemento;
  * This class represents a consultation to the great guru of how a particular set of
  * query elements relates to the rest of the system.  It has a three-phase lifecycle:
  * created, activated (queries-in-progress), and done.
- * @author Brian de Alwis
  */
 public class Consultation {
 	protected Object originalElements[];

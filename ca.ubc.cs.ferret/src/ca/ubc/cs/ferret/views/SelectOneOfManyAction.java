@@ -124,8 +124,8 @@ public class SelectOneOfManyAction<T> extends Action implements IMenuCreator {
     }
 
     protected void selectionChanged(T object) {
-        for(Object listener : selectionChangedList.getListeners()) {
-            ((ICallback<T>)listener).run(object);
+		for (ICallback<T> listener : selectionChangedList) {
+			listener.run(object);
         }
     }
 

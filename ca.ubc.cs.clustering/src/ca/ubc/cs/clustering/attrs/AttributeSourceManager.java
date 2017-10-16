@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.Status;
 /**
  * FIXME: this doesn't properly handle classifiers that differ on per-instance
  * features (i.e., those specifying core.expression guards in the plugin.xml).
- * @author Brian de Alwis
  */
 public class AttributeSourceManager implements IAttributeSourceManager,
 	IRegistryChangeListener {
@@ -41,8 +40,6 @@ public class AttributeSourceManager implements IAttributeSourceManager,
 	/**
 	 * Return an IAttributeSource for the provided element consisting of all of
 	 * its possible attribute sources.
-	 * @param element
-	 * @return
 	 */
 	public synchronized IAttributeSource getAttributeSource(Object element) {
 		IAttributeSource result;
