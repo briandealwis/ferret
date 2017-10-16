@@ -15,7 +15,6 @@ import ca.ubc.cs.ferret.types.FerretObject;
 
 /**
  * The universal relation maps each element to itself.
- * @author Brian de Alwis
  */
 public class UniversalRelation extends AbstractToolRelation {
 

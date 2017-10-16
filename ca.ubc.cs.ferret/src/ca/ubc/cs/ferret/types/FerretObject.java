@@ -29,7 +29,6 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 
 /**
  * An object wrapper for bridging objects between sphereHelpers.
- * @author Brian de Alwis
  */
 public class FerretObject implements IAdaptable {
 	protected static ConversionResult<?>[] EMPTY_CONVERSIONRESULT_ARRAY = 

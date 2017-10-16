@@ -21,7 +21,6 @@ import java.util.Iterator;
 
 /**
  * An test operator that always returns the values provided to its constructor. 
- * @author Brian de Alwis
  */
 public class FixedRelation extends AbstractToolRelation {
 	protected Collection<FerretObject> collection;

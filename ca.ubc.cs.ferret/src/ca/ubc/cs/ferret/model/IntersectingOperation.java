@@ -24,7 +24,6 @@ import java.util.Set;
 
 /**
  * Reports only those elements reported by all of the constituent operations. 
- * @author Brian de Alwis
  */
 public class IntersectingOperation extends RelationalFunction {
 	protected Iterator<FerretObject> iterator;

@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Absorb all and release nothing.  Useful for testing, especially NamedJoinRelation's hasNext().
- * @author Brian de Alwis
  */
 public class NullRelation extends AbstractToolRelation {
 

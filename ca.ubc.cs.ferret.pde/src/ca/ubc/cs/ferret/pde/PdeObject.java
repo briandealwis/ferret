@@ -24,7 +24,6 @@ import org.eclipse.pde.internal.core.ibundle.IBundlePluginModelProvider;
  * A wrapper around PDE Plugin Objects.  Sadly necessary as PDE
  * doesn't provide a populated model, so we have to spoof it up.  This breaks the
  * links between the plugin elements and the defining plugin.
- * @author Brian de Alwis
  */
 public abstract class PdeObject implements IPluginObject {
 	public IPluginModelBase plugin;

@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * The relation container and resolver.  Relations are registered with particular names.
  * When resolving relations by name, the first configurable relation wins.
- * @author Brian de Alwis
  */
 public class Sphere extends AbstractSphere {
 

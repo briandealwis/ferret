@@ -16,7 +16,6 @@ import java.util.LinkedList;
 /**
  * An identity relation (one that maps any object to itself), optionally providing the object is of
  * the required type. 
- * @author Brian de Alwis
  */
 public class IdentityRelation extends AbstractToolRelation {
 	protected Class<?> clazz;

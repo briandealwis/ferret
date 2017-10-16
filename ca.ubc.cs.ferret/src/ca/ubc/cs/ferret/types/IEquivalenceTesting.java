@@ -16,7 +16,6 @@ package ca.ubc.cs.ferret.types;
  * {@link org.eclipse.hyades.models.trace.TRCMethod TRCMethod} instance for
  * a particular method for each dynamic program trace found, despite that these
  * TRCMethods represent the same method.  
- * @author Brian de Alwis
  */
 public interface IEquivalenceTesting {
 

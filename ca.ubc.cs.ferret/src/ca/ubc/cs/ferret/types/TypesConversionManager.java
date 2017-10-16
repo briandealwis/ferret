@@ -44,7 +44,6 @@ import org.osgi.framework.ServiceReference;
  * FIXME: this should probably somehow use the desired-type class hierarchy to
  * 		determine the conversion.  For now converters should explicitly enumerate the types
  * 		they support
- * @author Brian de Alwis
  */
 public class TypesConversionManager implements IRegistryChangeListener {
 	public final static String conversionExtensionPoint = FerretPlugin.pluginID + ".typeConverters"; 

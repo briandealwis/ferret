@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.SubProgressMonitor;
  * The results of this relation are that from the matching relation.
  * If none of the relations in {@link #transforms} match, and {@link #permissive} 
  * is true, then the value is passed unmolested, or is otherwise discarded (the default).
- * @author Brian de Alwis
  */
 public class TransformingOperation extends RelationalFunction {
 	protected IProgressMonitor monitor;

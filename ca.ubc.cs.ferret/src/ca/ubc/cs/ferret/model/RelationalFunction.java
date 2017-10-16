@@ -14,7 +14,6 @@ import java.util.LinkedList;
 
 /**
  * This type hierarchy is used for implementing functional relations.
- * @author Brian de Alwis
  */
 public abstract class RelationalFunction extends AbstractRelation {
 	protected LinkedList<IRelation> operations = new LinkedList<IRelation>();

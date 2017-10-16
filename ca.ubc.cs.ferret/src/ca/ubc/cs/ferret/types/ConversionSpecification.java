@@ -22,7 +22,6 @@ public class ConversionSpecification {
 	 * <EM>Equivalent</EM> conversions are the best possible match; <EM>Approximate</EM>
 	 * matches are near-equivalent.
 	 * FIXME: should work on these descriptions!
-	 * @author Brian de Alwis
 	 */
 	public enum Fidelity { Approximate, Equivalent, Exact;
 		public static Fidelity fromString(String string) {

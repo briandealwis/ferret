@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * network. There are two types of operations: those that start an operation afresh from the 
  * root (or top) of the network, and those that continue resolution from the point as captured by this
  * instance.
- * @author Brian de Alwis
  */
 public interface IRelationResolver {
 	

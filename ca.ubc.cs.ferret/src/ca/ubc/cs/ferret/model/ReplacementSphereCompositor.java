@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * A sphere where constituent spheres are consulted  in FIFO order, and 
  * the first sphere providing a matching operation is the one used.
- * @author Brian de Alwis
  */
 public class ReplacementSphereCompositor extends AbstractSphereCompositor {
 

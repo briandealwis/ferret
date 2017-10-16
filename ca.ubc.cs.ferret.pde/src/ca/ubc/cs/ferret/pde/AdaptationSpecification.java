@@ -14,7 +14,6 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 
 /**
  * Represent an adaptation specification.
- * @author Brian de Alwis
  */
 public class AdaptationSpecification {
 	protected IPluginModelBase plugin;

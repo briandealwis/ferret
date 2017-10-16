@@ -14,7 +14,6 @@ import java.util.List;
 
 /**
  * Implements a sphere composition function.
- * @author Brian de Alwis
  */
 public interface ISphereCompositor extends ISphere {
 	/**
