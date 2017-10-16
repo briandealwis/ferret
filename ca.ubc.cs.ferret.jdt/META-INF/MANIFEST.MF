@@ -17,8 +17,11 @@ Require-Bundle: ca.ubc.cs.ferret,
  org.eclipse.debug.core,
  org.eclipse.jface.text,
  org.eclipse.ui.workbench.texteditor,
- org.eclipse.ui.editors
-Import-Package: com.google.common.cache;version="[21.0.0,22.0.0)",
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.ide
+Import-Package: com.google.common.base;version="[21.0.0,22.0.0)",
+ com.google.common.cache;version="[21.0.0,22.0.0)",
  com.google.common.collect;version="[21.0.0,22.0.0)"
 Bundle-ActivationPolicy: lazy
 Export-Package: ca.ubc.cs.ferret.jdt;version="0.5.0",

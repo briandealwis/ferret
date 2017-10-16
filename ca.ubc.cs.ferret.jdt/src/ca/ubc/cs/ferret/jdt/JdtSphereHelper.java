@@ -15,6 +15,9 @@ import ca.ubc.cs.ferret.model.ISphereFactory;
 import ca.ubc.cs.ferret.model.SphereHelper;
 import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
 import ca.ubc.cs.ferret.types.TypesConversionManager;
+import com.google.common.base.Preconditions;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugException;
@@ -22,10 +25,12 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.ITypeRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
@@ -37,7 +42,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class JdtSphereHelper extends SphereHelper {
     protected static JdtSphereHelper singleton;
@@ -102,7 +109,7 @@ public class JdtSphereHelper extends SphereHelper {
     	if(singleton == this) { singleton = null; }
     }
 
-    @SuppressWarnings("restriction")
+	@SuppressWarnings("restriction") // JavaEditor, SelectionConverter
 	public Object[] getSelectedObjects(IEditorPart editor) {
     	if(editor instanceof JavaEditor) {
 	        try {
@@ -112,27 +119,76 @@ public class JdtSphereHelper extends SphereHelper {
         	}
         }
 
+
         ISelectionProvider provider = editor.getSite().getSelectionProvider();
 		if (provider == null) { return null; }
 		ISelection selection = provider.getSelection();
-		if(selection instanceof ITextSelection) {
-			ITextSelection ts = (ITextSelection)selection;
-			if(ts.getLength() > 0 || (ts = expandTextSelection(editor, ts, JdtSphereHelper::isJavaIdentifier)) != null) {
-				return getSelectedObjects(ts);
+		if (selection instanceof ITextSelection) {
+			ITextSelection ts = (ITextSelection) selection;
+			if (ts.getLength() > 0
+					|| (ts = expandTextSelection(editor, ts, JdtSphereHelper::isJavaIdentifier)) != null) {
+				Preconditions.checkNotNull(ts);
+				String text = ts.getText();
+				IJavaElement javaContainer = getJavaContainer(editor);
+				if (javaContainer != null) {
+					// try resolving as a type
+					IType type = JavaModelHelper.getDefault().resolveType(text, javaContainer);
+					if (type != null) {
+						return new Object[] { type };
+					}
+
+					// try resolving as a package
+					IPackageFragment pkg = JavaModelHelper.getDefault().resolvePackage(text, javaContainer);
+					if (pkg != null) {
+						return new Object[] { pkg };
+					}
+				}
 			}
 		}
         return null;
     }
     
-    protected static boolean isJavaIdentifier(Character ch) {
+	private IJavaElement getJavaContainer(IEditorPart editor) {
+		IJavaElement container = editor.getAdapter(IJavaElement.class);
+		if (container != null) {
+			return container;
+		}
+
+		IEditorInput input = editor.getEditorInput();
+		if (input instanceof FileEditorInput) {
+			IFile file = ((FileEditorInput) input).getFile();
+			container = JavaCore.create(file);
+			if (container != null) {
+				return container;
+			}
+			container = JavaCore.create(file.getProject());
+			if (container != null) {
+				return container;
+			}
+		}
+
+		IFile file = input.getAdapter(IFile.class);
+		container = JavaCore.create((IFile) input);
+		if (container != null) {
+			return container;
+		}
+		container = JavaCore.create(file.getProject());
+		if (container != null) {
+			return container;
+		}
+
+		IProject project = input.getAdapter(IProject.class);
+		container = JavaCore.create(project);
+		if (container != null) {
+			return container;
+		}
+		return null;
+	}
+
+	protected static boolean isJavaIdentifier(Character ch) {
     	return Character.isLetterOrDigit(ch) || ch == '.';
     }
     
-    protected Object[] getSelectedObjects(ITextSelection ts) {
-    	IType t = JavaModelHelper.getDefault().resolveType(ts.getText());
-    	return t != null ? new Object[] { t } : null;
-    }
-
     @Override
 	public boolean isCommonElement(Object o) {
     	// FIXME: Should make this configurable?  Like TPTP's filter list (which

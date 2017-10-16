@@ -334,4 +334,9 @@ public class JdtTests {
         }
     }
 
+	@Test
+	public void testResolvePackage() {
+		assertNotNull(jmh.resolvePackage("test", testProject.getJavaProject()));
+		assertNull(jmh.resolvePackage("does.not.exist", testProject.getJavaProject()));
+	}
 }
