@@ -54,6 +54,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
@@ -607,8 +608,7 @@ public class JavaModelHelper implements IElementChangedListener {
 			}
 			String fqParm;
 			if(Signature.getSignatureQualifier(sig).length() == 0) {
-				fqParm = JavaModelHelper.getDefault()
-				.resolveTypeName(Signature.getSignatureSimpleName(sig), container);
+				fqParm = resolveTypeName(Signature.getSignatureSimpleName(sig), container);
 			} else {
 				fqParm = Signature.getSignatureQualifier(sig) + "."
 				+ Signature.getSignatureSimpleName(sig);
@@ -656,51 +656,50 @@ public class JavaModelHelper implements IElementChangedListener {
     	return resolveType(typeName, null);
 	}
     
-	public IType resolveType(String typeName, IMember t) {
+	public IType resolveType(String typeName, IJavaElement context) {
         // basicResolveType and resolveEnclosedType add results to type cache
-		try {
-			typeName = resolveTypeName(typeName, t);
-		} catch (JavaModelException e) {
-			logJME(e);
-			return null;
+		if (context instanceof IMember) {
+			try {
+				typeName = resolveTypeName(typeName, (IMember) context);
+			} catch (JavaModelException e) {
+				logJME(e);
+				return null;
+			}
+			int dollarIndex = typeName.lastIndexOf(Signature.C_DOLLAR);
+			if (dollarIndex < 0) {
+				return basicResolveType(typeName, context);
+			}
+			String parentName = typeName.substring(0, dollarIndex);
+			IType result;
+			if ((result = resolveType(parentName, context)) == null) {
+				return null;
+			}
+			return resolveEnclosedType(result, parentName, typeName.substring(dollarIndex + 1));
+		} else {
+			return basicResolveType(typeName, context);
 		}
-
-		int dollarIndex = typeName.lastIndexOf(Signature.C_DOLLAR); 
-        if(dollarIndex < 0) { return  basicResolveType(typeName, t); }
-        String parentName = typeName.substring(0, dollarIndex);
-        IType result;
-        if((result = resolveType(parentName, t)) == null) { return null; }
-        return resolveEnclosedType(result, parentName, typeName.substring(dollarIndex + 1));
     }
 
-    protected IType basicResolveType(final String typeName, final IJavaElement referencingMember) {
-    	return resolveOperation(typeCache, typeName, new Callable<IType>() {
+	protected IType basicResolveType(final String typeName, final IJavaElement referencingMember) {
+		return resolveOperation(typeCache, typeName, new Callable<IType>() {
 			public IType call() throws Exception {
-		    	CollectingSearchRequestor requestor =  new CollectingSearchRequestor();
-		    	SearchPattern pattern = SearchPattern.createPattern(typeName, 
-		    			IJavaSearchConstants.TYPE,
-		    			IJavaSearchConstants.DECLARATIONS,
-		    			SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
-				IJavaSearchScope scope = createSearchScope(referencingMember);
-		    	performSearch(pattern, scope, requestor, new NullProgressMonitor());
-		    	List<Object> results = new ArrayList<Object>(requestor.getValues());
-		    	if(results.size() > 1) {
-		    		FerretPlugin.log(new Status(IStatus.WARNING, FerretJdtPlugin.pluginID, 0,
-		    				"resolveType(" + typeName + ") has multiple resolutions; using first", null));
-		    	}
-		    	return results.isEmpty() ? null : (IType)results.get(0);
-			}});
-    }
+				CollectingSearchRequestor requestor = new CollectingSearchRequestor();
+				SearchPattern pattern = SearchPattern.createPattern(typeName, IJavaSearchConstants.TYPE,
+						IJavaSearchConstants.DECLARATIONS,
+						SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
 
-    /**
-	 * @param referencingMember
-	 * @return
-	 */
-	protected IJavaSearchScope createSearchScope(IJavaElement referencingMember) {
-		if (referencingMember == null) {
-			return SearchEngine.createWorkspaceScope();
-		}
-		return SearchEngine.createJavaSearchScope(new IJavaElement[] { referencingMember.getJavaProject() });
+				IJavaSearchScope scope = referencingMember == null ? SearchEngine.createWorkspaceScope()
+						: SearchEngine.createJavaSearchScope(new IJavaElement[] { referencingMember.getJavaProject() });
+
+				performSearch(pattern, scope, requestor, new NullProgressMonitor());
+				List<Object> results = new ArrayList<Object>(requestor.getValues());
+				if (results.size() > 1) {
+					FerretPlugin.log(new Status(IStatus.WARNING, FerretJdtPlugin.pluginID, 0,
+							"resolveType(" + typeName + ") has multiple resolutions; using first", null));
+				}
+				return results.isEmpty() ? null : (IType) results.get(0);
+			}
+		});
 	}
 
 	/**
@@ -1532,11 +1531,32 @@ public class JavaModelHelper implements IElementChangedListener {
 	protected String resolveTypeSignature(String typeSignature, IMember source) throws JavaModelException {
 		typeSignature = typeSignature.replace('/', '.');
 		if (Signature.getSignatureQualifier(typeSignature).length() == 0) {
-			return JavaModelHelper.getDefault().resolveTypeName(
+			return resolveTypeName(
 						Signature.getSignatureSimpleName(typeSignature), source);
 		}
 		return Signature.getSignatureQualifier(typeSignature) + "."
 				+ Signature.getTypeErasure(Signature.getSignatureSimpleName(typeSignature));
+	}
+
+	public IPackageFragment resolvePackage(String packageName, IJavaElement referencingMember) {
+		CollectingSearchRequestor requestor = new CollectingSearchRequestor();
+		SearchPattern pattern = SearchPattern.createPattern(packageName, IJavaSearchConstants.PACKAGE,
+				IJavaSearchConstants.DECLARATIONS, SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
+
+		// assume not resolving java.* or other system libraries
+		// IJavaSearchScope.SYSTEM_LIBRARIES
+		IJavaSearchScope scope = referencingMember == null ? SearchEngine.createWorkspaceScope()
+				: SearchEngine.createJavaSearchScope(new IJavaElement[] { referencingMember.getJavaProject() },
+						IJavaSearchScope.SOURCES | IJavaSearchScope.APPLICATION_LIBRARIES
+								| IJavaSearchScope.REFERENCED_PROJECTS);
+
+		performSearch(pattern, scope, requestor, new NullProgressMonitor());
+		List<Object> results = new ArrayList<Object>(requestor.getValues());
+		if (results.size() > 1) {
+			FerretPlugin.log(new Status(IStatus.WARNING, FerretJdtPlugin.pluginID, 0,
+					"resolvePackage(" + packageName + ") has multiple resolutions; using first", null));
+		}
+		return results.isEmpty() ? null : (IPackageFragment) results.get(0);
 	}
 
 }
