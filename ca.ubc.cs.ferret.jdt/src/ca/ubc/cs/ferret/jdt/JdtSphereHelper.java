@@ -19,10 +19,12 @@ import com.google.common.base.Preconditions;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -30,6 +32,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.ITypeRoot;
+import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
@@ -131,16 +134,29 @@ public class JdtSphereHelper extends SphereHelper {
 				String text = ts.getText();
 				IJavaElement javaContainer = getJavaContainer(editor);
 				if (javaContainer != null) {
+					IJavaProject javaProject = javaContainer instanceof IJavaProject ? (IJavaProject) javaContainer
+							: javaContainer.getJavaProject();
+					String sourceCompatibilityLevel = javaProject.getOption(JavaCore.COMPILER_SOURCE, true);
+					String sourceComplianceLevel = javaProject.getOption(JavaCore.COMPILER_COMPLIANCE, true);
+
 					// try resolving as a type
-					IType type = JavaModelHelper.getDefault().resolveType(text, javaContainer);
-					if (type != null) {
-						return new Object[] { type };
+					IStatus isType = JavaConventions.validateJavaTypeName(text, sourceCompatibilityLevel,
+							sourceComplianceLevel);
+					if (isType.isOK()) {
+						IType type = JavaModelHelper.getDefault().resolveType(text, javaContainer);
+						if (type != null) {
+							return new Object[] { type };
+						}
 					}
 
 					// try resolving as a package
-					IPackageFragment pkg = JavaModelHelper.getDefault().resolvePackage(text, javaContainer);
-					if (pkg != null) {
-						return new Object[] { pkg };
+					IStatus isPackage = JavaConventions.validatePackageName(text, sourceCompatibilityLevel,
+							sourceComplianceLevel);
+					if (isPackage.isOK()) {
+						IPackageFragment pkg = JavaModelHelper.getDefault().resolvePackage(text, javaContainer);
+						if (pkg != null) {
+							return new Object[] { pkg };
+						}
 					}
 				}
 			}
