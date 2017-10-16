@@ -131,16 +131,16 @@ public class JdtSphereHelper extends SphereHelper {
 				String text = ts.getText();
 				IJavaElement javaContainer = getJavaContainer(editor);
 				if (javaContainer != null) {
-					// try resolving as a package
-					IPackageFragment pkg = JavaModelHelper.getDefault().resolvePackage(text, javaContainer);
-					if (pkg != null) {
-						return new Object[] { pkg };
-					}
-
 					// try resolving as a type
 					IType type = JavaModelHelper.getDefault().resolveType(text, javaContainer);
 					if (type != null) {
 						return new Object[] { type };
+					}
+
+					// try resolving as a package
+					IPackageFragment pkg = JavaModelHelper.getDefault().resolvePackage(text, javaContainer);
+					if (pkg != null) {
+						return new Object[] { pkg };
 					}
 				}
 			}
