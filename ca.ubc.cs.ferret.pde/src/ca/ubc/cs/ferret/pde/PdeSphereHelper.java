@@ -13,7 +13,9 @@ package ca.ubc.cs.ferret.pde;
 import ca.ubc.cs.ferret.FerretPlugin;
 import ca.ubc.cs.ferret.model.ISphereFactory;
 import ca.ubc.cs.ferret.model.SphereHelper;
+import ca.ubc.cs.ferret.util.ReflectionUtils;
 import ca.ubc.cs.ferret.views.ImageImageDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -161,7 +163,15 @@ public class PdeSphereHelper extends SphereHelper {
 			return true;
 		}
 		if (element instanceof IFeatureModel) {
-			FeatureEditor.openFeatureEditor((IFeatureModel) element);
+			// Bug 438509 (Oxygen) changed the return type of openFeatureEditor
+			// from void to IEditorPart
+			try {
+				ReflectionUtils.invokeVoid(FeatureEditor.class, "openFeatureEditor",
+						new Class[] { IFeatureModel.class }, element);
+			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException ex) {
+				FerretPlugin.log(ex);
+			}
 			return true;
 		}
 		return super.openObject(element);
