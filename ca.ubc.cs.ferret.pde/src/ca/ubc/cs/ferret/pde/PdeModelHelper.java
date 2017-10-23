@@ -261,6 +261,17 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		return findPluginModel(object.getProject());
 	}
 		
+	/**
+	 * Find the IPluginModelBase that has the given location.
+	 */
+	public IPluginModelBase locatePluginModel(String bundleLocation) {
+		for (IPluginModelBase modelBase : getActiveModels()) {
+			if (bundleLocation.equals(modelBase.getInstallLocation())) {
+				return modelBase;
+			}
+		}
+		return null;
+	}
 
 	public Collection<IPluginModelBase> getActiveModels() {
 		verifyModelCaches();
@@ -685,5 +696,4 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 	private FeatureModelManager getFeatureModelManager() {
 		return PDECore.getDefault().getFeatureModelManager();
 	}
-
 }

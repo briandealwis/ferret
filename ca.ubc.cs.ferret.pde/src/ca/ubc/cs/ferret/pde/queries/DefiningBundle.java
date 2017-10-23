@@ -16,6 +16,7 @@ import ca.ubc.cs.ferret.pde.PdeModelHelper;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.internal.core.natures.PDE;
@@ -39,10 +40,19 @@ public class DefiningBundle extends PdeSingleParmConceptualQuery<IType> {
 
 	@Override
 	protected void internalRun(IProgressMonitor monitor) {
-		IProject project = parameter.getJavaProject().getProject();
-		IPluginModelBase plugin =
-				PdeModelHelper.getDefault().findPluginModel((IProject)project);
-
+		IPackageFragmentRoot root = (IPackageFragmentRoot) parameter.getAncestor(IType.PACKAGE_FRAGMENT_ROOT);
+		IPluginModelBase plugin = null;
+		PdeModelHelper modelHelper = PdeModelHelper.getDefault();
+		// Could check the IJavaProject's classpath entries and verify it's
+		// the Plugin Dependencies container
+		if (root.isExternal()) {
+			String rootLocation = root.getPath().toOSString();
+			plugin = modelHelper.locatePluginModel(rootLocation);
+		}
+		if (plugin == null) {
+			IProject project = parameter.getJavaProject().getProject();
+			plugin = modelHelper.findPluginModel((IProject) project);
+		}
 		SimpleSolution s = new SimpleSolution(this, null);
 		s.add("defined", plugin);
 		s.setPrimaryEntityName("defined");
