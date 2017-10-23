@@ -6,7 +6,7 @@
       provider-name="University of British Columbia">
    <install-handler/>
 
-   <description url="http://www.cs.ubc.ca/~bsd/research/ferret/">
+   <description url="http://manumitting.com/tools/eclipse/ferret/">
       Ferret is an automated program query tool that presents a unified
 view across a multitude of sources of program information.
    </description>
@@ -20,12 +20,11 @@ view across a multitude of sources of program information.
 
 Dependencies are provided under the following licenses:
   * JUNG: BSD
-  * CERN Colt: BSD-like, LGPL
-  * Larva Labs Commons Collections 4.01: Apache license 2.0
+  * Guava: Apache Software License
    </license>
 
    <url>
-      <update label="Ferret Update Site" url="http://www.cs.ubc.ca/~bsd/research/ferret/"/>
+      <update label="Ferret Update Site" url="http://manumitting.com/tools/eclipse/ferret/"/>
       <discovery label="Eclipse Modelling Framework (for TPTP)" url="http://download.eclipse.org/modeling/emf/updates/"/>
       <discovery label="Eclipse Test and Performance Tools Platform (TPTP)" url="http://eclipse.org/tptp/updates/"/>
    </url>
