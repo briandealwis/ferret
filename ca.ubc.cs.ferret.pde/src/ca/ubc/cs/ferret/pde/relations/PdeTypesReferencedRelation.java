@@ -58,7 +58,7 @@ public class PdeTypesReferencedRelation extends
     	if(po instanceof IPluginAttribute) {
     		IPluginAttribute attr = (IPluginAttribute)po; 
     		IStatus status = JavaConventions.validateJavaTypeName(attr.getValue().trim());
-    		if(status.getCode() != IStatus.ERROR) {
+			if (status.getSeverity() != IStatus.ERROR) {
     			IType t = JavaModelHelper.getDefault().resolveType(attr.getValue());
     			if(t != null) { types.add(t); }
     		}
