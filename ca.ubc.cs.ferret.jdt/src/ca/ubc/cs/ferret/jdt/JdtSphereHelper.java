@@ -171,6 +171,9 @@ public class JdtSphereHelper extends SphereHelper {
 		}
 
 		IEditorInput input = editor.getEditorInput();
+		if ((container = TypesConversionManager.getAdapter(input, IJavaElement.class, Fidelity.Exact)) != null) {
+			return container;
+		}
 		if (input instanceof FileEditorInput) {
 			IFile file = ((FileEditorInput) input).getFile();
 			container = JavaCore.create(file);
@@ -183,19 +186,20 @@ public class JdtSphereHelper extends SphereHelper {
 			}
 		}
 
-		IFile file = input.getAdapter(IFile.class);
-		container = JavaCore.create((IFile) input);
-		if (container != null) {
-			return container;
-		}
-		container = JavaCore.create(file.getProject());
-		if (container != null) {
-			return container;
+		IFile file = TypesConversionManager.getAdapter(input, IFile.class, Fidelity.Exact);
+		if (file != null) {
+			container = JavaCore.create(file);
+			if (container != null) {
+				return container;
+			}
+			container = JavaCore.create(file.getProject());
+			if (container != null) {
+				return container;
+			}
 		}
 
-		IProject project = input.getAdapter(IProject.class);
-		container = JavaCore.create(project);
-		if (container != null) {
+		IProject project = TypesConversionManager.getAdapter(input, IProject.class, Fidelity.Exact);
+		if (project != null && (container = JavaCore.create(project)) != null) {
 			return container;
 		}
 		return null;
