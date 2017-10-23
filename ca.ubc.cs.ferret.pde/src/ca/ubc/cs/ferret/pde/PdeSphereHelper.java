@@ -92,8 +92,9 @@ public class PdeSphereHelper extends SphereHelper {
 					+ PdeModelHelper.getDefault().getPluginId(extension.getPluginModel()); //$NON-NLS-1$
 		} else if(element instanceof ISharedPluginModel) { return PdeModelHelper
 				.getDefault().getPluginId((ISharedPluginModel)element); }
-		return getMeaningfulLabel(element, PDEPlugin.getDefault().getLabelProvider()
-				.getText(element));
+		// return getMeaningfulLabel(element, PDEPlugin.getDefault().getLabelProvider()
+		// .getText(element));
+		return null;
 	}
 
 	@Override
