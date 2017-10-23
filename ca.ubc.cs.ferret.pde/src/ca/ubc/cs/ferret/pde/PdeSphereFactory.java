@@ -50,11 +50,9 @@ public class PdeSphereFactory extends AbstractSphereFactory {
 		Sphere tb = new Sphere("Eclipse PDE target image information");
 		tb.register(ObjectOrientedRelations.OP_TYPES_REFERENCED,
 				new PdeTypesReferencedRelation());
-		tb.register(PdeSphereHelper.OP_DECLARED_EXTENSION_POINTS,
-				new PdePluginDeclaredExtensionPoints(),
+		tb.register(PdeSphereHelper.OP_DECLARED_EXTENSION_POINTS, new PdePluginDeclaredExtensionPoints(),
 				new PdeExtensionsExtensionPoint());
-		tb.register(PdeSphereHelper.OP_DECLARED_EXTENSIONS, new PdePluginDeclaredExtensions(),
-				new PdeExtensionPointExtensions());
+		tb.register(PdeSphereHelper.OP_DECLARED_EXTENSIONS, new PdePluginDeclaredExtensions());
 		tb.register(PdeSphereHelper.OP_IDENTIFIER_REFERENCED,
 				new PdeIdentifierReferencedRelation());
 		tb.register(PdeSphereHelper.OP_EXTENDED_BY, new PdeExtensionPointExtensions());
