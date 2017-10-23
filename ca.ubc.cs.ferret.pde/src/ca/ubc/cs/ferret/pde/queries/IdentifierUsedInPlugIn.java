@@ -57,11 +57,13 @@ public class IdentifierUsedInPlugIn extends PdeSingleParmConceptualQuery<PdeIden
 
         		Multimap<IPluginExtension,IPluginObject> extensions =
         			PdeModelHelper.getDefault().getExtensions(pluginModel);
-        		for(IPluginExtension ext : extensions.keySet()) {
-        			for(IPluginObject child : extensions.get(ext)) {
-        				checkExtensionElement(child, pluginModel, ext);
-        			}
-        			monitor.worked(1);
+				if (extensions != null) {
+					for (IPluginExtension ext : extensions.keySet()) {
+						for (IPluginObject child : extensions.get(ext)) {
+							checkExtensionElement(child, pluginModel, ext);
+						}
+						monitor.worked(1);
+					}
         		}
         	}
         } finally {
