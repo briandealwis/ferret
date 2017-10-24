@@ -23,6 +23,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginExtensionPoint;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
@@ -83,17 +84,17 @@ public class PdeSphereHelper extends SphereHelper {
 
 	@Override
 	public String getLabel(Object element) {
-		if(element instanceof IPluginExtensionPoint) {
-			return PdeModelHelper.getDefault().getFullId((IPluginExtensionPoint)element);
-		} else if(element instanceof IPluginExtension) {
+		if (element instanceof IPluginExtensionPoint) {
+			return PdeModelHelper.getDefault().getFullId((IPluginExtensionPoint) element);
+		} else if (element instanceof IPluginExtension) {
 			// stolen from PluginSearchResultPage
-			IPluginExtension extension = (IPluginExtension)element;
-			return extension.getPoint() + " - "
-					+ PdeModelHelper.getDefault().getPluginId(extension.getPluginModel()); //$NON-NLS-1$
-		} else if(element instanceof ISharedPluginModel) { return PdeModelHelper
-				.getDefault().getPluginId((ISharedPluginModel)element); }
-		// return getMeaningfulLabel(element, PDEPlugin.getDefault().getLabelProvider()
-		// .getText(element));
+			IPluginExtension extension = (IPluginExtension) element;
+			return extension.getPoint() + " - " + PdeModelHelper.getDefault().getPluginId(extension.getPluginModel()); // $NON-NLS-1$
+		} else if (element instanceof ISharedPluginModel) {
+			return PdeModelHelper.getDefault().getPluginId((ISharedPluginModel) element);
+		} else if (element instanceof IModel) {
+			return getMeaningfulLabel(element, PDEPlugin.getDefault().getLabelProvider().getText(element));
+		}
 		return null;
 	}
 
