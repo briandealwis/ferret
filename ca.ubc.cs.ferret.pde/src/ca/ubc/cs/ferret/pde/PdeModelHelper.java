@@ -372,6 +372,7 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 		verifyModelCaches();
 		String sourceId = getId(source);
 		if(sourceId == null) { return Collections.emptyList(); }
+		boolean sourceIsFeature = source instanceof IFeatureModel;
 		Collection<IFeatureModel> results = new ArrayList<IFeatureModel>();
 		for(IFeatureModel featureModel : features.values()) {
 			if(!featureModel.isValid()) {
@@ -379,7 +380,8 @@ public class PdeModelHelper implements IPluginModelListener, IRegistryChangeList
 			}
 			IFeature feature = featureModel.getFeature();
 			for(IFeatureImport p : feature.getImports()) {
-				if(sourceId.equals(p.getId())) {
+				boolean importIsFeature = p.getType() == IFeatureImport.FEATURE;
+				if (sourceId.equals(p.getId()) && importIsFeature == sourceIsFeature) {
 					results.add(featureModel);
 					break;
 				}
