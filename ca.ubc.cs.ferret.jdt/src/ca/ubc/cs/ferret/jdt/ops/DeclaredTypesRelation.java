@@ -22,7 +22,6 @@ import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 public class DeclaredTypesRelation extends AbstractCollectionBasedRelation<Object> {
@@ -46,8 +45,7 @@ public class DeclaredTypesRelation extends AbstractCollectionBasedRelation<Objec
 				typeSignature = ((ILocalVariable)input).getTypeSignature();
 				member = (IMember)((ILocalVariable)input).getParent();
 			} else if(input instanceof IJavaVariable) {
-				IJavaType t = ((IJavaVariable)input).getJavaType();
-				typeSignature = t.getSignature();
+				typeSignature = ((IJavaVariable) input).getGenericSignature();
 			}
 		} catch(JavaModelException e) {
 			JavaModelHelper.logJME(e);
@@ -59,6 +57,7 @@ public class DeclaredTypesRelation extends AbstractCollectionBasedRelation<Objec
 				Signature.getTypeSignatureKind(typeSignature) == Signature.BASE_TYPE_SIGNATURE) {
 			return Collections.EMPTY_LIST;
 		}
+		typeSignature = typeSignature.replace('/', '.');
 		Collection<IType> results = new ArrayList<IType>(1);
 		IType type = JavaModelHelper.getDefault().resolveSignature(typeSignature, member);
 		if(type != null) { results.add(type); }
