@@ -238,8 +238,20 @@
            fidelity="equivalent"
            providedType="org.eclipse.pde.internal.core.text.bundle.PackageObject">
      </converter>
+     <converter
+           class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+           providedType="org.eclipse.ui.IStorageEditorInput"
+           desiredType="org.eclipse.jdt.core.IJavaElement"
+           fidelity="equivalent">
+     </converter>
+     <converter
+           class="ca.ubc.cs.ferret.pde.PdeTypeConverter"
+           providedType="org.eclipse.ui.IStorageEditorInput"
+           desiredType="org.eclipse.jdt.core.IPackageFragmentRoot"
+           fidelity="equivalent">
+     </converter>
           
-	 </extension>
+  </extension>
   <extension point="ca.ubc.cs.clustering.classifiers">
      <classifier
            class="ca.ubc.cs.ferret.pde.classifiers.PluginObjectClassifier"
@@ -265,18 +277,4 @@
     <extension point="org.eclipse.help.contexts">
         <contexts file="helpContexts.xml"  />
     </extension>
-    <extension
-          point="org.eclipse.core.runtime.adapters">
-       <factory
-             adaptableType="org.eclipse.ui.IStorageEditorInput"
-             class="ca.ubc.cs.ferret.pde.JarFileAdapterFactory">
-          <adapter
-                type="org.eclipse.jdt.core.IJavaElement">
-          </adapter>
-          <adapter
-                type="org.eclipse.jdt.core.IPackageFragmentRoot">
-          </adapter>
-       </factory>
-    </extension>
-
 </plugin>
