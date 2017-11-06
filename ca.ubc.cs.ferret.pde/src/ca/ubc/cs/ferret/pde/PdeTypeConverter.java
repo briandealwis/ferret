@@ -17,13 +17,16 @@ import ca.ubc.cs.ferret.types.ConversionException;
 import ca.ubc.cs.ferret.types.ConversionResult;
 import ca.ubc.cs.ferret.types.ConversionSpecification;
 import ca.ubc.cs.ferret.types.ConversionSpecification.Fidelity;
+import java.io.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.osgi.service.resolver.ExportPackageDescription;
 import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
@@ -31,10 +34,12 @@ import org.eclipse.pde.core.IIdentifiable;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.internal.core.PDECore;
 import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.core.plugin.ImportObject;
 import org.eclipse.pde.internal.core.text.bundle.PackageObject;
+import org.eclipse.ui.IStorageEditorInput;
 
 public class PdeTypeConverter extends AbstractTypeConverter {
 
@@ -43,7 +48,8 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 	public ConversionResult<?> convert(Object object,
 			ConversionSpecification spec, ISphere sphere) throws ConversionException {
 		try {
-			if(spec.getDesiredClass() == IPluginModelBase.class) {
+			Class<?> desiredClass = spec.getDesiredClass();
+			if (desiredClass == IPluginModelBase.class) {
 				if(object instanceof IPluginImport) {
 					return wrap(spec, Fidelity.Exact, IPluginModelBase.class,
 							PdeModelHelper.getDefault().findPluginModel(((IPluginImport)object).getId()));
@@ -63,13 +69,13 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 									((IIdentifiable)object).getId());
 					return wrap(spec, Fidelity.Exact, IPluginModelBase.class, plugin);
 				}
-			} else if(spec.getDesiredClass() == IPluginImport.class) {
+			} else if (desiredClass == IPluginImport.class) {
 				// This is more here for proof-of-concept
 				if(object instanceof ImportObject) {
 					return wrap(spec, Fidelity.Exact, IPluginImport.class,
 							((ImportObject)object).getImport());
 				}
-			} else if(spec.getDesiredClass() == PdeIdentifier.class) {
+			} else if (desiredClass == PdeIdentifier.class) {
 				// FIXME: PdeIdentifier should be a contextualized object, with JavaTypePdeIdentifier,
 				// ResourcePdeIdentifier, etc.  The problem is that a resource is specified relative to
 				// to its defining project.  Although I don't think there's a way to reference resources 
@@ -94,14 +100,14 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 								new PdeIdentifier(relativePathname));
 			        }
 				}
-			} else if(spec.getDesiredClass() == IFeatureModel.class) {
+			} else if (desiredClass == IFeatureModel.class) {
 				if(object instanceof IIdentifiable) {
 					IFeatureModel feature =
 							PdeModelHelper.getDefault().findFeatureModel(
 									((IIdentifiable)object).getId());
 					return wrap(spec, Fidelity.Exact, IFeatureModel.class, feature);
 				}
-			} else if(spec.getDesiredClass() == IModel.class) {
+			} else if (desiredClass == IModel.class) {
 				if(object instanceof IModel) {
 					return wrap(spec, Fidelity.Exact, IModel.class, (IModel)object);
 				} else if(object instanceof IIdentifiable) {
@@ -116,7 +122,7 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 					if(plugin != null) { return wrap(spec, Fidelity.Exact,
 							IPluginModelBase.class, plugin); }
 				}
-			} else if(spec.getDesiredClass() == JavaPackage.class) {
+			} else if (desiredClass == JavaPackage.class) {
 				if(object instanceof ImportPackageSpecification) {
 					return wrap(
 							spec,
@@ -133,6 +139,18 @@ public class PdeTypeConverter extends AbstractTypeConverter {
 				} else if(object instanceof IPackageFragment) { return wrap(spec,
 						Fidelity.Equivalent, JavaPackage.class, new JavaPackage(
 								((IPackageFragment)object).getElementName())); }
+			} else if (desiredClass == IJavaElement.class || desiredClass == IPackageFragmentRoot.class) {
+				if (object instanceof IStorageEditorInput) {
+					IStorageEditorInput input = (IStorageEditorInput) object;
+					File file = input.getAdapter(File.class);
+					if (file != null) {
+						Object adapted = PDECore.getDefault().getSearchablePluginsManager().createAdapterChild(null,
+								file);
+						if (desiredClass.isInstance(adapted)) {
+							return wrap(spec, Fidelity.Equivalent, (Class<Object>) desiredClass, adapted);
+						}
+					}
+				}
 			}
 		} catch(ClassNotFoundException e) {
 			throw new ConversionException(e);
